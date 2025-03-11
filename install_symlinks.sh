@@ -4,6 +4,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="$SCRIPT_DIR/symlinks.conf"
 
+source $SCRIPT_DIR/utils.sh
+
 # Check if configuration file with symlinks definitions exists
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Configuration file not found: $CONFIG_FILE"
@@ -11,7 +13,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 create_symlinks() {
-    echo "Creating symbolic links"
+    info "Creating symbolic links"
 
     # Read dotfile links from the CONFIG_FILE
     while IFS=: read -r source target || [ -n "$source" ]; do
@@ -27,15 +29,15 @@ create_symlinks() {
 
         # Check if the source file exists
         if [ ! -e "$source" ]; then
-            echo "Error: Source file '$source' not found. Skipping link creation for '$target'."
+            error "Error: Source file '$source' not found. Skipping link creation for '$target'."
             continue
         fi
 
         # Check if the symbolic link already exists
         if [ -L "$target" ]; then
-            echo "Symbolic link already exists: $target"
+            warning "Symbolic link already exists: $target"
         elif [ -f "$target" ]; then
-            echo "File already exists: $target"
+            warning "File already exists: $target"
         else
             # Extract the directory portion of the target path
             target_dir=$(dirname "$target")
@@ -48,13 +50,13 @@ create_symlinks() {
 
             # Create the symbolic link
             ln -s "$source" "$target"
-            echo "Created symbolic link: $target"
+            success "Created symbolic link: $target"
         fi
     done <"$CONFIG_FILE"
 }
 
 delete_symlinks() {
-    echo "Deleting symbolic links..."
+    info "Deleting symbolic links..."
 
     while IFS=: read -r _ target || [ -n "$target" ]; do
 
@@ -70,9 +72,9 @@ delete_symlinks() {
         if [ -L "$target" ] || { [ "$include_files" == true ] && [ -f "$target" ]; }; then
             # Remove the symbolic link or file
             rm -rf "$target"
-            echo "Deleted: $target"
+            success "Deleted: $target"
         else
-            echo "Not found: $target"
+            warning "Not found: $target"
         fi
     done <"$CONFIG_FILE"
 }
@@ -95,8 +97,8 @@ if [ "$(basename "$0")" = "$(basename "${BASH_SOURCE[0]}")" ]; then
         ;;
     *)
         # Display an error message for unknown arguments
-        echo "Error: Unknown argument '$1'"
-        echo "Usage: $0 [--create | --delete [--include-files] | --help]"
+        error "Error: Unknown argument '$1'"
+        error "Usage: $0 [--create | --delete [--include-files] | --help]"
         exit 1
         ;;
     esac
