@@ -1,5 +1,5 @@
 Key mappings:
-```
+```sh
 ctrl s
 leader sn
 ctrl q
@@ -8,37 +8,62 @@ ctrl q
 ctrl+d
 ctrl+u
 
-/, n, N
+/, n, N  (searching)
 
 zz (center)
-arrows (resize)
 
 # Buffers
 tab
 shift tab
 leader x
 leader b
-
 # Move between the splits
 ctrl w hjkl
 ctrl hjkl
 
-# Resize splits 
 shift arrows
 
-# Splits
-ctrl w v s = 
-leader xs
+ctrl w v s =
+space v
+space h
+space se
+space xs
+ctrl h j k l  (navigate btw splits)
 
-# Tabs
-leader to tx tn tp
+space to tx tn tp
+
+space lw
+
+# indent in visual mode
+>
+<
+
+```
+
+idk right now XD:
+  - treesitter.lua
+  - aerial.lua
+
+nie działa space tx
+
+```sh
+# autocompletion
+ctrl n
+ctrl p
+ctrl b 
+ctrl f
+ctrl a
+ctrl space
+ctrl l
+ctrl h
+
 ```
 
 :Telescope colorscheme
 
 :colo tab
 :Colorscheme tab
-Fajne:
+Nice colorschemes:
   - desert
   - evening
   - habamax

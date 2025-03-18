@@ -28,7 +28,7 @@ require("lazy").setup({
 	-- require 'plugins.alpha',  -- greater
 	require("plugins.indent-blankline"),
 	require("plugins.comment"),
-	require("plugins.whichkey"),
+	-- require("plugins.whichkey"),  -- hints about keyboard bindings
 	require("plugins.autoclosetags"),
 	require("plugins.autopairs"),
 	require("plugins.colorizer"),
