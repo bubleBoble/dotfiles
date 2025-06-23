@@ -1,6 +1,6 @@
 require("core.options") -- Load general options
 require("core.keymaps") -- Load general keymaps
-require("core.snippets") -- Custom code snippets
+-- require("core.snippets") -- Custom code snippets
 
 -- Set up the Lazy plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -15,24 +15,24 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Set up plugins
 require("lazy").setup({
-	require("plugins.neotree"),
+	-- require("plugins.neotree"), -- sidebar
 	require("plugins.colortheme"),
 	require("plugins.bufferline"),
 	require("plugins.lualine"),
-	require("plugins.treesitter"),
+	require("plugins.treesitter"), -- for synax coloring
 	require("plugins.lsp"),
-	require("plugins.telescope"),
-	require("plugins.autocompletion"),
+	require("plugins.telescope"), -- fuzzy finder
+	-- require("plugins.autocompletion"),
 	require("plugins.none-ls"),
 	require("plugins.gitsigns"),
 	-- require 'plugins.alpha',  -- greater
-	require("plugins.indent-blankline"),
-	require("plugins.comment"),
+	-- require("plugins.indent-blankline"),
+	-- require("plugins.comment"), -- for comments
 	-- require("plugins.whichkey"),  -- hints about keyboard bindings
-	require("plugins.autoclosetags"),
-	require("plugins.autopairs"),
+	-- require("plugins.autoclosetags"),
+	-- require("plugins.autopairs"),
 	require("plugins.colorizer"),
-	require("plugins.aerial"),
+	-- require("plugins.aerial"),
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

@@ -40,12 +40,6 @@ space lw
 
 ```
 
-idk right now XD:
-  - treesitter.lua
-  - aerial.lua
-
-nie działa space tx
-
 ```sh
 # autocompletion
 ctrl n
@@ -56,16 +50,10 @@ ctrl a
 ctrl space
 ctrl l
 ctrl h
-
 ```
 
 :Telescope colorscheme
 
 :colo tab
 :Colorscheme tab
-Nice colorschemes:
-  - desert
-  - evening
-  - habamax
-  - elflord
 
