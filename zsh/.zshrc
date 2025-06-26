@@ -92,4 +92,6 @@ fvgrep() {
       | awk '{print $1}' | xargs -I{} -o vgrep --show {}
 }
 
-
+alias gdb="gdb -q"
+alias cs="cd /home/dadam/Documents/05-gd-a-notatki/07-C-tools && vim ."
+alias ll="l -l --group-directories-first"

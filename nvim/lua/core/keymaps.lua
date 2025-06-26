@@ -88,7 +88,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-
-
+-- nnoremap <leader>lb :ls<CR>:b<space>
+vim.keymap.set('n', '<leader>lb', ':ls<CR>:b ', { noremap = true })
 
 
