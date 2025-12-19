@@ -95,3 +95,5 @@ fvgrep() {
 alias gdb="gdb -q"
 alias cs="cd /home/dadam/Documents/05-gd-a-notatki/07-C-tools && vim ."
 alias ll="l -l --group-directories-first"
+
+alias vimks='NVIM_APPNAME="nvim-kickstart" nvim'
