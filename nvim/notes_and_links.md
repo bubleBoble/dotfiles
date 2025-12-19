@@ -11,6 +11,9 @@
   * kickstart - patrz instalacja, zależności, czcionki, FAQ
     * w szczególności w FAQ patrz na "NVIM_APPNAME"
 
+https://www.youtube.com/watch?v=m8C0Cq9Uv9o
+  * TJ
+
 * https://github.com/ThePrimeagen/init.lua
   * primeagen
 
