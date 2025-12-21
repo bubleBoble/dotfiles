@@ -1,6 +1,6 @@
 vim.g.mapleader = " " -- :help mapleader, Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.maplocalleader = " "
-vim.g.have_nerd_font = false -- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.o.number = true -- :help vim.o, :help option-list
 vim.o.relativenumber = true
 vim.o.mouse = "a"

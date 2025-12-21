@@ -4,6 +4,7 @@ require('core.autocommands')
 require('core.lazyinit')
 
 require('lazy').setup({
+        require('plugins/nvim-web-devicons'),
         require('plugins.guess-indent'),
         require('plugins.gitsigns'),
         require('plugins.which-key'),
@@ -16,6 +17,7 @@ require('lazy').setup({
         require('plugins.nvim-treesitter'),
         require('plugins.colorscheme'),
         require('plugins.huez'),
+        require('plugins.neotree'),
 }, {
         ui = {
                 -- If you are using a Nerd Font: set icons to an empty table which will use the

@@ -1,32 +1,16 @@
-# oh-my-zsh replaced previous $HOME/.zshrc file contents, it should be 
-# backed up in $HOME/.zshrc.pre-oh-my-zsh
-
 # Packages installed without root privilages are placed under $HOME/
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-#ZSH_THEME="eastwood"
-#ZSH_THEME="lukerandall"
-#ZSH_THEME="gozilla"
-#ZSH_THEME="agnoster"
 ZSH_THEME="miloshadzic"
-#ZSH_THEME="alanpeabody"
-#ZSH_THEME="apple"
-#ZSH_THEME="afowler"
 
-# Case sensitive completion
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+# Marking untracked files under VCS as dirty.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -51,39 +35,35 @@ else
         export EDITOR='nvim'
 fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-
-alias vim="nvim"
-alias cls="clear"
-
+################################################################################
+# NVM stuff lol
+################################################################################
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-alias ta="tmux attach"
+################################################################################
+# Run tmux by default
+################################################################################
+# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#         exec tmux
+# fi
 
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  exec tmux
-fi
+################################################################################
+# fzf
+################################################################################
+# source <(fzf --zsh)
 
-tm ()
+fman ()
 {
-    local man_page;
-    man_page=$(man -k . | sort | fzf --prompt='Man Pages> ' --preview='echo {} | awk "{print \$1}" | xargs man' --preview-window=right:60%:wrap);
-    man "$(echo "$man_page" | awk '{print $1}')"
+        local man_page;
+        man_page=$(man -k . | sort | fzf --prompt='Man Pages> ' --preview='echo {} | awk "{print \$1}" | xargs man' --preview-window=right:60%:wrap);
+        man "$(echo "$man_page" | awk '{print $1}')"
 }
 
-# vgrep with fzf
-# https://github.com/vrothberg/vgrep
+################################################################################
+# vgrep with fzf - https://github.com/vrothberg/vgrep
+################################################################################
 fvgrep() {
       INITIAL_QUERY="$1"
       VGREP_PREFIX="vgrep --no-header "
@@ -92,8 +72,16 @@ fvgrep() {
       | awk '{print $1}' | xargs -I{} -o vgrep --show {}
 }
 
-alias gdb="gdb -q"
-alias cs="cd /home/dadam/Documents/05-gd-a-notatki/07-C-tools && vim ."
-alias ll="l -l --group-directories-first"
-
+################################################################################
+# Aliases
+################################################################################
+alias fzf="fzf --height 40% --layout reverse --border"
+# alias fzfv ="vim $(fzf)"
+alias vim="nvim"
 alias vimks='NVIM_APPNAME="nvim-kickstart" nvim'
+alias ta="tmux attach"
+alias cls="clear"
+alias gdb="gdb -q"
+alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
+alias ll="ls -l --group-directories-first"
+alias dotf="cd /home/dadam/a-dev/dotfiles && vim ."
