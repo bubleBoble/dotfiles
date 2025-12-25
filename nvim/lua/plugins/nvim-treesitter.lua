@@ -1,7 +1,8 @@
 return { -- nvim-treesitter/nvim-treesitter: Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
+        branch = 'main',
         build = ':TSUpdate',
-        -- main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+        main = 'nvim-treesitter.configs', -- Sets main module to use for opts
         -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
         opts = {
                 ensure_installed = {
@@ -21,24 +22,16 @@ return { -- nvim-treesitter/nvim-treesitter: Highlight, edit, and navigate code
                         'python',
                         'javascript',
                         'typescript',
-                        'vim',
                         'regex',
-                        'terraform',
-                        'sql',
                         'dockerfile',
                         'toml',
                         'json',
-                        'java',
-                        'groovy',
                         'go',
                         'gitignore',
-                        'graphql',
                         'yaml',
                         'make',
                         'cmake',
-                        'tsx',
                         'css',
-                        'html',
                 },
                 -- Autoinstall languages that are not installed
                 auto_install = true,
@@ -48,10 +41,23 @@ return { -- nvim-treesitter/nvim-treesitter: Highlight, edit, and navigate code
                         --  If you are experiencing weird indenting issues, add the language to
                         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
                         additional_vim_regex_highlighting = { 'ruby' },
+                        -- Disable in large C buffers
+                        disable = function(lang, bufnr)
+                                return lang == 'c' and vim.api.nvim_buf_line_count(bufnr) > 50000
+                        end,
                 },
                 indent = {
                         enable = true,
                         disable = { 'ruby' },
+                },
+                incremental_selection = {
+                        enable = true,
+                        keymaps = {
+                                init_selection = '<leader>is', -- start inc selection
+                                node_incremental = '<leader>iu', -- inc to the upper named parent
+                                scope_incremental = '<leader>is', -- inc to the upper scope
+                                node_decremental = '<leader>id', -- dec to the prev named node
+                        },
                 },
         },
         -- There are additional nvim-treesitter modules that you can use to interact

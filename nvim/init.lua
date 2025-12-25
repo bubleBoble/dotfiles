@@ -4,7 +4,7 @@ require('core.autocommands')
 require('core.lazyinit')
 
 require('lazy').setup({
-        require('plugins/nvim-web-devicons'),
+        require('plugins.nvim-web-devicons'),
         require('plugins.guess-indent'),
         require('plugins.gitsigns'),
         require('plugins.which-key'),

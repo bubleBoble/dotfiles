@@ -34,6 +34,10 @@ vim.keymap.set('n', '<C-A-k>', '<C-w>K', { desc = 'Move window to the upper' })
 -- Colorscheme picker/manager
 vim.keymap.set('n', '<leader>sc', '<cmd>Huez<CR>', { desc = 'Choose colorscheme' })
 
+-- jj as ESC
+vim.keymap.set('i', 'jj', '<ESC>', { noremap = false })
+vim.keymap.set('i', 'jk', '<ESC>', { noremap = false })
+
 -- mini.map (minimap left sidebar)
 -- vim.keymap.set('n', '<leader>mo', MiniMap.open, { desc = 'Minimap open' })
 -- vim.keymap.set('n', '<leader>mr', MiniMap.refresh, { desc = 'Minimap refresh' })
