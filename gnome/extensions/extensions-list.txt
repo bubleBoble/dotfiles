@@ -1,0 +1,17 @@
+Some useful extensions:
+
+  * gTile@vibou                       -- window tiling for gnome
+  * arcmenu@arcmenu.com               -- just for app launcher
+  * clipboard-history@alexsaveau.dev
+  * space-bar@luchrioh                -- i3-like workspace indicator
+  * Vitals@CoreCoding.com             -- system info on topbar
+
+Some extensions can be installed with dnf, I don't actually use them:
+
+  sudo dnf install -y gnome-shell-extension-gsconnect.x86_64 \
+                      gnome-shell-extension-dash-to-dock.noarch \
+                      gnome-shell-extension-apps-menu.noarch \
+                      gnome-shell-extension-launch-new-instance.noarch \
+                      gnome-shell-extension-places-menu.noarch \
+                      gnome-shell-extension-window-list.noarch \
+                      gnome-shell-extension-appindicator.noarch \

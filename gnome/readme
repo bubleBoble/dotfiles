@@ -1,0 +1,44 @@
+############################################################################### 
+# Note
+############################################################################### 
+
+  This is my more or less gnome setup, there are no auto install scripts
+  for this config
+
+  See below how to restore some gnome settings, key shortcuts, extensions
+  settings, note that this method is not perfect and future you should
+  be careful when doing this on a fresh system install - especially
+  with replacing parts of dconf database
+
+############################################################################### 
+# Saving and restoring
+############################################################################### 
+
+  This should include keyboard shortcuts, key mappings and
+  gnome tweaks settings
+
+
+        dconf dump /org/gnome/ > ./dconf/gnome-settings.ini
+
+
+  This should export gnome extensions settings
+
+
+        dconf dump /org/gnome/shell/extensions/ > ./dconf/extensions.ini
+
+
+  This is how you could restore the saved dconf settings
+  NOTE that this will replace the dconf database contents
+
+
+        dconf load /org/gnome/ < gnome/dconf/gnome-settings.ini
+        dconf load /org/gnome/shell/extensions/ < gnome/dconf/extensions.ini
+
+
+  This is how you can create list of installed gnome extensions
+
+
+        gnome-extensions list > ./extensions/extensions-list-manual.txt
+
+
+
