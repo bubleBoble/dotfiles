@@ -17,7 +17,8 @@ require('lazy').setup({
         require('plugins.nvim-treesitter'),
         require('plugins.colorscheme'),
         require('plugins.huez'),
-        require('plugins.neotree'),
+        -- require('plugins.neotree'),
+        require('plugins.oil'),
         require('plugins.vscode-diff'),
 }, {
         ui = {
