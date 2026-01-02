@@ -57,11 +57,11 @@ vim.keymap.set('n', '<S-Left>', ':vertical resize -2<CR>')
 vim.keymap.set('n', '<S-Right>', ':vertical resize +2<CR>')
 
 -- Some terminals have colliding keymaps or are not able to send distinct keycodes
-vim.keymap.set('n', '<C-A-h>', '<C-w>H', { desc = 'Move window to the left' })
+-- vim.keymap.set('n', '<C-A-h>', '<C-w>H', { desc = 'Move window to the left' })
 
 -- vim.keymap.set("n", "<C-A-l>", "<C-w>L", { desc = "Move window to the right" }) -- doesn't work
-vim.keymap.set('n', '<C-A-j>', '<C-w>J', { desc = 'Move window to the lower' })
-vim.keymap.set('n', '<C-A-k>', '<C-w>K', { desc = 'Move window to the upper' })
+-- vim.keymap.set('n', '<C-A-j>', '<C-w>J', { desc = 'Move window to the lower' })
+-- vim.keymap.set('n', '<C-A-k>', '<C-w>K', { desc = 'Move window to the upper' })
 
 -- Colorscheme picker/manager
 vim.keymap.set('n', '<leader>sc', '<cmd>Huez<CR>', { desc = 'Choose colorscheme' })
@@ -88,3 +88,31 @@ vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', opts)
 -- Stay in indent mode after doing >> or <<
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
+
+-- Toggle lualine
+local lualine_hidden = false
+local laststatus_prev = vim.o.laststatus
+local cmdheight_prev = vim.o.cmdheight
+
+local function ToggleLualine()
+        local ok, lualine = pcall(require, 'lualine')
+        if not ok then
+                vim.notify('Lualine not loaded', vim.log.levels.WARN)
+                return
+        end
+
+        if lualine_hidden then
+                lualine.hide({ unhide = true })
+                vim.o.laststatus = laststatus_prev
+                vim.o.cmdheight = cmdheight_prev
+                lualine_hidden = false
+        else
+                laststatus_prev = vim.o.laststatus
+                cmdheight_prev = vim.o.cmdheight
+                lualine.hide()
+                vim.o.laststatus = 0
+                vim.o.cmdheight = 0
+                lualine_hidden = true
+        end
+end
+vim.keymap.set('n', '<leader>ul', ToggleLualine, { desc = 'Toggle lualine', noremap = true, silent = true })

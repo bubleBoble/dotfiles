@@ -48,7 +48,7 @@ vim.o.hlsearch = true -- highligh when searching, default is true
 vim.o.whichwrap = 'bs<>[]hl' -- which "horizontal" keys are allowed to travel to prev/next line (default: 'b,s')
 vim.o.numberwidth = 4 -- number column width
 vim.o.swapfile = false -- default is true
-vim.o.showtabline = 2 -- show tabs line never/atleast2tabs/always - 0/1/2
+vim.o.showtabline = 1 -- show tabs line never/atleast2tabs/always - 0/1/2
 vim.o.backspace = 'indent,eol,start'
 vim.o.pumheight = 0 -- max popup menu size - 0 means whatever is need
 vim.o.conceallevel = 0 -- So that `` is visible in markdown files (default: 1)
@@ -56,3 +56,4 @@ vim.wo.signcolumn = 'yes'
 vim.o.backup = false -- whether to make backup while writing the file
 vim.o.writebackup = false -- whether to create a backup while the file is being edited
 vim.opt.runtimepath:remove('/usr/share/vim/vimfiles') -- Separate Vim plugins from Neovim in case Vim still in use (default: includes this path if Vim is installed)
+vim.o.hidden = true -- will allow you to have modified buffers open in the "background" - ie not displayed in the window

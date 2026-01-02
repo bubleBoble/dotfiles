@@ -35,11 +35,12 @@ return {
                 vim.fn.sign_define('DiagnosticSignHint', { text = '󰌵', texthl = 'DiagnosticSignHint' })
 
                 require('neo-tree').setup({
-                        source_selector = {
-                                winbar = false,
-                                statusline = true,
-                        },
-                        popup_border_style = 'rounded',
+                        -- "files/buffers/git" selector
+                        --  source_selector = {
+                        --          winbar = false,
+                        --          statusline = true,
+                        --  },
+                        popup_border_style = 'NC', -- 'NC' or ''
                         enable_git_status = false,
                         enable_diagnostics = false,
                         -- enable_normal_mode_for_inputs = false,                             -- Enable normal mode for input dialogs.
@@ -130,6 +131,7 @@ return {
                         -- see `:h neo-tree-custom-commands-global`
                         commands = {},
                         window = {
+                                show_header = false,
                                 position = 'left',
                                 width = 40,
                                 mapping_options = {
@@ -291,7 +293,7 @@ return {
                         },
                         git_status = {
                                 window = {
-                                        position = 'float',
+                                        -- position = 'float',
                                         mappings = {
                                                 ['A'] = 'git_add_all',
                                                 ['gu'] = 'git_unstage_file',

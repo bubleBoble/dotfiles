@@ -17,9 +17,11 @@ require('lazy').setup({
         require('plugins.nvim-treesitter'),
         require('plugins.colorscheme'),
         require('plugins.huez'),
-        -- require('plugins.neotree'),
-        require('plugins.oil'),
+        require('plugins.neotree'),
+        -- require('plugins.oil'),
         require('plugins.vscode-diff'),
+        require('plugins.lualine'),
+        require('plugins.bufferline'),
 }, {
         ui = {
                 -- If you are using a Nerd Font: set icons to an empty table which will use the
