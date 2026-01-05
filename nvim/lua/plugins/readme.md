@@ -25,3 +25,4 @@ Other plugins to checkout:
   * nvimtools/none-ls.nvim - Format on save and linters
   * mfussenegger/nvim-lint
   * oil.nvim instead of neotree
+  * folke/twilight.nvim

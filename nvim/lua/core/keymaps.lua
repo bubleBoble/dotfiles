@@ -67,8 +67,8 @@ vim.keymap.set('n', '<S-Right>', ':vertical resize +2<CR>')
 vim.keymap.set('n', '<leader>sc', '<cmd>Huez<CR>', { desc = 'Choose colorscheme' })
 
 -- jj as ESC
-vim.keymap.set('i', 'jj', '<ESC>', { noremap = false })
-vim.keymap.set('i', 'jk', '<ESC>', { noremap = false })
+-- vim.keymap.set('i', 'jj', '<ESC>', { noremap = false })
+-- vim.keymap.set('i', 'jk', '<ESC>', { noremap = false })
 
 -- Buffers
 vim.keymap.set('n', '<Tab>', ':bnext<CR>') -- goto next buffer
@@ -116,3 +116,7 @@ local function ToggleLualine()
         end
 end
 vim.keymap.set('n', '<leader>ul', ToggleLualine, { desc = 'Toggle lualine', noremap = true, silent = true })
+
+-- Terminal
+vim.keymap.set('n', '<leader>tv', [[<cmd>vsplit | term<cr>A]], { desc = 'Open [t]erminal in [v]ertical split' })
+vim.keymap.set('n', '<leader>th', [[<cmd>split | term<cr>A]], { desc = 'Open [t]erminal in [h]orizontal split' })
