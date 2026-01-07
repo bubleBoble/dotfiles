@@ -16,7 +16,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>')
 
 -- quit file
-vim.keymap.set('n', '<C-q>', '<cmd> q <CR>')
+-- vim.keymap.set('n', '<C-q>', '<cmd> q <CR>')
+
+-- display empty buffer after deleting the current one
+vim.keymap.set('n', '<C-q>', ':bp|sp|bn|bd<CR>', { noremap = true, silent = true })
 
 -- delete single character without copying into register
 vim.keymap.set('n', 'x', '"_x')
