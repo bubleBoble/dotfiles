@@ -27,11 +27,23 @@ return { -- nvim-telescope/telescope.nvim: Fuzzy Finder (files, lsp, etc). It's 
         config = function()
                 -- :help telescope and :help telescope.setup()
                 require('telescope').setup({
-                        -- defaults = {
-                        --   mappings = {
-                        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-                        --   },
-                        -- },
+                        defaults = {
+                                --   mappings = {
+                                --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+                                --   },
+                                previewer = false,
+                                layout_strategy = 'vertical', -- use vertical layout
+                                layout_config = {
+                                        vertical = {
+                                                prompt_position = 'top',
+                                                preview_height = 0.5,
+                                                results_height = 0.3,
+                                                width = 0.6,
+                                                height = 0.4,
+                                        },
+                                },
+                                -- borderchars = { '*', ':', '*', ':', '+', '+', '+', '+' },
+                        },
                         -- pickers = {}
                         extensions = {
                                 ['ui-select'] = { require('telescope.themes').get_dropdown() },
@@ -50,9 +62,15 @@ return { -- nvim-telescope/telescope.nvim: Fuzzy Finder (files, lsp, etc). It's 
                 vim.keymap.set('n', '<leader>sk', builtin.keymaps, {
                         desc = '[S]earch [K]eymaps',
                 })
-                vim.keymap.set('n', '<leader>sf', builtin.find_files, {
-                        desc = '[S]earch [F]iles',
-                })
+
+                -- vim.keymap.set('n', '<leader>sf', builtin.find_files, {
+                --         desc = '[S]earch [F]iles',
+                -- })
+
+                vim.keymap.set('n', '<leader>sf', function()
+                        require('telescope.builtin').find_files({ previewer = false })
+                end, { desc = '[S]earch [F]iles without preview' })
+
                 vim.keymap.set('n', '<leader>ss', builtin.builtin, {
                         desc = '[S]earch [S]elect Telescope',
                 })
@@ -100,6 +118,7 @@ return { -- nvim-telescope/telescope.nvim: Fuzzy Finder (files, lsp, etc). It's 
                 vim.keymap.set('n', '<leader>sn', function()
                         builtin.find_files({
                                 cwd = vim.fn.stdpath('config'),
+                                previewer = false,
                         })
                 end, {
                         desc = '[S]earch [N]eovim files',
