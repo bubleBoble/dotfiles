@@ -74,16 +74,16 @@ vim.keymap.set('n', '<leader>sc', '<cmd>Huez<CR>', { desc = 'Choose colorscheme'
 -- vim.keymap.set('i', 'jk', '<ESC>', { noremap = false })
 
 -- Buffers
-vim.keymap.set('n', '<Tab>', ':bnext<CR>') -- goto next buffer
-vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>') -- goto previous buffer
-vim.keymap.set('n', '<leader>bx', ':bdelete!<CR>', { desc = 'Close buffer' }) -- close buffer
-vim.keymap.set('n', '<leader>bn', '<cmd> enew <CR>', { desc = 'New buffer' }) -- new buffer
+vim.keymap.set('n', '<Tab>', ':bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>bx', ':bdelete!<CR>', { desc = 'Close buffer' })
+vim.keymap.set('n', '<leader>bn', '<cmd> enew <CR>', { desc = 'New buffer' })
 
 -- Tabs
-vim.keymap.set('n', '<leader>to', ':tabnew<CR>', { desc = 'Open new tab' }) -- open new tab
-vim.keymap.set('n', '<leader>tx', ':tabclose<CR>', { desc = 'Close tab' }) -- close current tab
-vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Goto next tab' }) --  go to next tab
-vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Goto prev tab' }) --  go to previous tab
+vim.keymap.set('n', '<leader>to', ':tabnew<CR>', { desc = 'Open new tab' })
+vim.keymap.set('n', '<leader>tx', ':tabclose<CR>', { desc = 'Close tab' })
+vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Goto next tab' })
+vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Goto prev tab' })
 
 -- Toggle line wrapping, or just use :set wrap!
 vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', opts)

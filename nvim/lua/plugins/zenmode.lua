@@ -25,6 +25,16 @@ return {
                         },
                 },
 
+                plugins = {
+                        options = {
+                                enabled = true,
+                                showcmd = false,
+                                -- status line will be show only when laststatus == 3
+                                laststatus = 3,
+                        },
+                        gitsigns = { enabled = true },
+                },
+
                 -- callback where you can add custom code when the Zen window opens
                 on_open = function(win) end,
                 -- callback where you can add custom code when the Zen window closes

@@ -39,7 +39,7 @@ vim.opt.listchars = {
         nbsp = '␣',
 }
 vim.o.inccommand = 'split' -- preview substitutions live, as you type
-vim.o.cursorline = false -- highlight current line
+vim.o.cursorline = true -- highlight current line
 vim.o.scrolloff = 0 -- minimal number of screen lines to keep above and below the cursor
 vim.o.sidescrolloff = 0 -- minimal num of columns if wrap is false
 vim.o.confirm = false -- :help confirm
