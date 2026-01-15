@@ -138,7 +138,12 @@ return {
                                                 width = 0.8, -- 80% of screen width
                                                 height = 0.8, -- 80% of screen height
                                         },
-                                        border = 'rounded', -- optional
+                                        -- border = 'rounded', -- optional
+                                        border = {
+                                                -- style = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
+                                                -- style = { '╔', '═', '╗', '║', '╝', '═', '╚', '║' },
+                                                style = { '+', '-', '+', '|', '+', '-', '+', '|' },
+                                        },
                                         -- optionally, center it manually
                                         -- can also use 'top', 'left' for offsets
                                 },

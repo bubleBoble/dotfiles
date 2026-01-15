@@ -73,6 +73,20 @@ fvgrep() {
 }
 
 ################################################################################
+# yazi terminal file manager
+################################################################################
+
+# change pwd when quiting yazi
+# https://yazi-rs.github.io/docs/quick-start
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+################################################################################
 # Aliases
 ################################################################################
 alias fzf="fzf --height 40% --layout reverse --border"
@@ -87,3 +101,5 @@ alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
 alias ll="ls -l --group-directories-first"
 alias dotf="cd /home/dadam/a-dev/dotfiles && vim ."
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
+
+

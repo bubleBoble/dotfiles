@@ -18,10 +18,11 @@ require('lazy').setup({
         -- require('plugins.nvim-treesitter-textobjects'),
         require('plugins.colorscheme'),
         require('plugins.huez'),
-        require('plugins.neotree'),
+        -- require('plugins.neotree'),
         -- require('plugins.oil'),
+        require('plugins.yazi'),
         require('plugins.vscode-diff'),
-        require('plugins.lualine'),
+        -- require('plugins.lualine'),
         require('plugins.bufferline'),
         require('plugins.zenmode'),
 }, {

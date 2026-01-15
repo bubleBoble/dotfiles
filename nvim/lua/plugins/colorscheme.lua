@@ -1,5 +1,7 @@
 -- for more themes see: https://dotfyle.com/neovim/colorscheme/top
 return {
+        { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = false, priority = 1000 },
+        'nyoom-engineering/oxocarbon.nvim',
         'folke/tokyonight.nvim',
         'catppuccin/nvim',
         'rebelot/kanagawa.nvim',
@@ -40,3 +42,16 @@ return {
                 end,
         },
 }
+
+-- favourite:
+--   ron          -- dark
+--   torte        -- dark
+--   wildcharm    -- dark
+--   desert       -- light grey
+--   elflord      -- dark
+--   evening      -- light grey
+--   github_dark_high_contrast
+--   github_dark_default
+--   github_dark_colorblind
+--   lunaperche
+--   quiet        -- very basic
