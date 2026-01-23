@@ -102,4 +102,4 @@ alias ll="ls -l --group-directories-first"
 alias dotf="cd /home/dadam/a-dev/dotfiles && vim ."
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
 
-
+export MANWIDTH=80

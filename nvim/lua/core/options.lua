@@ -8,8 +8,8 @@ vim.o.showmode = false -- don't show the mode, since it's already in the status 
 vim.o.wrap = false
 vim.o.breakindent = true -- indent wrapped lines - if wrapping is on
 vim.o.linebreak = true -- if true and if line wrapping enabled, it won't break words
-vim.o.expandtab = true -- convert tab to spaces
-vim.o.tabstop = 4 -- number of spaces for TAB
+vim.o.expandtab = false -- convert tab to spaces
+vim.o.tabstop = 8 -- number of spaces for TAB
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 4
 vim.o.virtualedit = 'block,onemore' -- to be able to place cursor in the place where here is not character - only in visual block mode
@@ -57,3 +57,4 @@ vim.o.backup = false -- whether to make backup while writing the file
 vim.o.writebackup = false -- whether to create a backup while the file is being edited
 vim.opt.runtimepath:remove('/usr/share/vim/vimfiles') -- Separate Vim plugins from Neovim in case Vim still in use (default: includes this path if Vim is installed)
 vim.o.hidden = true -- will allow you to have modified buffers open in the "background" - ie not displayed in the window
+vim.o.colorcolumn = '80'

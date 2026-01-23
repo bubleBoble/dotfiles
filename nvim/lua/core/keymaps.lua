@@ -36,10 +36,10 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- Disable arrow keys in normal mode
-vim.keymap.set('n', '<left>', '<cmd>echo "=============> Use h to move!! <============="<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "=============> Use l to move!! <============="<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "=============> Use k to move!! <============="<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "=============> Use j to move!! <============="<CR>')
+-- vim.keymap.set('n', '<left>', '<cmd>echo "=============> Use h to move!! <============="<CR>')
+-- vim.keymap.set('n', '<right>', '<cmd>echo "=============> Use l to move!! <============="<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "=============> Use k to move!! <============="<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "=============> Use j to move!! <============="<CR>')
 
 -- Window management
 vim.keymap.set('n', '<leader>v', '<C-w>v') -- split window vertically
@@ -123,3 +123,6 @@ vim.keymap.set('n', '<leader>ul', ToggleLualine, { desc = 'Toggle lualine', nore
 -- Terminal
 vim.keymap.set('n', '<leader>tv', [[<cmd>vsplit | term<cr>A]], { desc = 'Open [t]erminal in [v]ertical split' })
 vim.keymap.set('n', '<leader>th', [[<cmd>split | term<cr>A]], { desc = 'Open [t]erminal in [h]orizontal split' })
+
+vim.keymap.set('n', '<leader>;', ':', { desc = 'Command mode' })
+vim.keymap.set('n', '<leader>c', ':', { desc = 'Command mode' })
