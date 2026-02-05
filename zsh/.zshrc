@@ -45,9 +45,9 @@ export NVM_DIR="$HOME/.nvm"
 ################################################################################
 # Run tmux by default
 ################################################################################
-# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-#         exec tmux
-# fi
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+        exec tmux
+fi
 
 ################################################################################
 # fzf
@@ -101,5 +101,6 @@ alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
 alias ll="ls -l --group-directories-first"
 alias dotf="cd /home/dadam/a-dev/dotfiles && vim ."
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
+alias info="info --vi-keys"
 
 export MANWIDTH=80

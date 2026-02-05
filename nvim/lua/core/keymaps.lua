@@ -126,3 +126,15 @@ vim.keymap.set('n', '<leader>th', [[<cmd>split | term<cr>A]], { desc = 'Open [t]
 
 vim.keymap.set('n', '<leader>;', ':', { desc = 'Command mode' })
 vim.keymap.set('n', '<leader>c', ':', { desc = 'Command mode' })
+
+vim.keymap.set('i', '<C-h>', '<Left>')
+vim.keymap.set('i', '<C-j>', '<Down>')
+vim.keymap.set('i', '<C-k>', '<Up>')
+vim.keymap.set('i', '<C-l>', '<Right>')
+
+vim.keymap.set('n', 'zz', function()
+        local offset = 10
+        local view = vim.fn.winsaveview()
+        view.topline = math.max(view.lnum - offset, 1)
+        vim.fn.winrestview(view)
+end)
