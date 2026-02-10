@@ -12,6 +12,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         end,
 })
 
+vim.cmd('syntax off')
+
+vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+                pcall(vim.treesitter.start)
+        end,
+})
+
 -- Create an autocmd group for C/C++ project navigation
 vim.api.nvim_create_augroup('c_cpp_path', { clear = true })
 

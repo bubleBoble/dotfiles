@@ -120,9 +120,61 @@ local function ToggleLualine()
 end
 vim.keymap.set('n', '<leader>ul', ToggleLualine, { desc = 'Toggle lualine', noremap = true, silent = true })
 
+-- ############################################################################
 -- Terminal
-vim.keymap.set('n', '<leader>tv', [[<cmd>vsplit | term<cr>A]], { desc = 'Open [t]erminal in [v]ertical split' })
-vim.keymap.set('n', '<leader>th', [[<cmd>split | term<cr>A]], { desc = 'Open [t]erminal in [h]orizontal split' })
+-- ############################################################################
+vim.keymap.set('n', '<leader>tv', [[<cmd>40vsplit | term<cr>A]], { desc = 'Open [t]erminal in [v]ertical split' })
+-- vim.keymap.set('n', '<leader>th', [[<cmd>15split | term<cr>A]], { desc = 'Open [t]erminal in [h]orizontal split' })
+-- vim.keymap.set('n', '<leader>th', function()
+--         local height = 15
+--         vim.cmd(height .. 'split')
+--         vim.cmd('term')
+--         vim.cmd('startinsert')
+-- end, { desc = 'Open terminal in horizontal split with custom height' })
+-- Keep a reference to the terminal buffer
+local toggle_term_buf = nil
+local toggle_term_win = nil
+
+-- Function to toggle terminal, like vscode default terminal
+local function toggle_terminal()
+        -- If the terminal window is open, close it
+        if toggle_term_win and vim.api.nvim_win_is_valid(toggle_term_win) then
+                vim.api.nvim_win_close(toggle_term_win, true)
+                toggle_term_win = nil
+                return
+        end
+
+        -- If the terminal buffer exists, reuse it
+        if toggle_term_buf and vim.api.nvim_buf_is_valid(toggle_term_buf) then
+                -- Open a new split
+                vim.cmd('15split')
+                toggle_term_win = vim.api.nvim_get_current_win()
+                -- Set the buffer to the terminal buffer
+                vim.api.nvim_win_set_buf(toggle_term_win, toggle_term_buf)
+                vim.cmd('startinsert')
+        else
+                -- Create a new terminal buffer
+                vim.cmd('15split')
+                vim.cmd('term')
+                toggle_term_win = vim.api.nvim_get_current_win()
+                toggle_term_buf = vim.api.nvim_get_current_buf()
+                vim.cmd('startinsert')
+        end
+end
+
+-- Map Ctrl+` to toggle the terminal
+-- vscode-like style
+-- vim.keymap.set('n', '<leader>`', toggle_terminal, { desc = 'Toggle terminal' })
+-- vim.keymap.set('t', '<leader>`', toggle_terminal, { desc = 'Toggle terminal from terminal mode' })
+
+-- Floating terminal keymap
+vim.keymap.set('n', '<leader>`', function()
+        require('extra.floating_term').toggle_terminal()
+end, { desc = 'Toggle floating terminal' })
+vim.keymap.set('t', '<esc>', function()
+        require('extra.floating_term').toggle_terminal()
+end, { desc = 'Close floating terminal' })
+-- ############################################################################
 
 vim.keymap.set('n', '<leader>;', ':', { desc = 'Command mode' })
 vim.keymap.set('n', '<leader>c', ':', { desc = 'Command mode' })

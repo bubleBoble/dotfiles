@@ -32,6 +32,7 @@ return { -- nvim-telescope/telescope.nvim: Fuzzy Finder (files, lsp, etc). It's 
                                 --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
                                 --   },
                                 previewer = false,
+                                sorting_strategy = 'ascending',
                                 layout_strategy = 'vertical', -- use vertical layout
                                 layout_config = {
                                         vertical = {
