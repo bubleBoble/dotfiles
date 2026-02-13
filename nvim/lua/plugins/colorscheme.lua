@@ -41,17 +41,7 @@ return {
                         vim.cmd.colorscheme('gruvbox-material')
                 end,
         },
+        { 'agude/vim-eldar', priority = 1000 },
+        { 'NLKNguyen/papercolor-theme', priority = 1000 },
+        { 'EdenEast/nightfox.nvim', priority = 1000 },
 }
-
--- favourite:
---   ron          -- dark
---   torte        -- dark
---   wildcharm    -- dark
---   desert       -- light grey
---   elflord      -- dark
---   evening      -- light grey
---   github_dark_high_contrast
---   github_dark_default
---   github_dark_colorblind
---   lunaperche
---   quiet        -- very basic
