@@ -57,10 +57,22 @@ return { -- saghen/blink.cmp: Autocompletion
                         -- <c-k>: Toggle signature help
                         --
                         -- See :h blink-cmp-config-keymap for defining your own keymap
-                        preset = 'super-tab',
 
                         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
                         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+                        -- ------------------------------------------------- --
+                        -- preset = 'super-tab',
+                        preset = 'none',
+
+                        ['<Tab>'] = { 'accept', 'fallback' },
+                        ['<S-Tab>'] = { 'select_prev' },
+
+                        ['<CR>'] = { 'accept', 'fallback' },
+
+                        ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+                        ['<C-e>'] = { 'hide' },
+                        ['<C-n>'] = { 'select_next' },
+                        ['<C-p>'] = { 'select_prev' },
                 },
 
                 appearance = {

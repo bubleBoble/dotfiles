@@ -57,4 +57,10 @@ vim.o.backup = false -- whether to make backup while writing the file
 vim.o.writebackup = false -- whether to create a backup while the file is being edited
 vim.opt.runtimepath:remove('/usr/share/vim/vimfiles') -- Separate Vim plugins from Neovim in case Vim still in use (default: includes this path if Vim is installed)
 vim.o.hidden = true -- will allow you to have modified buffers open in the "background" - ie not displayed in the window
-vim.o.colorcolumn = '80'
+-- 80 char column line for .c and .h files
+vim.api.nvim_create_autocmd('FileType', {
+        pattern = { 'c', 'h' },
+        callback = function()
+                vim.o.colorcolumn = '80'
+        end,
+})

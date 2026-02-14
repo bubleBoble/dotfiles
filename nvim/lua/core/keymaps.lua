@@ -190,3 +190,6 @@ vim.keymap.set('n', 'zz', function()
         view.topline = math.max(view.lnum - offset, 1)
         vim.fn.winrestview(view)
 end)
+
+vim.keymap.set({ 'n', 'v' }, '<C-e>', '2<C-e>', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, '<C-y>', '2<C-y>', { noremap = true })

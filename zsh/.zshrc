@@ -99,7 +99,7 @@ alias cls="clear"
 alias gdb="gdb -q"
 alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
 alias ll="ls -l --group-directories-first"
-alias dotf="cd /home/dadam/a-dev/dotfiles && vim ."
+alias dotf="cd /home/dadam/a-dev/dotfiles"
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
 alias info="info --vi-keys"
 

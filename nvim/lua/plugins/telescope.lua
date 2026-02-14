@@ -92,9 +92,17 @@ return { -- nvim-telescope/telescope.nvim: Fuzzy Finder (files, lsp, etc). It's 
                 vim.keymap.set('n', '<leader>s.', builtin.oldfiles, {
                         desc = '[S]earch Recent Files ("." for repeat)',
                 })
-                vim.keymap.set('n', '<leader><leader>', builtin.buffers, {
-                        desc = '[ ] Find existing buffers',
-                })
+                -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, {
+                --         desc = '[ ] Find existing buffers',
+                -- })
+                local themes = require('telescope.themes')
+                vim.keymap.set('n', '<leader><leader>', function()
+                        require('telescope.builtin').buffers(themes.get_ivy({
+                                sort_mru = true,
+                                sort_lastused = true,
+                                initial_mode = 'insert',
+                        }))
+                end, { desc = '[ ] Find existing buffers' })
 
                 -- Overriding default behavior and theme
                 -- vim.keymap.set('n', '<leader>/', function()
