@@ -26,6 +26,7 @@ require('lazy').setup({
         require('plugins.lualine'),
         -- require('plugins.bufferline'),
         require('plugins.zenmode'),
+        require('plugins.noneckpain'),
         require('plugins.autopairs'),
 }, {
         ui = {
