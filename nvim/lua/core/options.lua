@@ -49,8 +49,9 @@ vim.o.whichwrap = 'bs<>[]hl' -- which "horizontal" keys are allowed to travel to
 vim.o.numberwidth = 4 -- number column width
 vim.o.swapfile = false -- default is true
 vim.o.showtabline = 1 -- show tabs line never/atleast2tabs/always - 0/1/2
+vim.o.cmdheight = 2
 vim.o.backspace = 'indent,eol,start'
-vim.o.pumheight = 0 -- max popup menu size - 0 means whatever is need
+vim.o.pumheight = 10 -- popup menu size - 0 means whatever is needed
 vim.o.conceallevel = 0 -- So that `` is visible in markdown files (default: 1)
 vim.wo.signcolumn = 'yes'
 vim.o.backup = false -- whether to make backup while writing the file
@@ -64,3 +65,5 @@ vim.api.nvim_create_autocmd('FileType', {
                 vim.o.colorcolumn = '80'
         end,
 })
+vim.opt.wildmenu = true
+-- vim.opt.wildoptions = 'fuzzy'

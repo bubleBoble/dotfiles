@@ -184,12 +184,14 @@ vim.keymap.set('i', '<C-j>', '<Down>')
 vim.keymap.set('i', '<C-k>', '<Up>')
 vim.keymap.set('i', '<C-l>', '<Right>')
 
-vim.keymap.set('n', 'zz', function()
-        local offset = 10
-        local view = vim.fn.winsaveview()
-        view.topline = math.max(view.lnum - offset, 1)
-        vim.fn.winrestview(view)
-end)
+-- zz will not center the screen but will move the screen top
+-- a fixed offset from the top
+-- vim.keymap.set('n', 'zz', function()
+--         local offset = 10
+--         local view = vim.fn.winsaveview()
+--         view.topline = math.max(view.lnum - offset, 1)
+--         vim.fn.winrestview(view)
+-- end)
 
 vim.keymap.set({ 'n', 'v' }, '<C-e>', '2<C-e>', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<C-y>', '2<C-y>', { noremap = true })
