@@ -195,3 +195,16 @@ vim.keymap.set('i', '<C-l>', '<Right>')
 
 vim.keymap.set({ 'n', 'v' }, '<C-e>', '2<C-e>', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<C-y>', '2<C-y>', { noremap = true })
+
+-- stylua: ignore start
+local harpoon = require("harpoon")
+harpoon:setup()
+vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
+vim.keymap.set("n", "<leader>he", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+vim.keymap.set("n", "<leader>h1", function() harpoon:list():select(1) end)
+vim.keymap.set("n", "<leader>h2", function() harpoon:list():select(2) end)
+vim.keymap.set("n", "<leader>h3", function() harpoon:list():select(3) end)
+vim.keymap.set("n", "<leader>h4", function() harpoon:list():select(4) end)
+vim.keymap.set("n", "<C-S-N>", function() harpoon:list():prev() end)
+vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
+-- stylua: ignore end

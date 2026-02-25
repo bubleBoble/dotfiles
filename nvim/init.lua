@@ -1,6 +1,5 @@
 require('extra.floating_term')
 require('core.options')
-require('core.keymaps')
 require('core.autocommands')
 require('core.lazyinit')
 
@@ -28,6 +27,7 @@ require('lazy').setup({
         require('plugins.zenmode'),
         require('plugins.noneckpain'),
         require('plugins.autopairs'),
+        require('plugins.harpoon'),
 }, {
         ui = {
                 -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -49,3 +49,5 @@ require('lazy').setup({
                 },
         },
 })
+
+require('core.keymaps')
