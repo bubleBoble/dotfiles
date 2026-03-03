@@ -158,5 +158,147 @@
     "workbench.colorTheme": "MacOS Modern Dark - Ventura Xcode Civic",
     "window.commandCenter": false,
     "workbench.layoutControl.enabled": false,
-    "chat.commandCenter.enabled": false
+    "chat.commandCenter.enabled": false,
+    "vim.leader": "<Space>",
+    "vim.hlsearch": true,
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useCtrlKeys": true,
+    "vim.useSystemClipboard": true,
+    "vim.highlightedyank.enable": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+      // Switch between buffers using Tab
+      {
+        "before": ["<Tab>"],
+        "commands": [":bnext"]
+      },
+      {
+        "before": ["<S-Tab>"],
+        "commands": [":bprev"]
+      },
+      // Create splits
+      {
+        "before": ["leader", "v"],
+        "commands": [":vsplit"]
+      },
+      {
+        "before": ["leader", "h"],
+        "commands": [":split"]
+      },
+      // Navigate panes using CTRL+hjkl
+      {
+        "before": ["<C-h>"],
+        "commands": ["workbench.action.navigateLeft"]
+      },
+      {
+        "before": ["<C-j>"],
+        "commands": ["workbench.action.navigateDown"]
+      },
+      {
+        "before": ["<C-k>"],
+        "commands": ["workbench.action.navigateUp"]
+      },
+      {
+        "before": ["<C-l>"],
+        "commands": ["workbench.action.navigateRight"]
+      },
+      // Navigate the Explorer
+      {
+        "before": ["leader", "E"],
+        "commands": ["workbench.explorer.fileView.focus"]
+      },
+      {
+        "before": ["leader", "e"],
+        "commands": ["workbench.action.toggleSidebarVisibility"]
+      },
+      // Terminal
+      {
+        "before": ["leader", "t"],
+        "commands": ["workbench.action.togglePanel"]
+      },
+      // Closing and saving buffers
+      {
+        "before": ["leader", "s"],
+        "commands": [":w!"]
+      },
+      {
+        "before": ["leader", "q"],
+        "commands": [":q!"]
+      },
+      {
+        "before": ["leader", "x"],
+        "commands": [":x!"]
+      },
+      // Jump to markers
+      {
+        "before": ["[", "d"],
+        "commands": ["editor.action.marker.prev"]
+      },
+      {
+        "before": ["]", "d"],
+        "commands": ["editor.action.marker.next"]
+      },
+      // Code actions
+      {
+        "before": ["leader", "c", "a"],
+        "commands": ["editor.action.quickFix"]
+      },
+      // Search files
+      {
+        "before": ["leader", "s", "f"],
+        "commands": ["workbench.action.quickOpen"]
+      },
+      // Command prompt
+      {
+        "before": ["leader", "p"],
+        "commands": ["workbench.action.showCommands"]
+      },
+      // Show definition
+      {
+        "before": ["g", "d"],
+        "commands": ["editor.action.showDefinitionPreviewHover"]
+      },
+      // Toggle activity bar
+      {
+        "before": ["leader", "u", "a"],
+        "commands": ["workbench.action.toggleActivityBarVisibility"]
+      },
+      // Move panes
+      {
+        "before": ["leader", "w", "l"],
+        "commands": ["workbench.action.moveActiveEditorGroupRight"]
+      },
+      {
+        "before": ["leader", "w", "h"],
+        "commands": ["workbench.action.moveActiveEditorGroupLeft"]
+      },
+      {
+        "before": ["leader", "w", "j"],
+        "commands": ["workbench.action.moveActiveEditorGroupDown"]
+      },
+      {
+        "before": ["leader", "w", "k"],
+        "commands": ["workbench.action.moveActiveEditorGroupUp"]
+      },
+      // Resize panes
+      {
+        "before": ["up"],
+        "commands": ["workbench.action.increaseViewSize"]
+      },
+      {
+        "before": ["down"],
+        "commands": ["workbench.action.decreaseViewSize"]
+      }
+    ],
+    "vim.visualModeKeyBindings": [
+      // Allow indenting from visual mode
+      {
+        "before": ["<"],
+        "commands": ["editor.action.outdentLines"]
+      },
+      {
+        "before": [">"],
+        "commands": ["editor.action.indentLines"]
+      }
+    ]
 }
