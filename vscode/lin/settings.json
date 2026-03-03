@@ -1,0 +1,162 @@
+{
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[html][jsonc][json][css]": {
+        "editor.rulers": []
+    },
+    "[javascript]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[markdown]": {
+        "editor.wordWrap": "off"
+    },
+    "[python]": {
+        // "editor.defaultFormatter": "ms-python.autopep8",
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.formatOnSave": true
+    },
+    "C_Cpp.autocompleteAddParentheses": true,
+    "cmake.configureOnOpen": false,
+    "cmake.options.statusBarVisibility": "visible",
+    "cSpell.enabled": false,
+    "cSpell.language": "en,pl",
+    "cSpell.userWords": [
+        "baudrate",
+        "bytesize",
+        "desktopowe",
+        "desktopowymi",
+        "hostnames",
+        "inicjalizuje",
+        "stopbits",
+        "tutorialami",
+        "zainicjalizowaniu"
+    ],
+    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.renderSideBySide": true,
+    "diffviewer.outputFormat": "side-by-side",
+    "editor.autoClosingBrackets": "always",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.cursorStyle": "line",
+    "editor.cursorSurroundingLines": 20,
+    "editor.cursorSurroundingLinesStyle": "default",
+    "editor.dragAndDrop": false,
+    "editor.fastScrollSensitivity": 5,
+    "editor.foldingHighlight": false,
+    "editor.fontFamily": "'IosevkaTermSlab Nerd Font Mono', 'Fira Code', 'JetBrains Mono', Monaco, Consolas, 'Courier New', monospace",
+    "editor.fontWeight": "350",
+    "editor.formatOnSave": false,
+    "editor.gotoLocation.multipleDeclarations": "goto",
+    "editor.gotoLocation.multipleDefinitions": "goto",
+    "editor.gotoLocation.multipleReferences": "goto",
+    "editor.guides.highlightActiveBracketPair": false,
+    "editor.guides.indentation": false,
+    "editor.hideCursorInOverviewRuler": true,
+    "editor.insertSpaces": true,
+    "editor.lineNumbers": "relative",
+    "editor.matchBrackets": "never",
+    "editor.minimap.enabled": false,
+    "editor.mouseWheelZoom": true,
+    "editor.occurrencesHighlight": "off",
+    "editor.renderLineHighlight": "none",
+    "editor.renderWhitespace": "selection",
+    "editor.rulers": [
+        {
+            "color": "#ff000031",
+            "column": 80
+        }
+    ],
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.scrollbar.vertical": "hidden",
+    "editor.selectionHighlight": false,
+    "editor.stickyScroll.enabled": false,
+    "editor.tabSize": 4,
+    "explorer.autoReveal": false,
+    "explorer.compactFolders": false,
+    "explorer.confirmDragAndDrop": false,
+    "files.eol": "\n",
+    "files.exclude": {
+        "**/.DS_Store": false,
+        "**/.git": false,
+        "**/.hg": false,
+        "**/.svn": false,
+        "**/CVS": false,
+        "**/Thumbs.db": false
+    },
+    "git-graph.commitDetailsView.location": "Docked to Bottom",
+    "git.enabled": true,
+    "git.openRepositoryInParentFolders": "always",
+    "javascript.suggest.completeFunctionCalls": true,
+    "javascript.updateImportsOnFileMove.enabled": "never",
+    "makefile.configureOnOpen": true,
+    "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.initialHint": false, // Hide default copilot hint
+    "terminal.integrated.profiles.windows": {
+        "bash (MSYS2)": {
+            "args": [
+                "--login",
+                "-i"
+            ],
+            "env": {
+                "CHERE_INVOKING": "1"
+            },
+            "path": "C:\\msys64\\usr\\bin\\bash.exe"
+        },
+        "Command Prompt": {
+            "args": [],
+            "icon": "terminal-cmd",
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ]
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "MSYS2": {
+            "args": [
+                "--login",
+                "-i"
+            ],
+            "env": {
+                "CHERE_INVOKING": "1",
+                "MSYSTEM": "MINGW64"
+            },
+            "path": "C:\\msys64\\usr\\bin\\mingw32.exe"
+        },
+        "PowerShell": {
+            "icon": "terminal-powershell",
+            "source": "PowerShell"
+        }
+    },
+    "window.restoreWindows": "none",
+    "workbench.colorCustomizations": {
+        "editorRuler.foreground": "#c29613"
+    },
+    "workbench.editor.centeredLayoutAutoResize": true,
+    "workbench.editor.empty.hint": "hidden",
+    "workbench.editor.tabSizing": "fit",
+    "workbench.list.openMode": "doubleClick",
+    "workbench.sash.size": 5,
+    "workbench.tree.indent": 40,
+    "zenMode.hideLineNumbers": false,
+    "workbench.sideBar.location": "right",
+    "workbench.activityBar.location": "top",
+    "chat.viewSessions.orientation": "stacked",
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "c": false
+    },
+    "workbench.statusBar.visible": false,
+    "workbench.navigationControl.enabled": false,
+    "workbench.colorTheme": "MacOS Modern Dark - Ventura Xcode Civic",
+    "window.commandCenter": false,
+    "workbench.layoutControl.enabled": false,
+    "chat.commandCenter.enabled": false
+}
