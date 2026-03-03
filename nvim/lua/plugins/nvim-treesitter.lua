@@ -8,6 +8,7 @@ return {
                 treesitter.install({
                         'agda',
                         'bash',
+                        'zsh',
                         'c',
                         'cmake',
                         'cpp',

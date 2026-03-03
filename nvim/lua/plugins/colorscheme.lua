@@ -44,4 +44,5 @@ return {
         { 'agude/vim-eldar', priority = 1000 },
         { 'NLKNguyen/papercolor-theme', priority = 1000 },
         { 'EdenEast/nightfox.nvim', priority = 1000 },
+        { 'lunarvim/darkplus.nvim' },
 }

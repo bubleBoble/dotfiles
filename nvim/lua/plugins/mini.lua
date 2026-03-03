@@ -16,7 +16,21 @@ return { -- echasnovski/mini.nvim
                 -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
                 -- - sd'   - [S]urround [D]elete [']quotes
                 -- - sr)'  - [S]urround [R]eplace [)] [']
-                require('mini.surround').setup()
+                require('mini.surround').setup({
+                        -- highlight duration
+                        highlight_duration = 1000,
+                        mappings = {
+                                add = 'sa', -- saw" ...
+                                delete = 'sd', -- sd" sd< ...
+                                find = 'sf', -- sf<
+                                find_left = 'sF',
+                                highlight = 'sh',
+                                replace = 'sr',
+                                update_n_lines = 'sn',
+                        },
+
+                        n_lines = 40, -- num of lines within which surrounding is searched
+                })
 
                 -- Simple and easy statusline.
                 --  You could remove this setup call if you don't like it,
