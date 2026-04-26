@@ -21,7 +21,7 @@ plugins=(
         git
         zsh-autosuggestions
         zsh-syntax-highlighting
-        nvm
+        # nvm
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -45,7 +45,13 @@ export NVM_DIR="$HOME/.nvm"
 ################################################################################
 # Run tmux by default
 ################################################################################
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+if command -v tmux &> /dev/null && \
+   [[ -o interactive ]] && \
+   [[ -z "$VSCODE_RESOLVING_ENVIRONMENT" ]] && \
+   [[ "$TERM_PROGRAM" != "vscode" ]] && \
+   [[ ! "$TERM" =~ screen ]] && \
+   [[ ! "$TERM" =~ tmux ]] && \
+   [[ -z "$TMUX" ]]; then
         exec tmux
 fi
 
@@ -97,7 +103,8 @@ alias vimlazyvim='NVIM_APPNAME="nvim-lazyvim" nvim'
 alias ta="tmux attach"
 alias cls="clear"
 alias gdb="gdb -q"
-alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
+# alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
+alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && ls && ./random_words_printer.py aRANDOM --columns 5"
 alias ll="ls -l --group-directories-first"
 alias dotf="cd /home/dadam/a-dev/dotfiles"
 alias expl='nautilus -w . >/dev/null 2>&1 &!'

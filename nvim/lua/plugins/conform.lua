@@ -38,7 +38,7 @@ return { -- stevearc/conform.nvim: Auto formatter
                         lua = { 'stylua' },
                         c = { 'clang_format' },
                         cpp = { 'clang_format' },
-                        python = { 'isort', 'black' },
+                        python = { 'black', 'autopep8', 'isort' },
                         --
                         -- You can use 'stop_after_first' to run the first available formatter from the list
                         -- javascript = { "prettierd", "prettier", stop_after_first = true },

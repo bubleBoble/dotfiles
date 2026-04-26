@@ -67,8 +67,7 @@ return { -- saghen/blink.cmp: Autocompletion
                         ['<Tab>'] = { 'accept', 'fallback' },
                         ['<S-Tab>'] = { 'select_prev' },
 
-                        ['<CR>'] = { 'accept', 'fallback' },
-
+                        -- ['<CR>'] = { 'accept', 'fallback' },
                         ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
                         ['<C-e>'] = { 'hide' },
                         ['<C-n>'] = { 'select_next' },
