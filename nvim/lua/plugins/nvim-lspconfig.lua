@@ -163,18 +163,18 @@ return {
                         },
                 }
 
-                local ensure_installed = {
-                        'lua-language-server',
-                        'stylua',
-                        'clangd',
-                        'clang-format',
-                        'pyright',
-                        'autopep8',
-                        'rust-analyzer',
-                }
-                require('mason-tool-installer').setup({
-                        ensure_installed = ensure_installed,
-                })
+                -- local ensure_installed = {
+                --         'lua-language-server',
+                --         'stylua',
+                --         'clangd',
+                --         'clang-format',
+                --         'pyright',
+                --         'autopep8',
+                --         'rust-analyzer',
+                -- }
+                -- require('mason-tool-installer').setup({
+                --         ensure_installed = ensure_installed,
+                -- })
 
                 for name, server in pairs(servers) do
                         server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
