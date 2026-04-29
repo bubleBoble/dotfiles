@@ -45,4 +45,30 @@ return {
         { 'NLKNguyen/papercolor-theme', priority = 1000 },
         { 'EdenEast/nightfox.nvim', priority = 1000 },
         { 'lunarvim/darkplus.nvim' },
+        { 'chriskempson/base16-vim' },
+        { 'lurst/austere.vim' },
+        { 'huyvohcmc/atlas.vim' },
+        {
+            'silentium-theme/silentium.nvim',
+            config = function()
+                local silentium = require('silentium')
+                silentium.setup({
+                    accent = "#9c9c9c" ,
+                    white = "#b9b7b7",
+                    light_gray = "#8f8f8f",
+                    gray = "#737373",
+                    ghost = "#404040",
+                    dark_gray = "#282828",
+                    dark = "#141414",
+                    diff_add = "#363636",
+                    diff_change = "#444444",
+                    diff_delete = "#252525",
+                    diff_text = "#5a5a5a",
+                })
+                vim.cmd.colorscheme('silentium')
+            end
+        },
+        { 'zaki/zazen' },
+        { 'robertmeta/nofrils' },
+        { 'Lokaltog/vim-monotone' },
 }
