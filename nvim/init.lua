@@ -22,7 +22,7 @@ require('lazy').setup({
         -- require('plugins.oil'),
         -- require('plugins.yazi'),
         require('plugins.vscode-diff'),
-        require('plugins.lualine'),
+        -- require('plugins.lualine'),
         -- require('plugins.bufferline'),
         require('plugins.zenmode'),
         require('plugins.noneckpain'),
