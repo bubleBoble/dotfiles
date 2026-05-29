@@ -111,3 +111,4 @@ alias expl='nautilus -w . >/dev/null 2>&1 &!'
 alias info="info --vi-keys"
 
 export MANWIDTH=80
+export PATH="$PATH:$HOME/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin"

@@ -3,7 +3,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.o.number = true -- :help vim.o, :help option-list
 vim.o.relativenumber = true
-vim.o.mouse = 'a'
+vim.o.mouse = ''
 vim.o.showmode = false -- don't show the mode, since it's already in the status line
 vim.o.wrap = false
 vim.o.breakindent = true -- indent wrapped lines - if wrapping is on
@@ -40,7 +40,7 @@ vim.opt.listchars = {
 }
 vim.o.inccommand = 'split' -- preview substitutions live, as you type
 vim.o.cursorline = true -- highlight current line
-vim.o.scrolloff = 0 -- minimal number of screen lines to keep above and below the cursor
+vim.o.scrolloff = 10 -- minimal number of screen lines to keep above and below the cursor
 vim.o.sidescrolloff = 0 -- minimal num of columns if wrap is false
 vim.o.confirm = false -- :help confirm
 vim.o.termguicolors = true
