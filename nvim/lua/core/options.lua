@@ -20,7 +20,7 @@ vim.o.inccommand = 'split' -- see find&replace results in a split (:%s/word/neww
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-        vim.o.clipboard = 'unnamedplus'
+    vim.o.clipboard = 'unnamedplus'
 end)
 
 vim.o.undofile = true -- Save undo history
@@ -34,9 +34,9 @@ vim.o.splitright = true -- how new vert splits should be opened
 vim.o.splitbelow = true -- how new horiz splits should be opened
 vim.o.list = true -- :help list listchars lua-options lua-options-guide
 vim.opt.listchars = {
-        tab = '» ',
-        trail = '·',
-        nbsp = '␣',
+    tab = '» ',
+    trail = '·',
+    nbsp = '␣',
 }
 vim.o.inccommand = 'split' -- preview substitutions live, as you type
 vim.o.cursorline = true -- highlight current line

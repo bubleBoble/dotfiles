@@ -98,25 +98,25 @@ local laststatus_prev = vim.o.laststatus
 local cmdheight_prev = vim.o.cmdheight
 
 local function ToggleLualine()
-        local ok, lualine = pcall(require, 'lualine')
-        if not ok then
-                vim.notify('Lualine not loaded', vim.log.levels.WARN)
-                return
-        end
+    local ok, lualine = pcall(require, 'lualine')
+    if not ok then
+        vim.notify('Lualine not loaded', vim.log.levels.WARN)
+        return
+    end
 
-        if lualine_hidden then
-                lualine.hide({ unhide = true })
-                vim.o.laststatus = laststatus_prev
-                vim.o.cmdheight = cmdheight_prev
-                lualine_hidden = false
-        else
-                laststatus_prev = vim.o.laststatus
-                cmdheight_prev = vim.o.cmdheight
-                lualine.hide()
-                vim.o.laststatus = 0
-                vim.o.cmdheight = 0
-                lualine_hidden = true
-        end
+    if lualine_hidden then
+        lualine.hide({ unhide = true })
+        vim.o.laststatus = laststatus_prev
+        vim.o.cmdheight = cmdheight_prev
+        lualine_hidden = false
+    else
+        laststatus_prev = vim.o.laststatus
+        cmdheight_prev = vim.o.cmdheight
+        lualine.hide()
+        vim.o.laststatus = 0
+        vim.o.cmdheight = 0
+        lualine_hidden = true
+    end
 end
 vim.keymap.set('n', '<leader>ul', ToggleLualine, { desc = 'Toggle lualine', noremap = true, silent = true })
 
@@ -137,29 +137,29 @@ local toggle_term_win = nil
 
 -- Function to toggle terminal, like vscode default terminal
 local function toggle_terminal()
-        -- If the terminal window is open, close it
-        if toggle_term_win and vim.api.nvim_win_is_valid(toggle_term_win) then
-                vim.api.nvim_win_close(toggle_term_win, true)
-                toggle_term_win = nil
-                return
-        end
+    -- If the terminal window is open, close it
+    if toggle_term_win and vim.api.nvim_win_is_valid(toggle_term_win) then
+        vim.api.nvim_win_close(toggle_term_win, true)
+        toggle_term_win = nil
+        return
+    end
 
-        -- If the terminal buffer exists, reuse it
-        if toggle_term_buf and vim.api.nvim_buf_is_valid(toggle_term_buf) then
-                -- Open a new split
-                vim.cmd('15split')
-                toggle_term_win = vim.api.nvim_get_current_win()
-                -- Set the buffer to the terminal buffer
-                vim.api.nvim_win_set_buf(toggle_term_win, toggle_term_buf)
-                vim.cmd('startinsert')
-        else
-                -- Create a new terminal buffer
-                vim.cmd('15split')
-                vim.cmd('term')
-                toggle_term_win = vim.api.nvim_get_current_win()
-                toggle_term_buf = vim.api.nvim_get_current_buf()
-                vim.cmd('startinsert')
-        end
+    -- If the terminal buffer exists, reuse it
+    if toggle_term_buf and vim.api.nvim_buf_is_valid(toggle_term_buf) then
+        -- Open a new split
+        vim.cmd('15split')
+        toggle_term_win = vim.api.nvim_get_current_win()
+        -- Set the buffer to the terminal buffer
+        vim.api.nvim_win_set_buf(toggle_term_win, toggle_term_buf)
+        vim.cmd('startinsert')
+    else
+        -- Create a new terminal buffer
+        vim.cmd('15split')
+        vim.cmd('term')
+        toggle_term_win = vim.api.nvim_get_current_win()
+        toggle_term_buf = vim.api.nvim_get_current_buf()
+        vim.cmd('startinsert')
+    end
 end
 
 -- Map Ctrl+` to toggle the terminal
@@ -169,10 +169,10 @@ end
 
 -- Floating terminal keymap
 vim.keymap.set('n', '<leader>`', function()
-        require('extra.floating_term').toggle_terminal()
+    require('extra.floating_term').toggle_terminal()
 end, { desc = 'Toggle floating terminal' })
 vim.keymap.set('t', '<esc>', function()
-        require('extra.floating_term').toggle_terminal()
+    require('extra.floating_term').toggle_terminal()
 end, { desc = 'Close floating terminal' })
 -- ############################################################################
 
