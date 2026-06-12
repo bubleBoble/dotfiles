@@ -48,6 +48,7 @@ return {
         end
 
         require('neo-tree').setup({
+            close_if_last_window = true,
             popup_border_style = 'NC',
             enable_git_status = false,
             enable_diagnostics = false,
@@ -174,7 +175,7 @@ return {
                     never_show = {},
                     never_show_by_pattern = {},
                 },
-                follow_current_file = { enabled = false, leave_dirs_open = false },
+                follow_current_file = { enabled = true, leave_dirs_open = false },
                 group_empty_dirs = false,
                 hijack_netrw_behavior = 'open_default',
                 use_libuv_file_watcher = true,

@@ -41,3 +41,5 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.opt_local.wildignore:append({ '*/build/*', '*/Debug/*', '*/Release/*', '*/.git/*', '*/.cache/*' })
     end,
 })
+
+vim.keymap.set('n', '<leader>fr', ':Neotree reveal<CR>', {})
