@@ -16,6 +16,7 @@ require('lazy').setup({
     require('plugins.mini'),
     require('plugins.nvim-treesitter'),
     -- require('plugins.nvim-treesitter-textobjects'),
+    require('plugins.nvim-treesitter-context'),
     require('plugins.colorscheme'),
     require('plugins.huez'),
     require('plugins.neotree'),

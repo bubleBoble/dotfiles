@@ -24,6 +24,7 @@ return { -- stevearc/conform.nvim: Auto formatter
             local disable_filetypes = {
                 c = true,
                 cpp = true,
+                python = true,
             }
             if disable_filetypes[vim.bo[bufnr].filetype] then
                 return nil

@@ -170,6 +170,7 @@ return {
                         },
                 }
 
+                -- MASON TOOLS INSTALLATION
                 -- local ensure_installed = {
                 --         'lua-language-server',
                 --         'stylua',
