@@ -45,15 +45,15 @@ export NVM_DIR="$HOME/.nvm"
 ################################################################################
 # Run tmux by default
 ################################################################################
-if command -v tmux &> /dev/null && \
-   [[ -o interactive ]] && \
-   [[ -z "$VSCODE_RESOLVING_ENVIRONMENT" ]] && \
-   [[ "$TERM_PROGRAM" != "vscode" ]] && \
-   [[ ! "$TERM" =~ screen ]] && \
-   [[ ! "$TERM" =~ tmux ]] && \
-   [[ -z "$TMUX" ]]; then
-        exec tmux
-fi
+# if command -v tmux &> /dev/null && \
+#    [[ -o interactive ]] && \
+#    [[ -z "$VSCODE_RESOLVING_ENVIRONMENT" ]] && \
+#    [[ "$TERM_PROGRAM" != "vscode" ]] && \
+#    [[ ! "$TERM" =~ screen ]] && \
+#    [[ ! "$TERM" =~ tmux ]] && \
+#    [[ -z "$TMUX" ]]; then
+#         exec tmux
+# fi
 
 ################################################################################
 # fzf
