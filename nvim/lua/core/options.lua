@@ -67,3 +67,12 @@ vim.o.hidden = true -- will allow you to have modified buffers open in the "back
 -- })
 vim.opt.wildmenu = true
 -- vim.opt.wildoptions = 'fuzzy'
+
+vim.opt.foldenable = true          -- enable folding
+vim.opt.foldmethod = "expr"        -- use an expression-based method
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- treesitter-based folds
+vim.opt.foldcolumn = "0"           -- optional: hide the fold column
+vim.opt.foldtext = ""              -- optional: show first line of fold with syntax
+vim.opt.foldlevel = 99             -- default: all folds open
+vim.opt.foldlevelstart = 1         -- on file open: only top-level folds open
+vim.opt.foldnestmax = 4            -- limit nesting depth of folds
