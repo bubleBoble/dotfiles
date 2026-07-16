@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     end,
 })
 
-vim.cmd('syntax off')
+-- vim.cmd('syntax off')
 
 vim.api.nvim_create_autocmd('FileType', {
     callback = function()
@@ -41,5 +41,3 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.opt_local.wildignore:append({ '*/build/*', '*/Debug/*', '*/Release/*', '*/.git/*', '*/.cache/*' })
     end,
 })
-
-vim.keymap.set('n', '<leader>fr', ':Neotree reveal<CR>', {})

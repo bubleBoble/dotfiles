@@ -24,28 +24,28 @@ return {
     },
     config = function()
         -- Remove diagnostic sign icons
-        vim.fn.sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
-        vim.fn.sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })
-        vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
-        vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
+        -- vim.fn.sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
+        -- vim.fn.sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })
+        -- vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
+        -- vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
 
         -- Disable ALL filetype icons coming from nvim-web-devicons
-        local ok_devicons, devicons = pcall(require, 'nvim-web-devicons')
-        if ok_devicons then
-            -- Return nil so neo-tree treats it as "no icon available"
-            devicons.get_icon = function()
-                return nil
-            end
-            devicons.get_icon_by_filetype = function()
-                return nil
-            end
-            devicons.get_icon_color = function()
-                return nil
-            end
-            devicons.get_icon_colors = function()
-                return nil
-            end
-        end
+        -- local ok_devicons, devicons = pcall(require, 'nvim-web-devicons')
+        -- if ok_devicons then
+        --     -- Return nil so neo-tree treats it as "no icon available"
+        --     devicons.get_icon = function()
+        --         return nil
+        --     end
+        --     devicons.get_icon_by_filetype = function()
+        --         return nil
+        --     end
+        --     devicons.get_icon_color = function()
+        --         return nil
+        --     end
+        --     devicons.get_icon_colors = function()
+        --         return nil
+        --     end
+        -- end
 
         require('neo-tree').setup({
             close_if_last_window = true,
@@ -73,13 +73,13 @@ return {
                 },
 
                 -- These are only the built-in fallback glyphs; devicons are neutralized above
-                icon = {
-                    folder_closed = '',
-                    folder_open = '',
-                    folder_empty = '',
-                    default = '',
-                    highlight = 'NeoTreeFileIcon',
-                },
+                -- icon = {
+                --     folder_closed = '',
+                --     folder_open = '',
+                --     folder_empty = '',
+                --     default = '',
+                --     highlight = 'NeoTreeFileIcon',
+                -- },
 
                 modified = { symbol = '', highlight = 'NeoTreeModified' },
 
@@ -89,19 +89,19 @@ return {
                     highlight = 'NeoTreeFileName',
                 },
 
-                git_status = {
-                    symbols = {
-                        added = '',
-                        modified = '',
-                        deleted = '',
-                        renamed = '',
-                        untracked = '',
-                        ignored = '',
-                        unstaged = '',
-                        staged = '',
-                        conflict = '',
-                    },
-                },
+                -- git_status = {
+                --     symbols = {
+                --         added = '',
+                --         modified = '',
+                --         deleted = '',
+                --         renamed = '',
+                --         untracked = '',
+                --         ignored = '',
+                --         unstaged = '',
+                --         staged = '',
+                --         conflict = '',
+                --     },
+                -- },
 
                 file_size = { enabled = false, required_width = 64 },
                 type = { enabled = false, required_width = 122 },
@@ -175,7 +175,7 @@ return {
                     never_show = {},
                     never_show_by_pattern = {},
                 },
-                follow_current_file = { enabled = true, leave_dirs_open = false },
+                follow_current_file = { enabled = false, leave_dirs_open = false },
                 group_empty_dirs = false,
                 hijack_netrw_behavior = 'open_default',
                 use_libuv_file_watcher = true,

@@ -150,7 +150,12 @@ return {
                     '--header-insertion=never',
                 },
             },
-            pyright = {},
+            pyright = {
+                root_dir = require('lspconfig.util').root_pattern('pyproject.toml', 'setup.py', 'setup.cfg', 'pytest.ini', 'requirements.txt', '.git'),
+                capabilities = {
+                    workspace = { diagnostics = { refreshSupport = false } },
+                },
+            },
             lua_ls = {
                 settings = {
                     Lua = {
@@ -163,18 +168,19 @@ return {
             },
         }
 
-        local ensure_installed = {
-            'lua-language-server',
-            'stylua',
-            'clangd',
-            'clang-format',
-            'pyright',
-            'autopep8',
-            'rust-analyzer',
-        }
-        require('mason-tool-installer').setup({
-            ensure_installed = ensure_installed,
-        })
+        -- MASON TOOLS INSTALLATION
+        -- local ensure_installed = {
+        --         'lua-language-server',
+        --         'stylua',
+        --         'clangd',
+        --         'clang-format',
+        --         'pyright',
+        --         'autopep8',
+        --         'rust-analyzer',
+        -- }
+        -- require('mason-tool-installer').setup({
+        --         ensure_installed = ensure_installed,
+        -- })
 
         for name, server in pairs(servers) do
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
