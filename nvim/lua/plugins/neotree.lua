@@ -29,23 +29,23 @@ return {
         vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
         vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
 
-        -- Disable ALL filetype icons coming from nvim-web-devicons
-        local ok_devicons, devicons = pcall(require, 'nvim-web-devicons')
-        if ok_devicons then
-            -- Return nil so neo-tree treats it as "no icon available"
-            devicons.get_icon = function()
-                return nil
-            end
-            devicons.get_icon_by_filetype = function()
-                return nil
-            end
-            devicons.get_icon_color = function()
-                return nil
-            end
-            devicons.get_icon_colors = function()
-                return nil
-            end
-        end
+        -- -- Disable ALL filetype icons coming from nvim-web-devicons
+        -- local ok_devicons, devicons = pcall(require, 'nvim-web-devicons')
+        -- if ok_devicons then
+        --     -- Return nil so neo-tree treats it as "no icon available"
+        --     devicons.get_icon = function()
+        --         return nil
+        --     end
+        --     devicons.get_icon_by_filetype = function()
+        --         return nil
+        --     end
+        --     devicons.get_icon_color = function()
+        --         return nil
+        --     end
+        --     devicons.get_icon_colors = function()
+        --         return nil
+        --     end
+        -- end
 
         require('neo-tree').setup({
             popup_border_style = 'NC',
@@ -71,14 +71,14 @@ return {
                     expander_highlight = 'NeoTreeExpander',
                 },
 
-                -- These are only the built-in fallback glyphs; devicons are neutralized above
-                icon = {
-                    folder_closed = '',
-                    folder_open = '',
-                    folder_empty = '',
-                    default = '',
-                    highlight = 'NeoTreeFileIcon',
-                },
+                -- -- These are only the built-in fallback glyphs; devicons are neutralized above
+                -- icon = {
+                --     folder_closed = '',
+                --     folder_open = '',
+                --     folder_empty = '',
+                --     default = '',
+                --     highlight = 'NeoTreeFileIcon',
+                -- },
 
                 modified = { symbol = '', highlight = 'NeoTreeModified' },
 
