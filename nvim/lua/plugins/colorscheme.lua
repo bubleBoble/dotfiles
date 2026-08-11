@@ -15,7 +15,6 @@ return {
             require('onedark').setup({
                 style = 'Deep', -- Warmer, Dakr, Warm, Cool, Darker, Deep
             })
-            require('onedark').load()
         end,
     },
     {
@@ -26,7 +25,6 @@ return {
                 style = 'dark', -- or "light", "darker", "cool", "deep", "warm", "warmer"
                 comments = { italic = false },
             })
-            require('onedark').load()
         end,
     },
     {
@@ -37,8 +35,6 @@ return {
             vim.g.gruvbox_material_foreground = 'material' -- material | mix | original
             vim.g.gruvbox_material_enable_italic = 1
             vim.g.gruvbox_material_better_performance = 1
-
-            vim.cmd.colorscheme('gruvbox-material')
         end,
     },
     { 'agude/vim-eldar', priority = 1000 },
@@ -53,20 +49,19 @@ return {
         config = function()
             local silentium = require('silentium')
             silentium.setup({
-                accent = "#9c9c9c" ,
-                white = "#b9b7b7",
-                light_gray = "#8f8f8f",
-                gray = "#737373",
-                ghost = "#404040",
-                dark_gray = "#282828",
-                dark = "#141414",
-                diff_add = "#363636",
-                diff_change = "#444444",
-                diff_delete = "#252525",
-                diff_text = "#5a5a5a",
+                accent = '#9c9c9c',
+                white = '#b9b7b7',
+                light_gray = '#8f8f8f',
+                gray = '#737373',
+                ghost = '#404040',
+                dark_gray = '#282828',
+                dark = '#141414',
+                diff_add = '#363636',
+                diff_change = '#444444',
+                diff_delete = '#252525',
+                diff_text = '#5a5a5a',
             })
-            vim.cmd.colorscheme('silentium')
-        end
+        end,
     },
     { 'zaki/zazen' },
     { 'robertmeta/nofrils' },

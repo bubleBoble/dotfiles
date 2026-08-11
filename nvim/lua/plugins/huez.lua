@@ -9,7 +9,7 @@ return { -- vague2k/huez: theme picker/manager, uses telescope
     },
     opts = {
         path = vim.fs.normalize(vim.fn.stdpath('data') --[[@as string]]) .. '/huez',
-        fallback = 'default',
+        fallback = 'eldar',
         suppress_messages = true,
         theme_config_module = nil,
         exclude = {},
