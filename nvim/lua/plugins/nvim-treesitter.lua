@@ -1,2 +1,44 @@
--- fuck treesitter.nvim
--- https://www.reddit.com/r/neovim/comments/1l3z4j4/help_with_new_treesitter_setup_in_neovim_default/
+return {
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
+    lazy = false,
+    build = ':TSUpdate',
+    config = function()
+        require('nvim-treesitter.config').setup({
+            ensure_installed = {
+                'bash',
+                'c',
+                'cmake',
+                'cpp',
+                'css',
+                'diff',
+                'dockerfile',
+                'git_config',
+                'git_rebase',
+                'gitattributes',
+                'gitcommit',
+                'glsl',
+                'go',
+                'html',
+                'javascript',
+                'json',
+                'lua',
+                'make',
+                'markdown',
+                'markdown_inline',
+                'meson',
+                'python',
+                'query',
+                'regex',
+                'rust',
+                'tsx',
+                'typescript',
+                'vim',
+                'vimdoc',
+                'yaml',
+            },
+            highlight = { enable = true },
+            indent = { enable = true },
+        })
+    end,
+}
