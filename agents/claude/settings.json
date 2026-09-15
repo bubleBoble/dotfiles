@@ -1,0 +1,31 @@
+{
+    "permissions": {
+        "defaultMode": "auto"
+    },
+    "statusLine": {
+        "type": "command",
+        "command": "~/.claude/statusline.sh"
+    },
+    "hooks": {},
+    "sandbox": {
+        "enabled": true,
+        "autoAllowBashIfSandboxed": true,
+        "filesystem": {
+            "denyRead": [
+                "~/.ssh",
+                "~/.aws",
+                "~/.gnupg",
+                "~/.netrc",
+                "~/.docker/config.json",
+                "~/.kube/config",
+                "~/.env",
+                "~/SecondBrain"
+            ]
+        }
+    },
+    "effortLevel": "medium",
+    "tui": "fullscreen",
+    "editorMode": "vim",
+    "agentPushNotifEnabled": true,
+    "autoUpdatesChannel": "latest"
+}
