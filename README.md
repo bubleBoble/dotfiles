@@ -1,5 +1,4 @@
-# My dotfiles
-tmux plugins are added as git submodule, clone this repo with:
+Clone with:
 ```sh
 git clone --recurse-submodules -j8 https://github.com/bubleBoble/dotfiles.git
 ```

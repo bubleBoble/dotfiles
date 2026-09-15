@@ -1,5 +1,0 @@
-.gitconfig
-dnf installed apps, like:
-```sh
-brew bundle dump --describe
-```

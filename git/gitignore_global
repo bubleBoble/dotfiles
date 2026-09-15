@@ -1,0 +1,4 @@
+.secrets/
+.secrets.zsh
+
+**/.claude/.cc-writes/

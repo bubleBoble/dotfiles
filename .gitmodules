@@ -7,3 +7,9 @@
 [submodule "tmux/plugins/tpm"]
 	path = tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+[submodule "nvim/LazyVim"]
+	path = nvim/LazyVim
+	url = https://github.com/LazyVim/LazyVim
+[submodule "agents/matpocock_skills_repo"]
+	path = agents/matpocock_skills_repo
+	url = https://github.com/mattpocock/skills.git

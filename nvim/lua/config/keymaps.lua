@@ -1,0 +1,214 @@
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
+-- :help vim.keymap.set()
+
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') -- :help hlsearch, Clear highlights on search when pressing <Esc> in normal mode
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' }) -- lua vim.diagnostic.goto_next()
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+-- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror message' })
+
+-- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
+-- for people to discover. Otherwise, you normally need to press <C-\><C-n>
+-- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
+-- or just use <C-\><C-n> to exit terminal mode
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Save file, ctrl+s
+vim.keymap.set('n', '<C-s>', '<cmd> w <CR>')
+
+-- quit file
+-- vim.keymap.set('n', '<C-q>', '<cmd> q <CR>')
+
+-- display empty buffer after deleting the current one
+vim.keymap.set('n', '<C-q>', ':bp|sp|bn|bd<CR>', { noremap = true, silent = true })
+
+-- delete single character without copying into register
+vim.keymap.set('n', 'x', '"_x')
+
+-- save file without auto-formatting
+-- vim.keymap.set('n', '<leader>sn', '<cmd>noautocmd w <CR>', opts)
+
+-- Vertical scroll and center
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Find and center - center screen each time you hit 'n' or 'N' on search result
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Disable arrow keys in normal mode
+-- vim.keymap.set('n', '<left>', '<cmd>echo "=============> Use h to move!! <============="<CR>')
+-- vim.keymap.set('n', '<right>', '<cmd>echo "=============> Use l to move!! <============="<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "=============> Use k to move!! <============="<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "=============> Use j to move!! <============="<CR>')
+
+-- Window management
+vim.keymap.set('n', '<leader>v', '<C-w>v') -- split window vertically
+vim.keymap.set('n', '<leader>h', '<C-w>s') -- split window horizontally
+-- vim.keymap.set('n', '<leader>ve', '<C-w>=') -- make split windows equal width & height
+vim.keymap.set('n', '<leader>xs', ':close<CR>', { desc = 'Close split' }) -- close current split window
+
+-- Split navigation Use CTRL+h/j/k/l to switch between splits, :help wincmd
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Resize splits with arrow keys
+vim.keymap.set('n', '<S-Up>', ':resize -2<CR>')
+vim.keymap.set('n', '<S-Down>', ':resize +2<CR>')
+vim.keymap.set('n', '<S-Left>', ':vertical resize -2<CR>')
+vim.keymap.set('n', '<S-Right>', ':vertical resize +2<CR>')
+
+-- Some terminals have colliding keymaps or are not able to send distinct keycodes
+-- vim.keymap.set('n', '<C-A-h>', '<C-w>H', { desc = 'Move window to the left' })
+
+-- vim.keymap.set("n", "<C-A-l>", "<C-w>L", { desc = "Move window to the right" }) -- doesn't work
+-- vim.keymap.set('n', '<C-A-j>', '<C-w>J', { desc = 'Move window to the lower' })
+-- vim.keymap.set('n', '<C-A-k>', '<C-w>K', { desc = 'Move window to the upper' })
+
+-- Colorscheme picker/manager
+vim.keymap.set('n', '<leader>sc', '<cmd>Huez<CR>', { desc = 'Choose colorscheme' })
+
+-- jj as ESC
+-- vim.keymap.set('i', 'jj', '<ESC>', { noremap = false })
+-- vim.keymap.set('i', 'jk', '<ESC>', { noremap = false })
+
+-- Buffers
+vim.keymap.set('n', '<Tab>', ':bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>bx', ':bdelete!<CR>', { desc = 'Close buffer' })
+vim.keymap.set('n', '<leader>bn', '<cmd> enew <CR>', { desc = 'New buffer' })
+
+-- Tabs
+vim.keymap.set('n', '<leader>to', ':tabnew<CR>', { desc = 'Open new tab' })
+vim.keymap.set('n', '<leader>tx', ':tabclose<CR>', { desc = 'Close tab' })
+vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Goto next tab' })
+vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Goto prev tab' })
+
+-- Toggle line wrapping, or just use :set wrap!
+vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', opts)
+
+-- Stay in indent mode after doing >> or <<
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
+
+-- Toggle lualine
+local lualine_hidden = false
+local laststatus_prev = vim.o.laststatus
+local cmdheight_prev = vim.o.cmdheight
+
+local function ToggleLualine()
+    local ok, lualine = pcall(require, 'lualine')
+    if not ok then
+        vim.notify('Lualine not loaded', vim.log.levels.WARN)
+        return
+    end
+
+    if lualine_hidden then
+        lualine.hide({ unhide = true })
+        vim.o.laststatus = laststatus_prev
+        vim.o.cmdheight = cmdheight_prev
+        lualine_hidden = false
+    else
+        laststatus_prev = vim.o.laststatus
+        cmdheight_prev = vim.o.cmdheight
+        lualine.hide()
+        vim.o.laststatus = 0
+        vim.o.cmdheight = 0
+        lualine_hidden = true
+    end
+end
+vim.keymap.set('n', '<leader>ul', ToggleLualine, { desc = 'Toggle lualine', noremap = true, silent = true })
+
+-- ############################################################################
+-- Terminal
+-- ############################################################################
+vim.keymap.set('n', '<leader>tv', [[<cmd>40vsplit | term<cr>A]], { desc = 'Open [t]erminal in [v]ertical split' })
+-- vim.keymap.set('n', '<leader>th', [[<cmd>15split | term<cr>A]], { desc = 'Open [t]erminal in [h]orizontal split' })
+-- vim.keymap.set('n', '<leader>th', function()
+--         local height = 15
+--         vim.cmd(height .. 'split')
+--         vim.cmd('term')
+--         vim.cmd('startinsert')
+-- end, { desc = 'Open terminal in horizontal split with custom height' })
+-- Keep a reference to the terminal buffer
+local toggle_term_buf = nil
+local toggle_term_win = nil
+
+-- Function to toggle terminal, like vscode default terminal
+local function toggle_terminal()
+    -- If the terminal window is open, close it
+    if toggle_term_win and vim.api.nvim_win_is_valid(toggle_term_win) then
+        vim.api.nvim_win_close(toggle_term_win, true)
+        toggle_term_win = nil
+        return
+    end
+
+    -- If the terminal buffer exists, reuse it
+    if toggle_term_buf and vim.api.nvim_buf_is_valid(toggle_term_buf) then
+        -- Open a new split
+        vim.cmd('15split')
+        toggle_term_win = vim.api.nvim_get_current_win()
+        -- Set the buffer to the terminal buffer
+        vim.api.nvim_win_set_buf(toggle_term_win, toggle_term_buf)
+        vim.cmd('startinsert')
+    else
+        -- Create a new terminal buffer
+        vim.cmd('15split')
+        vim.cmd('term')
+        toggle_term_win = vim.api.nvim_get_current_win()
+        toggle_term_buf = vim.api.nvim_get_current_buf()
+        vim.cmd('startinsert')
+    end
+end
+
+-- Map Ctrl+` to toggle the terminal
+-- vscode-like style
+-- vim.keymap.set('n', '<leader>`', toggle_terminal, { desc = 'Toggle terminal' })
+-- vim.keymap.set('t', '<leader>`', toggle_terminal, { desc = 'Toggle terminal from terminal mode' })
+
+-- Floating terminal keymap
+vim.keymap.set('n', '<leader>`', function()
+    require('extra.floating_term').toggle_terminal()
+end, { desc = 'Toggle floating terminal' })
+vim.keymap.set('t', '<esc>', function()
+    require('extra.floating_term').toggle_terminal()
+end, { desc = 'Close floating terminal' })
+-- ############################################################################
+
+vim.keymap.set('n', '<leader>;', ':', { desc = 'Command mode' })
+vim.keymap.set('n', '<leader>c', ':', { desc = 'Command mode' })
+
+vim.keymap.set('i', '<C-h>', '<Left>')
+vim.keymap.set('i', '<C-j>', '<Down>')
+vim.keymap.set('i', '<C-k>', '<Up>')
+vim.keymap.set('i', '<C-l>', '<Right>')
+
+-- zz will not center the screen but will move the screen top
+-- a fixed offset from the top
+-- vim.keymap.set('n', 'zz', function()
+--         local offset = 10
+--         local view = vim.fn.winsaveview()
+--         view.topline = math.max(view.lnum - offset, 1)
+--         vim.fn.winrestview(view)
+-- end)
+
+vim.keymap.set({ 'n', 'v' }, '<C-e>', '2<C-e>', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, '<C-y>', '2<C-y>', { noremap = true })
+
+-- -- stylua: ignore start
+-- local harpoon = require("harpoon")
+-- harpoon:setup()
+-- -- Use r like "recent"
+-- vim.keymap.set("n", "<leader>ra", function() harpoon:list():add() end)
+-- vim.keymap.set("n", "<leader>re", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+-- vim.keymap.set("n", "<leader>r1", function() harpoon:list():select(1) end)
+-- vim.keymap.set("n", "<leader>r2", function() harpoon:list():select(2) end)
+-- vim.keymap.set("n", "<leader>r3", function() harpoon:list():select(3) end)
+-- vim.keymap.set("n", "<leader>r4", function() harpoon:list():select(4) end)
+-- vim.keymap.set("n", "<C-M-p>", function() harpoon:list():prev() end)
+-- vim.keymap.set("n", "<C-M-n>", function() harpoon:list():next() end)
+-- -- stylua: ignore end

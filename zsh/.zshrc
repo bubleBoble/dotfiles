@@ -21,7 +21,7 @@ plugins=(
         git
         zsh-autosuggestions
         zsh-syntax-highlighting
-        nvm
+        # nvm
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -45,7 +45,13 @@ export NVM_DIR="$HOME/.nvm"
 ################################################################################
 # Run tmux by default
 ################################################################################
-# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+# if command -v tmux &> /dev/null && \
+#    [[ -o interactive ]] && \
+#    [[ -z "$VSCODE_RESOLVING_ENVIRONMENT" ]] && \
+#    [[ "$TERM_PROGRAM" != "vscode" ]] && \
+#    [[ ! "$TERM" =~ screen ]] && \
+#    [[ ! "$TERM" =~ tmux ]] && \
+#    [[ -z "$TMUX" ]]; then
 #         exec tmux
 # fi
 
@@ -91,15 +97,43 @@ function y() {
 ################################################################################
 alias fzf="fzf --height 40% --layout reverse --border"
 # alias fzfv ="vim $(fzf)"
-alias vim="nvim"
+alias vi="nvim"
 alias vimks='NVIM_APPNAME="nvim-kickstart" nvim'
 alias vimlazyvim='NVIM_APPNAME="nvim-lazyvim" nvim'
 alias ta="tmux attach"
+alias ha="herdr"
 alias cls="clear"
 alias gdb="gdb -q"
-alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
+alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools"
+alias ls="eza --icons --group-directories-first"
 alias ll="ls -l --group-directories-first"
-alias dotf="cd /home/dadam/a-dev/dotfiles && vim ."
+alias dotf="cd /home/dadam/a-dev/dotfiles"
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
+alias info="info --vi-keys"
 
 export MANWIDTH=80
+
+# if [ -z "${SSH_AUTH_SOCK:-}" ]; then
+#     eval "$(ssh-agent -s)" >/dev/null
+# fi
+# ssh-add -l
+
+export LANG=en_US.UTF-8
+export PATH=/home/dadam/go/bin:$PATH
+
+# Windows paths for msys2 ucrt64 shell
+if [[ "$OSTYPE" == msys* || -n "$MSYSTEM" ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
+    export PATH="$HOME/.config/emacs/bin:$PATH"
+    export PATH="$HOME/AppData/Local/Programs/Podman:$PATH"
+    export PATH="$HOME/AppData/Local/omp:$PATH"
+    export PATH="$HOME/.herdr/packages/standalone/releases/0.9.0-x86_64-pc-windows-msvc/:$PATH"
+    export PATH="/c/nvm4w/nodejs/:$PATH"
+fi
+
+eval "$(zoxide init zsh)"
+
+export PATH="$HOME/.opencode/bin:$PATH"
+[[ -f ~/.secrets/secrets.zsh ]] && source ~/.secrets/secrets.zsh
+
+alias claude="env -u ANTHROPIC_API_KEY claude"

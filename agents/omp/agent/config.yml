@@ -1,0 +1,56 @@
+symbolPreset: nerd
+composer:
+  shape: claude
+theme:
+  dark: dark-lunar
+setupVersion: 2
+tools:
+  approvalMode: always-ask
+statusLine:
+  preset: full
+  contextLine: embedded
+  sessionAccent: true
+  transparent: true
+  compactThinkingLevel: false
+  showHookStatus: true
+startup:
+  quiet: true
+web_search:
+  enabled: true
+modelRoles:
+  default: anthropic/claude-sonnet-5:medium
+  smol: anthropic/claude-haiku-4-5:medium
+  plan: anthropic/claude-sonnet-4-5:medium
+  slow: anthropic/claude-sonnet-5:medium
+  tiny: anthropic/claude-haiku-4-5:medium
+  commit: anthropic/claude-haiku-4-5
+  task: anthropic/claude-haiku-4-5:medium
+  advisor: anthropic/claude-sonnet-4-5:medium
+colorBlindMode: false
+terminal:
+  showProgress: false
+tui:
+  textSizing: false
+  renderMermaid: true
+  reactions: true
+  titleState: true
+  hyperlinks: always
+  tight: true
+display:
+  shimmer: classic
+  pinnedAgents: full
+  hideToolActivity: false
+  cacheMissMarker: false
+images:
+  blockImages: true
+defaultThinkingLevel: medium
+hideThinkingBlock: false
+personality: pragmatic
+edit:
+  mode: hashline
+bash:
+  enabled: true
+  allowCompoundCommands: true
+task:
+  disabledAgents:
+    - agent-creator-demo

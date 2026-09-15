@@ -1,0 +1,209 @@
+#!/usr/bin/env python3
+
+import argparse
+import logging
+import os
+import shutil
+import sys
+from pathlib import Path
+
+
+# Setup colorized logging
+class ColorFormatter(logging.Formatter):
+    COLORS = {
+        logging.DEBUG: "\033[94m",  # Blue
+        logging.INFO: "\033[92m",  # Green
+        logging.WARNING: "\033[93m",  # Yellow
+        logging.ERROR: "\033[91m",  # Red
+    }
+
+    def format(self, record):
+        color = self.COLORS.get(record.levelno, "")
+        reset = "\033[0m"
+        return f"{color}{record.getMessage()}{reset}"
+
+
+logger = logging.getLogger("dotfiles")
+handler = logging.StreamHandler()
+handler.setFormatter(ColorFormatter())
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
+
+# Determine if running under Windows (Native, MSYS2, or Cygwin)
+IS_WINDOWS = os.name == "nt" or sys.platform in ("msys", "cygwin")
+
+
+def parse_config(config_path: Path) -> list[tuple[Path, Path]]:
+    if not config_path.is_file():
+        logger.error(f"Configuration file not found: {config_path}")
+        sys.exit(1)
+
+    script_dir = config_path.parent
+    links = []
+
+    with config_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+
+            try:
+                src_str, tgt_str = line.split(":", 1)
+            except ValueError:
+                continue
+
+            # Evaluate variables like $HOME
+            src_str = os.path.expandvars(src_str)
+            tgt_str = os.path.expandvars(tgt_str)
+
+            # Resolve relative source paths against the config file's directory
+            src_path = (script_dir / src_str).expanduser().resolve()
+            tgt_path = Path(tgt_str).expanduser()
+
+            links.append((src_path, tgt_path))
+
+    return links
+
+
+def install_config(links: list[tuple[Path, Path]]):
+    logger.info("Installing configuration...")
+    source_dirs = set()
+
+    for src, tgt in links:
+        source_dirs.add(src.parent)
+
+        if not src.exists():
+            logger.error(f"Error: Source '{src}' not found. Skipping '{tgt}'.")
+            continue
+
+        if tgt.exists() or tgt.is_symlink():
+            logger.warning(f"Target already exists: {tgt}")
+            continue
+
+        tgt.parent.mkdir(parents=True, exist_ok=True)
+
+        if IS_WINDOWS:
+            if src.is_dir():
+                shutil.copytree(src, tgt)
+            else:
+                shutil.copy2(src, tgt)
+            logger.info(f"Copied: {tgt}")
+        else:
+            tgt.symlink_to(src)
+            logger.info(f"Created link: {tgt}")
+
+    print("")
+    for d in source_dirs:
+        note_file = d / "NOTE.md"
+        if note_file.is_file():
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(f"{d.name}:")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(note_file.read_text(encoding="utf-8").strip())
+            print("")
+
+
+def remove_config(links: list[tuple[Path, Path]], include_files: bool):
+    logger.info("Removing configuration...")
+
+    for _, tgt in links:
+        if IS_WINDOWS:
+            if tgt.exists() or tgt.is_symlink():
+                backup = tgt.with_name(tgt.name + ".old")
+
+                if backup.exists():
+                    if backup.is_dir() and not backup.is_symlink():
+                        shutil.rmtree(backup)
+                    else:
+                        backup.unlink()
+
+                shutil.move(str(tgt), str(backup))
+                logger.info(f"Moved to .old: {tgt}")
+            else:
+                logger.warning(f"Not found: {tgt}")
+        else:
+            if tgt.is_symlink() or (include_files and tgt.exists()):
+                if tgt.is_dir() and not tgt.is_symlink():
+                    shutil.rmtree(tgt)
+                else:
+                    tgt.unlink()
+                logger.info(f"Deleted: {tgt}")
+            else:
+                logger.warning(f"Not found: {tgt}")
+
+
+def sync_back(links: list[tuple[Path, Path]]):
+    logger.info("Syncing installed files back to the repository...")
+
+    for src, tgt in links:
+        if tgt.is_symlink():
+            logger.warning(f"Target is a symlink (sync not needed): {tgt}")
+        elif tgt.exists():
+            # Cleanly overwrite the repository source
+            if src.exists():
+                if src.is_dir() and not src.is_symlink():
+                    shutil.rmtree(src)
+                else:
+                    src.unlink()
+
+            if tgt.is_dir():
+                shutil.copytree(tgt, src)
+            else:
+                shutil.copy2(tgt, src)
+
+            logger.info(f"Synced back: {tgt} -> {src}")
+        else:
+            logger.warning(f"Installed target not found: {tgt}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Manage dotfile configuration deployments across Linux and Windows.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--install",
+        action="store_true",
+        help="Deploy configuration files to system targets.\n"
+        "Linux: Creates symbolic links.\n"
+        "Windows: Copies files/directories to bypass UAC.",
+    )
+    group.add_argument(
+        "--remove",
+        action="store_true",
+        help="Remove deployed configuration files.\n"
+        "Linux: Deletes symlinks.\n"
+        "Windows: Moves existing targets to '.old' backups.",
+    )
+    group.add_argument(
+        "--sync-back",
+        action="store_true",
+        help="Copy installed target files back to the repository source.\n"
+        "Intended for Windows environments where configurations\n"
+        "were copied instead of symlinked. Skips symlinked targets.",
+    )
+
+    parser.add_argument(
+        "--include-files",
+        action="store_true",
+        help="Use with '--remove' on Linux to force deletion\n"
+        "of regular files instead of just symlinks.",
+    )
+
+    args = parser.parse_args()
+
+    config_path = Path(__file__).resolve().parent / "config.conf"
+    links = parse_config(config_path)
+
+    if args.install:
+        install_config(links)
+    elif args.remove:
+        remove_config(links, args.include_files)
+    elif args.sync_back:
+        sync_back(links)
+
+
+if __name__ == "__main__":
+    main()
