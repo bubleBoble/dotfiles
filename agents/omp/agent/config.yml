@@ -1,0 +1,8 @@
+symbolPreset: nerd
+composer:
+  shape: pi
+theme:
+  dark: dark-lunar
+setupVersion: 2
+tools:
+  approvalMode: write
