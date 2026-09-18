@@ -5,7 +5,8 @@
         {
             "context": "Chat",
             "bindings": {
-                "space": null // by default it accepts auto compl. suggestions
+                "space": null, // by default it accepts auto compl. suggestions
+                "shift+enter": "insertNewline" // break line instead of sending
             }
         }
     ]

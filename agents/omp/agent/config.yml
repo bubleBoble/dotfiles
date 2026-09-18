@@ -5,4 +5,12 @@ theme:
   dark: dark-lunar
 setupVersion: 2
 tools:
-  approvalMode: write
+  approvalMode: safe
+statusLine:
+  preset: minimal
+  contextLine: embedded
+  sessionAccent: false
+startup:
+  quiet: true
+web_search:
+  enabled: true

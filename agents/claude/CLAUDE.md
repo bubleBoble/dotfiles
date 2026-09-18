@@ -53,6 +53,7 @@
 - Never hard-wrap paragraphs. Let the terminal soft-wrap.
 - **Reference code dynamically:** Use terminal-clickable formats (e.g., `path/to/file:line_number`).
 - **No meta-commentary:** Never describe your working method, round numbers, or prompt mechanics in drafted documents.
+- **Mermaid diagrams:** All graphs and flow diagrams MUST use ` ```mermaid ` blocks; terminal renders ASCII fallback.
 
 ## Writing Prompts
 - Always output prompts in Markdown. Wrap in triple backticks if not writing directly to a file.

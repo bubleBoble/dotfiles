@@ -106,7 +106,7 @@ alias cls="clear"
 alias gdb="gdb -q"
 # alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && vim ."
 alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools && ls && ./random_words_printer.py aRANDOM --columns 5"
-alias ls="eza --icons --grid --group-directories-first"
+alias ls="eza --icons --group-directories-first"
 alias ll="ls -l --group-directories-first"
 alias dotf="cd /home/dadam/a-dev/dotfiles"
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
@@ -120,7 +120,6 @@ export MANWIDTH=80
 # ssh-add -l
 
 export LANG=en_US.UTF-8
-export PATH=/home/dadam/.opencode/bin:$PATH
 export PATH=/home/dadam/go/bin:$PATH
 
 # Windows paths for msys2 ucrt64 shell
@@ -134,3 +133,5 @@ if [[ "$OSTYPE" == msys* || -n "$MSYSTEM" ]]; then
 fi
 
 eval "$(zoxide init zsh)"
+
+export PATH="$HOME/.opencode/bin:$PATH"

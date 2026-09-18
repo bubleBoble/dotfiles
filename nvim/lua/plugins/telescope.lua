@@ -45,7 +45,7 @@ return { -- nvim-telescope/telescope.nvim: Fuzzy Finder (files, lsp, etc). It's 
                 },
                 -- borderchars = { '─', '│', '─', '│', '+', '+', '+', '+' },
                 -- borderchars = { '-', '|', '-', '|', '+', '+', '+', '+' },
-                borderchars = { '─', '│', '─', '│', '+', '+', '+', '+' },
+                -- borderchars = { '─', '│', '─', '│', '+', '+', '+', '+' },
             },
             -- pickers = {}
             extensions = {
