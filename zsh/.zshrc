@@ -4,7 +4,7 @@ export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="miloshadzic"
+ZSH_THEME="eastwood"
 
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
@@ -106,8 +106,9 @@ alias cls="clear"
 alias gdb="gdb -q"
 alias cs="cd /home/dadam/Documents/05-gd-a-notatki/tools"
 alias ls="eza --icons --group-directories-first"
-alias ll="ls -l --group-directories-first"
-alias dotf="cd /home/dadam/a-dev/dotfiles"
+alias ll="ls -l --header --group-directories-first"
+alias llb="ls -l --grid --header --group-directories-first"
+alias dotf="cd ~/git/dotfiles"
 alias expl='nautilus -w . >/dev/null 2>&1 &!'
 alias info="info --vi-keys"
 
@@ -131,9 +132,13 @@ if [[ "$OSTYPE" == msys* || -n "$MSYSTEM" ]]; then
     export PATH="/c/nvm4w/nodejs/:$PATH"
 fi
 
-eval "$(zoxide init zsh)"
+# eval "$(zoxide init zsh)"
 
 export PATH="$HOME/.opencode/bin:$PATH"
 [[ -f ~/.secrets/secrets.zsh ]] && source ~/.secrets/secrets.zsh
 
 alias claude="env -u ANTHROPIC_API_KEY claude"
+export PATH="/usr/lib/llvm-22/bin:$PATH"
+export PATH="/opt/SEGGER/JLink:$PATH"
+export PATH="/opt/arm-gnu-toolchain-15.3.rel1-x86_64-arm-none-eabi/bin:$PATH"
+eval $(keychain --eval --agents ssh ~/.ssh/2026_04_03_ed25519_laptop --quiet)
