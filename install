@@ -33,13 +33,13 @@ logger.setLevel(logging.INFO)
 IS_WINDOWS = os.name == "nt" or sys.platform in ("msys", "cygwin")
 
 
-def parse_config(config_path: Path) -> list[tuple[Path, Path]]:
+def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
     if not config_path.is_file():
         logger.error(f"Configuration file not found: {config_path}")
         sys.exit(1)
 
     script_dir = config_path.parent
-    links = []
+    links: list[tuple[str, Path, Path]] = []
 
     with config_path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -55,14 +55,59 @@ def parse_config(config_path: Path) -> list[tuple[Path, Path]]:
             # Evaluate variables like $HOME
             src_str = os.path.expandvars(src_str)
             tgt_str = os.path.expandvars(tgt_str)
+            tool = Path(src_str.removesuffix("/*")).parts[0]
+
+            if "*" in src_str or "*" in tgt_str:
+                if not (
+                    src_str.endswith("/*")
+                    and tgt_str.endswith("/*")
+                    and src_str.count("*") == 1
+                    and tgt_str.count("*") == 1
+                ):
+                    logger.error(
+                        "Wildcard mappings must end with /* on both sides: "
+                        f"{line}"
+                    )
+                    sys.exit(1)
+
+                src_dir = (script_dir / src_str[:-2]).expanduser().resolve()
+                tgt_dir = Path(tgt_str[:-2]).expanduser()
+                if not src_dir.is_dir():
+                    logger.error(f"Wildcard source directory not found: {src_dir}")
+                    sys.exit(1)
+
+                for src_path in sorted(src_dir.iterdir(), key=lambda path: path.name):
+                    links.append((tool, src_path.resolve(), tgt_dir / src_path.name))
+                continue
 
             # Resolve relative source paths against the config file's directory
             src_path = (script_dir / src_str).expanduser().resolve()
             tgt_path = Path(tgt_str).expanduser()
 
-            links.append((src_path, tgt_path))
+            links.append((tool, src_path, tgt_path))
 
     return links
+
+
+def select_tools(
+    links: list[tuple[str, Path, Path]],
+    tools: list[str],
+    parser: argparse.ArgumentParser,
+) -> list[tuple[Path, Path]]:
+    available_tools = {tool for tool, _, _ in links}
+    unknown_tools = sorted(set(tools) - available_tools)
+    if unknown_tools:
+        parser.error(
+            f"unknown tool(s): {', '.join(unknown_tools)}; "
+            f"available tools: {', '.join(sorted(available_tools))}"
+        )
+
+    selected_tools = set(tools)
+    return [
+        (src, tgt)
+        for tool, src, tgt in links
+        if not selected_tools or tool in selected_tools
+    ]
 
 
 def install_config(links: list[tuple[Path, Path]]):
@@ -96,9 +141,9 @@ def install_config(links: list[tuple[Path, Path]]):
     for d in source_dirs:
         note_file = d / "NOTE.md"
         if note_file.is_file():
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("━" * 80)
             print(f"{d.name}:")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("━" * 80)
             print(note_file.read_text(encoding="utf-8").strip())
             print("")
 
@@ -191,11 +236,18 @@ def main():
         help="Use with '--remove' on Linux to force deletion\n"
         "of regular files instead of just symlinks.",
     )
+    parser.add_argument(
+        "tools",
+        nargs="*",
+        metavar="TOOL",
+        help="Only manage configuration for the named tool(s).\n"
+        "Omit to manage all tools.",
+    )
 
     args = parser.parse_args()
 
     config_path = Path(__file__).resolve().parent / "config.conf"
-    links = parse_config(config_path)
+    links = select_tools(parse_config(config_path), args.tools, parser)
 
     if args.install:
         install_config(links)

@@ -7,7 +7,7 @@ This is a personal dotfiles repository for managing development environment conf
 A centralized configuration management system that maintains dotfiles (configuration files) for various tools and keeps them synced to the home directory via symlinks. This allows:
 - Single source of truth for all configuration files
 - Git-tracked changes to configurations
-- Easy replication across machines via `git clone` and `install_symlinks.sh`
+- Easy replication across machines via `git clone` and `./install --install`
 
 ## Repository Structure
 
@@ -30,8 +30,8 @@ A centralized configuration management system that maintains dotfiles (configura
 
 ### Key Files
 
-- **`symlinks.conf`** — Master configuration defining source:target mappings
-- **`install_symlinks.sh`** — Installer script that creates symlinks based on symlinks.conf
+- **`config.conf`** — Master configuration defining source:target mappings
+- **`install`** — Installer that creates symlinks from config.conf
 - **`AGENTS.md`** — This file; project-level guidelines for all coding agents
 - **`CLAUDE.md`** — Claude Code-specific guidelines
 
@@ -42,32 +42,30 @@ A centralized configuration management system that maintains dotfiles (configura
 ```
 1. git clone --recurse-submodules <repo>
                 ↓
-2. ./install_symlinks.sh --create
+2. ./install --install
                 ↓
-3. Reads symlinks.conf (source:target pairs)
+3. Reads config.conf (source:target pairs)
                 ↓
 4. Creates directories as needed
                 ↓
 5. Creates symlinks: repo files → ~/.config/, ~/.*, etc.
 ```
 
-### symlinks.conf Format
+### config.conf Format
 
 Format: `SOURCE:TARGET` where:
-- **SOURCE** — Path in repo (resolved with `$(pwd)`)
+- **SOURCE** — Relative path resolved from the repository root
 - **TARGET** — Path in home directory (resolved with `$HOME`)
+- **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name
 
 Example:
 ```
-$(pwd)/nvim:$HOME/.config/nvim
-$(pwd)/zsh/.zshrc:$HOME/.zshrc
+./nvim:$HOME/.config/nvim
+./zsh/.zshrc:$HOME/.zshrc
+./agents/shared/skills/*:$HOME/.claude/skills/*
 ```
 
-See the actual file for complete mappings, organized into blocks:
-1. Common system configs
-2. Shared agents assets
-3. Claude configuration
-4. OMP configuration
+See the actual file for the complete mappings.
 
 ## Agents Directory
 
@@ -102,13 +100,13 @@ When adding or modifying configurations:
    - Changes to source files in repo are reflected immediately via symlinks
    - If a tool doesn't load changes, check if it caches config on startup
 
-2. **Update symlinks.conf:**
+2. **Update config.conf:**
    - Add new entries in the appropriate block (common, claude, omp, tool-specific)
-   - Format: `$(pwd)/path/to/file:$HOME/.config/target` or `$HOME/.file`
+   - Format: `./path/to/file:$HOME/.config/target` or `$HOME/.file`
    - Group related entries together with comments
 
 3. **Test changes:**
-   - Run `./install_symlinks.sh --create` after modifying symlinks.conf
+   - Run `./install --install` after modifying config.conf
    - Verify symlinks point to correct locations: `ls -l ~/.config/nvim` (should show arrow)
    - Restart affected tools to reload configs
 
@@ -127,7 +125,7 @@ When adding or modifying configurations:
 **Adding a new tool configuration:**
 1. Create tool directory: `mkdir <tool>`
 2. Add config files: `<tool>/config-file`
-3. Add to symlinks.conf: `$(pwd)/<tool>/file:$HOME/.config/<tool>/file`
+3. Add to config.conf: `./<tool>/file:$HOME/.config/<tool>/file`
 4. Run install script
 
 **Updating shared standards:**
@@ -154,7 +152,7 @@ When adding or modifying configurations:
 ```bash
 git clone --recurse-submodules -j8 https://github.com/bubleBoble/dotfiles.git ~/a-dev/dotfiles
 cd ~/a-dev/dotfiles
-./install_symlinks.sh --create
+./install --install
 ```
 
 ### Updating Existing Setup
@@ -163,14 +161,14 @@ cd ~/a-dev/dotfiles
 cd ~/a-dev/dotfiles
 git pull
 git submodule update --recursive
-./install_symlinks.sh --create  # Update any new symlinks
+./install --install  # Update symlinks
 ```
 
 ### Deleting Symlinks
 
 ```bash
-./install_symlinks.sh --delete
-./install_symlinks.sh --delete --include-files  # Also removes backed-up originals
+./install --remove
+./install --remove --include-files  # Also removes regular-file targets
 ```
 
 ## For Coding Agents
@@ -179,8 +177,8 @@ When asked to modify this repository:
 
 1. **Understand the symlink structure first** — Don't edit symlink targets directly
 2. **Verify the affected tool** — Which tool/config is being modified? (nvim, tmux, etc.)
-3. **Update both source AND symlinks.conf** — New files need to be added to symlinks.conf
-4. **Test symlink creation** — Run `./install_symlinks.sh --create` after changes
+3. **Update both source AND config.conf** — New files need to be added to config.conf
+4. **Test installation** — Run `./install --install` after changes
 5. **Document structural changes** — Update this AGENTS.md if directory layout changes
 
 Refer to this guide when making any modifications. Ask the user for clarification if requirements are ambiguous (especially for tool-specific config semantics).

@@ -99,16 +99,16 @@ detach = "prefix+d"
 # remove_worktree = ""  # optional, unset by default; opens confirmation
 rename_workspace = "prefix+shift+,"
 # close_workspace = "prefix+shift+d"
-previous_workspace = "alt+up"
-next_workspace = "alt+down"
+previous_workspace = ["alt+up", "alt+k"]
+next_workspace = ["alt+down", "alt+j"]
 # previous_agent = ""     # optional, unset by default
 # next_agent = ""         # optional, unset by default
 focus_agent = "prefix+alt+1..9"        # optional indexed binding, e.g. "prefix+alt+1..9"
 # remote_image_paste = "ctrl+v" # only active in herdr --remote; empty disables raw-key image paste
 # new_tab = "prefix+c"
 rename_tab = "prefix+,"
-previous_tab = "alt+left"
-next_tab = "alt+right"
+previous_tab = ["alt+left", "alt+h"]
+next_tab = ["alt+right", "alt+l"]
 # move_tab_previous = ""   # optional, e.g. "alt+shift+left" moves the tab toward the front
 # move_tab_next = ""       # optional, e.g. "alt+shift+right" moves the tab toward the back
 # switch_tab = "prefix+1..9"
@@ -134,7 +134,7 @@ split_horizontal = "prefix+\""
 # resize_pane_down = ""   # optional, e.g. "ctrl+shift+alt+down"
 # resize_pane_up = ""     # optional, e.g. "ctrl+shift+alt+up"
 # resize_pane_right = ""  # optional, e.g. "ctrl+shift+alt+right"
-# toggle_sidebar = "prefix+b"
+toggle_sidebar = "prefix+a"
 
 # Navigate-mode movement. These local shortcuts win while navigate mode is open.
 # They are independent from focus_pane_*. Do not include prefix+, esc, enter, tab, or 1..9 here.
@@ -185,10 +185,10 @@ split_horizontal = "prefix+\""
 # sidebar_max_width = 36
 
 # Start with the sidebar collapsed. Changes take effect on the next launch.
-# sidebar_start_collapsed = false
+sidebar_start_collapsed = true
 
 # Collapsed sidebar presentation: "compact" keeps the narrow status rail, "hidden" uses zero width.
-# sidebar_collapsed_mode = "compact"
+sidebar_collapsed_mode = "hidden"
 
 # Terminal width at or below which Herdr uses the mobile single-column layout.
 # Increase this for foldables, tablets, or wide phone terminals.
@@ -239,14 +239,14 @@ split_horizontal = "prefix+\""
 
 # Draw borders along the outside edge of the pane area.
 # Disable for tmux-style internal splitters without an outside frame.
-# pane_outer_borders = true
+pane_outer_borders = false
 
 # Draw interactive scrollbars beside terminal panes.
 # Set false to reclaim the scrollbar column and keep it out of terminal-native selections.
 # pane_scrollbars = true
 
 # Keep split panes visually separated instead of sharing divider borders.
-# pane_gaps = true
+pane_gaps = false
 
 # Show detected/reported agent labels in split pane borders when no manual pane name is set.
 # show_agent_labels_on_pane_borders = false
@@ -320,7 +320,7 @@ delivery = "system"
 # position = "bottom-right"
 
 [ui.toast.clipboard]
-# enabled = true
+enabled = false
 # position = "bottom-center"
 
 # Play sounds when agents change state in background workspaces
@@ -384,6 +384,12 @@ pane_history = false
 # Maximum scrollback buffer size in bytes retained per pane terminal.
 # Matches Ghostty's default scrollback-limit behavior.
 # scrollback_limit_bytes = 10000000
+
+[[keys.command]]
+key = "prefix+b"
+type = "plugin_action"
+command = "herdr-file-viewer.open-file-viewer"
+description = "open file viewer in split"
 
 [[keys.command]]
 key = "prefix+f"
