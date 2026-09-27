@@ -83,6 +83,9 @@ agents/
 │   ├── settings.json
 │   ├── keybindings.json
 │   └── statusline.sh
+├── pi/                 # Pi coding agent configuration
+│   ├── keybindings.json
+│   └── settings.json
 └── omp/                # OMP configuration
     └── agent/
         └── config.yml
