@@ -62,6 +62,18 @@ Applied to all coding agents (Claude, OMP, etc.).
 - Explain mechanisms before recommendations. Prefer concrete examples over abstract descriptions.
 - **No bare IDs:** Never refer to items exclusively by number/ID. State what it is in plain words, appending the ID in parentheses (e.g., "the migration script (PR #45)").
 
+## Natural Writing
+
+**Write like a knowledgeable person addressing this specific reader and task.**
+
+- Make each sentence carry concrete information. Use simple verbs, precise nouns, and the user's vocabulary.
+- Organize by the subject's actual structure. Vary sentence length naturally; use headings, lists, boldface, and repeated sentence patterns only when they make the content easier to scan.
+- Calibrate confidence to the evidence. Attribute claims precisely, distinguish facts from inference, and use only sources, quotations, links, and identifiers that you have verified.
+- Prefer direct statements over promotional framing, inflated significance, vague attribution, superficial analysis, or generic claims about impact, legacy, trends, challenges, and future prospects.
+- Keep transitions literal and sparse. Replace stock framing, canned introductions and conclusions, forced groups of three, and formulaic contrasts with the point they were masking.
+- Include conversational offers, reader instructions, capability disclaimers, or process commentary only when they are necessary to complete the request.
+- Before sending, remove any sentence that could be pasted into an unrelated answer without materially changing its meaning.
+
 ## Output Formatting
 
 **Copy-paste text must be clean to copy.**
