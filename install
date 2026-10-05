@@ -115,7 +115,7 @@ def install_config(links: list[tuple[Path, Path]]):
     source_dirs = set()
 
     for src, tgt in links:
-        source_dirs.add(src.parent)
+        source_dirs.add(src if src.is_dir() else src.parent)
 
         if not src.exists():
             logger.error(f"Error: Source '{src}' not found. Skipping '{tgt}'.")

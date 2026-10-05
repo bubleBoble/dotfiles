@@ -39,7 +39,9 @@ name = "kanagawa"
 # text = "#cdd6f4"
 
 [theme.custom]
-panel_bg = "reset"
+# Match the dark background used by the active tmux pane.
+panel_bg = "#080808"
+sidebar_bg = "#080808"
 # neutral white, matching the Ghostty/Neovim override
 text = "#E7E7E7"
 # nord's #4C566A is too dark for the agent panel headers and the dimmed second rows

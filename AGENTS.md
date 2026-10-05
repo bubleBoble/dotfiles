@@ -16,7 +16,7 @@ A centralized configuration management system that maintains dotfiles (configura
 | Directory | Purpose |
 |-----------|---------|
 | **agents/** | Coding agent configurations and shared standards |
-| **nvim/** | Neovim editor config and plugins (vendors LazyVim as a git submodule) |
+| **nvim/** | Neovim editor config and plugins; `lua/plugins/deps/` holds shared dependency specs |
 | **tmux/** | Tmux terminal multiplexer config (includes git submodules) |
 | **zsh/** | Zsh shell configuration |
 | **kitty/** | Kitty terminal emulator config |
@@ -144,7 +144,7 @@ When adding or modifying configurations:
 ## Important Constraints
 
 - **Do not edit config files via symlink targets** (e.g., `~/.config/nvim/init.lua`). Edit the source in the repo instead.
-- **Git submodules:** Tmux plugins and `nvim/LazyVim` are submodules. Clone with `--recurse-submodules` and be careful when updating.
+- **Git submodules:** Tmux plugins use submodules. Clone with `--recurse-submodules` and be careful when updating.
 - **Platform-specific configs:** VS Code has `lin` (Linux) and `win` (Windows) variants. Modify the appropriate one.
 - **Caching:** Some tools cache configs on startup. Restart them after changes.
 
