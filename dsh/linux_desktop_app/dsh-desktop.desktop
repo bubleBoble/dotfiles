@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=DSH
+Comment=DeepSeek Harness in a standalone app window
+Exec=sh -c "exec ~/.local/bin/dsh-desktop"
+Icon=dsh-desktop
+Terminal=false
+Categories=Development;
+Keywords=DeepSeek;Harness;AI;Coding;
+StartupWMClass=dsh-desktop

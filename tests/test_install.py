@@ -56,8 +56,9 @@ class InstallerTests(unittest.TestCase):
                 self.assertTrue(selected)
                 self.assertEqual(
                     set(selected),
-                    {(src, tgt) for _, src, tgt in self.links
-                     if tgt.is_relative_to(self.home / f".{tool}")},
+                    {(src, tgt) for owner, src, tgt in self.links
+                     if tgt.is_relative_to(self.home / f".{tool}")
+                     or (tool == "dsh" and owner == "dsh")},
                 )
         self.assertIn(
             ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".dsh/AGENTS.md"),
@@ -65,6 +66,16 @@ class InstallerTests(unittest.TestCase):
         )
         for tool in ("claude", "codex", "dsh", "omp", "pi"):
             self.assertTrue(any("skills" in target.parts for _, target in self.select(tool)))
+
+    def test_dsh_selection_includes_desktop_integration(self):
+        selected = set(self.select("dsh"))
+        for name, destination in (
+            ("dsh-desktop", ".local/bin/dsh-desktop"),
+            ("dsh-desktop.desktop", ".local/share/applications/dsh-desktop.desktop"),
+            ("dsh-desktop.svg", ".local/share/icons/hicolor/scalable/apps/dsh-desktop.svg"),
+        ):
+            self.assertIn(((ROOT / "dsh/linux_desktop_app" / name).resolve(), self.home / destination), selected)
+        self.assertFalse(any(src.parent == ROOT / "dsh/linux_desktop_app" for src, _ in self.select("claude")))
 
     def test_multiple_tools_and_default_all(self):
         self.assertEqual(

@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""Open DSH in a browser app window and stop its server when the window closes."""
+
+import argparse
+import fcntl
+import os
+from pathlib import Path
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+
+BASE_URL = "http://127.0.0.1:3080"
+START_TIMEOUT = 90
+STOP_TIMEOUT = 10
+
+
+class LauncherError(Exception):
+    pass
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+# Keep local readiness traffic off proxies and never follow a token redirect.
+HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
+
+
+def status(url):
+    try:
+        with HTTP.open(url, timeout=2) as response:
+            return response.status
+    except urllib.error.HTTPError as error:
+        return error.code
+    except (OSError, urllib.error.URLError):
+        return None
+
+
+def logged_url(log):
+    if not log.exists():
+        return None
+    with log.open("rb") as stream:
+        stream.seek(max(0, log.stat().st_size - 1024 * 1024))
+        text = stream.read().decode("utf-8", errors="replace")
+    matches = re.findall(r"dsh web: (http://127\.0\.0\.1:3080/\?token=[A-Za-z0-9_-]+)", text)
+    return matches[-1] if matches else None
+
+
+def dsh_environment():
+    env = os.environ.copy()
+    env["PATH"] = os.pathsep.join([
+        str(Path.home() / ".local/bin"), "/usr/local/bin",
+        env.get("PATH", "/usr/bin:/bin"),
+    ])
+    command = env.get("DSH_DESKTOP_DSH") or shutil.which("dsh", path=env["PATH"])
+    if command is None:
+        # GNOME does not source zshrc/nvm.sh; use the newest NVM with DSH.
+        nvm = Path(env.get("NVM_DIR", str(Path.home() / ".nvm")))
+        candidates = list((nvm / "versions/node").glob("*/bin/dsh"))
+        candidates.sort(
+            key=lambda path: tuple(int(n) for n in re.findall(r"\d+", path.parents[1].name)),
+            reverse=True,
+        )
+        command = next((str(path) for path in candidates if os.access(path, os.X_OK)), None)
+    if command is None or not os.access(command, os.X_OK):
+        raise LauncherError("DSH was not found. Install dsh, or set DSH_DESKTOP_DSH to its executable path.")
+    # Follow links only to identify an NVM installation, not to its lib/bin.js.
+    # This also handles ~/.local/bin/dsh pointing into an NVM installation.
+    resolved = Path(command).resolve()
+    node_bin = Path(command).absolute().parent
+    for parent in resolved.parents:
+        if parent.parent.name == "node" and parent.name.startswith("v") and (parent / "bin/node").is_file():
+            node_bin = parent / "bin"
+            break
+    env["PATH"] = str(node_bin) + os.pathsep + env["PATH"]
+    return command, env
+
+
+def browser_command():
+    for name in ("google-chrome-stable", "google-chrome", "chromium", "chromium-browser"):
+        command = shutil.which(name)
+        if command:
+            return command
+    raise LauncherError("Google Chrome or Chromium is required for the app window.")
+
+
+def group_exists(pid):
+    try:
+        os.killpg(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+
+
+def signal_group(pid, signum):
+    try:
+        os.killpg(pid, signum)
+    except ProcessLookupError:
+        pass
+
+
+def stop_server(process):
+    """Stop only a process group created by this launcher (server or browser)."""
+    deadline = time.monotonic() + STOP_TIMEOUT
+    signal_group(process.pid, signal.SIGTERM)
+    try:
+        process.wait(timeout=STOP_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        pass
+    # A finished group leader does not imply that all its children finished.
+    while group_exists(process.pid) and time.monotonic() < deadline:
+        time.sleep(0.05)
+    if group_exists(process.pid):
+        signal_group(process.pid, signal.SIGKILL)
+    process.wait(timeout=5)
+
+
+def start_server(log):
+    command, env = dsh_environment()
+    process = None
+    try:
+        with log.open("wb") as output:
+            log.chmod(0o600)
+            process = subprocess.Popen(
+                [command, "web", "--no-open", "--host", "127.0.0.1", "--port", "3080"],
+                cwd=Path.home(), env=env, stdin=subprocess.DEVNULL,
+                stdout=output, stderr=subprocess.STDOUT, start_new_session=True,
+                close_fds=True,
+            )
+        deadline = time.monotonic() + START_TIMEOUT
+        while time.monotonic() < deadline:
+            code = process.poll()
+            if code is not None:
+                raise LauncherError(f"DSH exited during startup (code {code}). See {log}.")
+            url = logged_url(log)
+            if url and status(url) in (200, 303):
+                return process, url
+            time.sleep(0.25)
+        raise LauncherError(f"DSH did not become ready within {START_TIMEOUT} seconds. See {log}.")
+    except BaseException:
+        if process is not None:
+            stop_server(process)
+        raise
+
+
+def run_window(url, profile, log):
+    browser = None
+    try:
+        with log.open("wb") as output:
+            log.chmod(0o600)
+            browser = subprocess.Popen(
+                [browser_command(), f"--user-data-dir={profile}", f"--app={url}",
+                 "--no-first-run", "--no-default-browser-check", "--disable-background-mode"],
+                stdin=subprocess.DEVNULL, stdout=output, stderr=subprocess.STDOUT,
+                start_new_session=True, close_fds=True,
+            )
+        code = browser.wait()
+        if code:
+            raise LauncherError(f"The app browser exited (code {code}). See {log}.")
+    finally:
+        if browser is not None:
+            stop_server(browser)
+
+
+def show_error(message):
+    print(f"DSH Desktop: {message}", file=sys.stderr)
+    if shutil.which("zenity") and (os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")):
+        subprocess.run(["zenity", "--error", "--title=DSH Desktop", f"--text={message}"], check=False)
+
+
+def interrupt_startup(*_):
+    raise KeyboardInterrupt
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true", help="check dependencies and server without starting anything")
+    args = parser.parse_args(argv)
+    state = Path(os.environ.get("XDG_STATE_HOME", str(Path.home() / ".local/state"))) / "dsh-desktop"
+    profile = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "dsh-desktop/chrome"
+    browser = browser_command()  # Fail before starting a server if unavailable.
+    if args.check:
+        command, _ = dsh_environment()
+        print(f"DSH executable: {command}")
+        print(f"Browser: {browser} (app mode)")
+        print(f"Server: {BASE_URL} ({status(BASE_URL) or 'not running'})")
+        return 0
+
+    os.umask(0o077)
+    state.mkdir(parents=True, exist_ok=True, mode=0o700)
+    state.chmod(0o700)
+    with (state / "launch.lock").open("a") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return 0  # The app already owns the server and its one window.
+        if status(BASE_URL) is not None:
+            raise LauncherError("DSH or another application is already running on port 3080. Stop that instance manually before opening DSH Desktop. Existing servers are never taken over or stopped by this launcher.")
+        profile.mkdir(parents=True, exist_ok=True, mode=0o700)
+        previous = {signum: signal.signal(signum, interrupt_startup) for signum in (signal.SIGINT, signal.SIGTERM)}
+        process = None
+        try:
+            process, url = start_server(state / "server.log")
+            run_window(url, profile, state / "browser.log")
+        finally:
+            try:
+                if process is not None:
+                    stop_server(process)
+            finally:
+                for signum, handler in previous.items():
+                    signal.signal(signum, handler)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        sys.exit(130)
+    except (LauncherError, OSError, subprocess.TimeoutExpired) as error:
+        show_error(str(error))
+        sys.exit(1)
