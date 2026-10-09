@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "skipped",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-09T08:56:25.233Z",
+  "specification": {
+    "path": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/candidate.json",
+    "sha256": "5a686f5b927695153a41e2d26a0c3a3ab547fed6ff08158c48db03fd2dca255e",
+    "bytes": 6626
+  },
+  "artifact": {
+    "path": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+    "sha256": "2f0e546850973bd781d30f711df0f457b9e9e25a61be561159b0e9c1b8429ec7",
+    "bytes": 769796
+  },
+  "stages": {
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "/home/buble/.nvm/versions/node/v24.21.0/bin/node",
+        "/home/buble/.dsh/profiles/web/node_modules/@tt-a1i/archify-dsh/skills/archify/bin/archify.mjs",
+        "deliver",
+        "workflow",
+        "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/candidate.json",
+        "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "/home/buble/git/dotfiles",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "5a686f5b927695153a41e2d26a0c3a3ab547fed6ff08158c48db03fd2dca255e",
+          "bytes": 6626
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 366,
+      "command": [
+        "/home/buble/.nvm/versions/node/v24.21.0/bin/node",
+        "/home/buble/.dsh/profiles/web/node_modules/@tt-a1i/archify-dsh/skills/archify/bin/archify.mjs",
+        "deliver",
+        "workflow",
+        "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/candidate.json",
+        "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "/home/buble/git/dotfiles",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "fb9f5e8e-66d8-4628-932f-c0c2b27e109a",
+        "ok": true,
+        "command": "deliver",
+        "type": "workflow",
+        "input": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/candidate.json",
+        "output": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+        "specification": {
+          "sha256": "5a686f5b927695153a41e2d26a0c3a3ab547fed6ff08158c48db03fd2dca255e",
+          "bytes": 6626
+        },
+        "artifact": {
+          "sha256": "2f0e546850973bd781d30f711df0f457b9e9e25a61be561159b0e9c1b8429ec7",
+          "bytes": 769796
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 126,
+      "command": [
+        "/home/buble/.nvm/versions/node/v24.21.0/bin/node",
+        "/home/buble/.dsh/profiles/web/node_modules/@tt-a1i/archify-dsh/skills/archify/bin/archify.mjs",
+        "check",
+        "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+        "artifact": {
+          "sha256": "2f0e546850973bd781d30f711df0f457b9e9e25a61be561159b0e9c1b8429ec7",
+          "bytes": 769796
+        },
+        "checks": [
+          {
+            "name": "single_svg",
+            "ok": true,
+            "details": [
+              "found 1 <svg> block(s)"
+            ]
+          },
+          {
+            "name": "finite_svg",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "orthogonal_arrows",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "label_route_clearance",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_crossings",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_corridors",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "container_border_runs",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "route_rhythm",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "legend_clearance",
+            "ok": true,
+            "details": []
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "metrics": {
+            "properCrossings": 0,
+            "resolvedCrossovers": 0,
+            "ambiguousCorridors": 0,
+            "arrowheadCollisions": 0,
+            "containerBorderRuns": 0,
+            "labelRouteClearanceIssues": 0,
+            "labelCanvasOverflowIssues": 0,
+            "minLabelRouteClearance": 74,
+            "desktopReadabilityIssues": 0,
+            "viewportHeightIssues": 0,
+            "minProjectedNodeTextPx": 8,
+            "maxBends": 2,
+            "routesOverSuggestedBends": 0,
+            "maxStretch": 3.624,
+            "routesOverSuggestedStretch": 2,
+            "minSegmentPx": 34,
+            "minInteriorSegmentPx": 134,
+            "shortSegmentCount": 0,
+            "shortEndpointSegmentCount": 0,
+            "shortInteriorSegmentCount": 0,
+            "microSegmentCount": 0
+          },
+          "suggestedLimits": {
+            "bendsPerRelationship": 2,
+            "stretch": 1.35,
+            "segmentPx": 16,
+            "microSegmentPx": 8
+          },
+          "routeReview": {
+            "crossings": [],
+            "detours": [
+              {
+                "relationship": {
+                  "id": "non-windows-link",
+                  "from": "platform",
+                  "to": "symlink",
+                  "label": "no",
+                  "collectionIndex": 3,
+                  "artifactIndex": 4
+                },
+                "bends": 2,
+                "stretch": 3.624
+              },
+              {
+                "relationship": {
+                  "id": "selected-pairs",
+                  "from": "select",
+                  "to": "source",
+                  "label": "each pair",
+                  "collectionIndex": 7,
+                  "artifactIndex": 8
+                },
+                "bends": 2,
+                "stretch": 3.624
+              }
+            ]
+          },
+          "leadingSpace": {
+            "measured": false,
+            "reviewSuggested": false
+          },
+          "desktopReadability": {
+            "budgetBasis": "legacy-930",
+            "readerContract": "declared-wide-v1",
+            "availableDiagramWidth": 930,
+            "actualBudgetPx": 930,
+            "limit": "legacy",
+            "requestedTargetPx": null,
+            "requestedTargetMet": null,
+            "hardFloorPx": 6,
+            "hardFloorMet": true,
+            "minimumOwner": {
+              "kind": "node",
+              "id": "command"
+            },
+            "minimumSourceTextPx": 8,
+            "minimumProjectedTextPx": 8,
+            "semanticTextCount": 35
+          },
+          "issues": []
+        },
+        "provenance": "current",
+        "deliveryReceiptId": "fb9f5e8e-66d8-4628-932f-c0c2b27e109a"
+      }
+    },
+    "browser-check": {
+      "status": "skipped",
+      "exitCode": 2,
+      "durationMs": 13,
+      "command": [
+        "/home/buble/.nvm/versions/node/v24.21.0/bin/node",
+        "/home/buble/.dsh/profiles/web/node_modules/@tt-a1i/archify-dsh/skills/archify/bin/archify.mjs",
+        "browser-check",
+        "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+        "--json",
+        "--require-provenance"
+      ],
+      "execution": "in-process",
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": false,
+        "command": "browser-check",
+        "evidenceKind": "automated-browser",
+        "status": "skipped",
+        "visualReview": "not-requested",
+        "provenance": "current",
+        "deliveryReceiptId": "fb9f5e8e-66d8-4628-932f-c0c2b27e109a",
+        "artifact": {
+          "path": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+          "sha256": "2f0e546850973bd781d30f711df0f457b9e9e25a61be561159b0e9c1b8429ec7",
+          "bytes": 769796
+        },
+        "state": {
+          "detail": "read",
+          "motion": "still"
+        },
+        "chrome": {
+          "status": "unavailable",
+          "executable": null
+        },
+        "diagnostics": [
+          {
+            "code": "viewer/chrome-unavailable",
+            "severity": "warning",
+            "message": "Chrome or Chromium is unavailable. Set ARCHIFY_CHROME to its executable path.",
+            "subject": {
+              "artifact": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html"
+            },
+            "evidence": {
+              "executable": null
+            },
+            "supportedFixes": [
+              "set ARCHIFY_CHROME to a Chrome or Chromium executable and rerun browser-check"
+            ]
+          }
+        ],
+        "containment": {
+          "status": "skipped",
+          "policy": "fit-or-reader-declared-readable-vertical-scroll",
+          "viewports": []
+        },
+        "themeStates": {
+          "status": "skipped",
+          "viewports": []
+        },
+        "readability": {
+          "status": "skipped",
+          "minimumProjectedNodeTextPx": 6,
+          "viewports": []
+        },
+        "viewerChrome": {
+          "status": "skipped",
+          "viewports": []
+        },
+        "captures": {
+          "status": "not-requested",
+          "screenshots": [],
+          "contactSheet": null
+        },
+        "sidecars": {
+          "receipt": "dotfiles-install.browser-check.json",
+          "files": []
+        },
+        "error": "Chrome or Chromium is unavailable. Set ARCHIFY_CHROME to its executable path."
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "viewer/chrome-unavailable",
+      "severity": "warning",
+      "message": "Chrome or Chromium is unavailable. Set ARCHIFY_CHROME to its executable path.",
+      "subject": {
+        "artifact": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html"
+      },
+      "evidence": {
+        "executable": null
+      },
+      "supportedFixes": [
+        "set ARCHIFY_CHROME to a Chrome or Chromium executable and rerun browser-check"
+      ]
+    }
+  ],
+  "evidence": {
+    "receipt": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.finalize.json",
+    "summaryReceipt": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.finalize-summary.json",
+    "browserCheckReceipt": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "failedStage": "browser-check",
+  "finishedAt": "2026-10-09T08:56:26.108Z",
+  "durationMs": 874,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

@@ -2,6 +2,8 @@ vim.g.mapleader = ' ' -- :help mapleader, Must happen before plugins are loaded 
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.o.number = true -- :help vim.o, :help option-list
+vim.o.signcolumn = 'no'
+vim.wo.signcolumn = 'no'
 vim.o.relativenumber = false
 vim.o.mouse = 'a'
 vim.o.showmode = false -- don't show the mode, since it's already in the status line
@@ -27,7 +29,6 @@ vim.o.undofile = true -- Save undo history
 vim.o.ignorecase = true -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.smartcase = true
 vim.o.smartindent = true
-vim.o.signcolumn = 'yes' -- Keep signcolumn on by default
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300 -- mapped sequence wait time
 vim.o.splitright = true -- how new vert splits should be opened
@@ -52,9 +53,9 @@ vim.o.showtabline = 1 -- show tabs line never/atleast2tabs/always - 0/1/2
 vim.o.backspace = 'indent,eol,start'
 vim.o.pumheight = 0 -- max popup menu size - 0 means whatever is need
 vim.o.conceallevel = 0 -- So that `` is visible in markdown files (default: 1)
-vim.wo.signcolumn = 'yes'
 vim.o.backup = false -- whether to make backup while writing the file
 vim.o.writebackup = false -- whether to create a backup while the file is being edited
 vim.opt.runtimepath:remove('/usr/share/vim/vimfiles') -- Separate Vim plugins from Neovim in case Vim still in use (default: includes this path if Vim is installed)
 vim.o.hidden = true -- will allow you to have modified buffers open in the "background" - ie not displayed in the window
 vim.o.colorcolumn = ''
+vim.opt.fillchars = {eob = " "}

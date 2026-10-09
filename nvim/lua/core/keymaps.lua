@@ -34,6 +34,7 @@ vim.keymap.set('n', '<leader>tx', ':tabclose<CR>', { desc = 'Close tab' })
 vim.keymap.set('n', '<leader>tn', ':tabn<CR>', { desc = 'Goto next tab' })
 vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { desc = 'Goto prev tab' })
 vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', { desc = 'Toggle line wrap' })
+vim.keymap.set('n', '<leader>m', '<cmd>MarkdownWrap<CR>', { desc = 'Toggle Markdown writing mode', silent = true })
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
 
@@ -92,7 +93,7 @@ end, { desc = 'Select inner argument' })
 --=============================================================================
 vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle<CR>', { desc = 'Toggle file explorer (neotree)' })
 vim.keymap.set('n', '<leader>R', '<cmd>Neotree reveal<CR>', { desc = 'Reveal current file in the explorer neotree' })
--- vim.keymap.set("n", "<leader>e", ":Neotree toggle position=float<CR>", { noremap = true, silent = true }) -- focus file explorer
+vim.keymap.set("n", "<leader>r", ":Neotree toggle position=float<CR>", { noremap = true, silent = true }) -- focus file explorer
 -- vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
 
 --=============================================================================

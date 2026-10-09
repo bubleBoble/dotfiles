@@ -56,6 +56,18 @@ def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
             src_str = os.path.expandvars(src_str)
             tgt_str = os.path.expandvars(tgt_str)
             tool = Path(src_str.removesuffix("/*")).parts[0]
+            if tool == "agents":
+                # Shared sources belong to the agent receiving them, not to
+                # one aggregate "agents" tool.
+                try:
+                    target_parts = Path(tgt_str).expanduser().relative_to(Path.home()).parts
+                except ValueError:
+                    target_parts = ()
+                if target_parts:
+                    if target_parts[0] == ".config" and len(target_parts) > 1:
+                        tool = target_parts[1]
+                    else:
+                        tool = target_parts[0].removeprefix(".")
 
             if "*" in src_str or "*" in tgt_str:
                 if not (
@@ -240,7 +252,8 @@ def main():
         "tools",
         nargs="*",
         metavar="TOOL",
-        help="Only manage configuration for the named tool(s).\n"
+        help="Only manage configuration for the named tool(s), e.g. nvim, claude, codex, dsh.\n"
+        "Agent configurations are grouped by destination, including shared assets.\n"
         "Omit to manage all tools.",
     )
 

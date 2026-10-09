@@ -65,16 +65,16 @@ return {
             git_status = {
                 symbols = {
                     -- Change type
-                    added = '[Added]', -- or "✚", but this is redundant info if you use git_status_colors on the name
-                    modified = '[Modified]', -- or "", but this is redundant info if you use git_status_colors on the name
-                    deleted = '[Deleted]', -- this can only be used in the git_status source
-                    renamed = '[Renamed]', -- this can only be used in the git_status source
+                    added = '[A]', -- or "✚", but this is redundant info if you use git_status_colors on the name
+                    modified = '[M]', -- or "", but this is redundant info if you use git_status_colors on the name
+                    deleted = '[D]', -- this can only be used in the git_status source
+                    renamed = '[R]', -- this can only be used in the git_status source
                     -- Status type
-                    untracked = '[Untracked]',
-                    ignored = '[Ignored]',
-                    unstaged = '[Unstaged]',
-                    staged = '[Staged]',
-                    conflict = '[!Conflict]',
+                    untracked = '[U]',
+                    ignored = '[I]',
+                    unstaged = '[Uns]',
+                    staged = '[S]',
+                    conflict = '[!]',
                 },
             },
             -- If you don't want to use these columns, you can set `enabled = false` for each of them individually

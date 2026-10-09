@@ -1,0 +1,76 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Dotfiles Installation Flow — Current Working Tree",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "output": ".archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html"
+  },
+  "lanes": [
+    { "id": "prepare", "label": "Installer — prepare selected mappings" },
+    { "id": "mapping", "label": "Installer — repeat for each selected source / target pair" },
+    { "id": "deploy", "label": "Home-directory deployment — platform branch" },
+    { "id": "report", "label": "Installer — after the mapping loop" }
+  ],
+  "mainPath": ["command", "config", "resolve", "select", "source", "target", "parents", "platform", "symlink", "notes"],
+  "nodes": [
+    { "id": "command", "lane": "prepare", "col": 1, "yOffset": -156, "type": "external", "icon": "person", "label": "Run installer", "sublabel": "./install --install [tools]", "width": 204, "height": 64 },
+    { "id": "config", "lane": "prepare", "col": 1, "yOffset": -52, "type": "backend", "label": "Read config.conf", "sublabel": "SOURCE:TARGET mappings", "tag": "config errors abort", "width": 204, "height": 76 },
+    { "id": "resolve", "lane": "prepare", "col": 1, "yOffset": 52, "type": "backend", "label": "Resolve mappings", "sublabel": "expand variables + child /*", "width": 204, "height": 64 },
+    { "id": "select", "lane": "prepare", "col": 1, "yOffset": 156, "type": "security", "label": "Select tools", "sublabel": "named tools, or all if omitted", "tag": "unknown tool aborts", "width": 204, "height": 76 },
+    { "id": "source", "lane": "mapping", "col": 1, "yOffset": -156, "type": "security", "label": "Source exists?", "sublabel": "resolved repository path", "width": 204, "height": 64 },
+    { "id": "missing", "lane": "mapping", "col": 3, "yOffset": -156, "type": "security", "icon": "failure", "label": "Missing source", "sublabel": "log error; skip this pair", "tag": "continue mapping loop", "width": 204, "height": 76 },
+    { "id": "target", "lane": "mapping", "col": 1, "yOffset": -52, "type": "security", "label": "Target already there?", "sublabel": "exists or is a symlink", "width": 204, "height": 64 },
+    { "id": "existing", "lane": "mapping", "col": 3, "yOffset": -52, "type": "security", "icon": "neutral", "label": "Keep existing target", "sublabel": "warn; skip this pair", "tag": "even a broken symlink", "width": 204, "height": 76 },
+    { "id": "parents", "lane": "mapping", "col": 1, "yOffset": 52, "type": "backend", "label": "Create target parents", "sublabel": "mkdir(parents=True)", "width": 204, "height": 64 },
+    { "id": "platform", "lane": "mapping", "col": 1, "yOffset": 156, "type": "security", "label": "Windows runtime?", "sublabel": "native / MSYS2 / Cygwin", "width": 204, "height": 64 },
+    { "id": "symlink", "lane": "deploy", "col": 1, "type": "database", "label": "Create symlink", "sublabel": "home target points to source", "tag": "repository edits propagate", "width": 204, "height": 76 },
+    { "id": "copy", "lane": "deploy", "col": 3, "type": "database", "label": "Copy configuration", "sublabel": "copytree(dir) / copy2(file)", "tag": "separate home-directory copy", "width": 204, "height": 76 },
+    { "id": "notes", "lane": "report", "col": 1, "type": "backend", "label": "Print optional notes", "sublabel": "NOTE.md in source directories", "tag": "after all mappings", "width": 204, "height": 76 }
+  ],
+  "edges": [
+    { "id": "invoke-config", "from": "command", "to": "config", "variant": "emphasis" },
+    { "id": "parse-resolve", "from": "config", "to": "resolve", "variant": "emphasis" },
+    { "id": "resolve-select", "from": "resolve", "to": "select", "variant": "emphasis" },
+    { "id": "selected-pairs", "from": "select", "to": "source", "label": "each pair", "variant": "emphasis" },
+    { "id": "source-present", "from": "source", "to": "target", "label": "yes", "variant": "emphasis" },
+    { "id": "source-missing", "from": "source", "to": "missing", "label": "no", "variant": "security", "role": "error" },
+    { "id": "target-free", "from": "target", "to": "parents", "label": "no", "variant": "emphasis" },
+    { "id": "target-exists", "from": "target", "to": "existing", "label": "yes", "variant": "security", "role": "branch" },
+    { "id": "parents-platform", "from": "parents", "to": "platform", "variant": "emphasis" },
+    { "id": "non-windows-link", "from": "platform", "to": "symlink", "label": "no", "variant": "emphasis" },
+    { "id": "windows-copy", "from": "platform", "to": "copy", "label": "yes", "variant": "default", "role": "branch" },
+    { "id": "links-batch-finish", "from": "symlink", "to": "notes", "label": "batch finished", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "route": "straight" },
+    { "id": "copies-batch-finish", "from": "copy", "to": "notes", "label": "batch finished", "variant": "dashed" }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Working-tree evidence, not commit-verified links",
+      "items": [
+        "Inspected local install and config.conf on 2026-10-09; both have uncommitted changes. This diagram reflects those current bytes, not HEAD.",
+        "Preparation: install:36–122, 216–274. Per-pair guards and platform writes: install:125–150. Notes: install:152–160.",
+        "Read-only source inspection only: the installer was not executed and home-directory targets were not inspected or changed."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Mapping and tool-selection rules",
+      "items": [
+        "Sources resolve relative to config.conf beside the installer. Environment variables and ~ expand in paths; blank lines and comments are ignored.",
+        "A /* mapping must end with /* on both sides. Each direct child becomes one pair, sorted by name; wildcard source directories must exist.",
+        "Ordinary tool names come from the first source directory. For agents/ sources, the receiving home-directory tool determines selection (install:58–70)."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Examples and iteration behavior",
+      "items": [
+        "config.conf:5 maps ./nvim to $HOME/.config/nvim. config.conf:27–28 maps shared instructions and each shared skill to DSH.",
+        "./install --install dsh selects the DSH destinations, including shared assets. Omit tool names to process all configured mappings.",
+        "Each successful or skipped pair continues the same loop. Notes are printed after the loop, including an all-skipped batch. Existing targets are never replaced during installation."
+      ]
+    }
+  ]
+}

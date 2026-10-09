@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "fb9f5e8e-66d8-4628-932f-c0c2b27e109a",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/candidate.json",
+  "output": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+  "specification": {
+    "sha256": "5a686f5b927695153a41e2d26a0c3a3ab547fed6ff08158c48db03fd2dca255e",
+    "bytes": 6626
+  },
+  "artifact": {
+    "sha256": "2f0e546850973bd781d30f711df0f457b9e9e25a61be561159b0e9c1b8429ec7",
+    "bytes": 769796
+  }
+}

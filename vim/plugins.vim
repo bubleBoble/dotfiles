@@ -7,6 +7,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
+Plug 'junegunn/goyo.vim'
 call plug#end()
 
 

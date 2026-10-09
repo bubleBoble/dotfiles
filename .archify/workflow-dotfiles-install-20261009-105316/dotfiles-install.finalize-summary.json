@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "skipped",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/candidate.json",
+    "sha256": "5a686f5b927695153a41e2d26a0c3a3ab547fed6ff08158c48db03fd2dca255e",
+    "bytes": 6626
+  },
+  "artifact": {
+    "path": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html",
+    "sha256": "2f0e546850973bd781d30f711df0f457b9e9e25a61be561159b0e9c1b8429ec7",
+    "bytes": 769796
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "skipped"
+  },
+  "failedStage": "browser-check",
+  "diagnostics": [
+    {
+      "code": "viewer/chrome-unavailable",
+      "severity": "warning",
+      "message": "Chrome or Chromium is unavailable. Set ARCHIFY_CHROME to its executable path.",
+      "subject": {
+        "artifact": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.html"
+      },
+      "evidence": {
+        "executable": null
+      },
+      "supportedFixes": [
+        "set ARCHIFY_CHROME to a Chrome or Chromium executable and rerun browser-check"
+      ]
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.finalize.json",
+    "summaryReceipt": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.finalize-summary.json",
+    "browserCheckReceipt": "/home/buble/git/dotfiles/.archify/workflow-dotfiles-install-20261009-105316/dotfiles-install.browser-check.json"
+  },
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 874
+}

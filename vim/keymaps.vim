@@ -75,6 +75,7 @@ nnoremap <leader>b :enew<CR>
 
 " toggle line wrapping
 nnoremap <leader>lw :set wrap!<CR>
+nnoremap <silent> <leader>m :MarkdownWrap<CR>
 
 " Press jk fast to exit insert mode
 inoremap jk <ESC>

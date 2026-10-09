@@ -12,11 +12,12 @@ require('lazy').setup({
     require('plugins.colorscheme'), -- multiple repositories: available colorschemes
     require('plugins.which-key'), -- folke/which-key.nvim: keybinding hints
     require('plugins.neo-tree'), -- nvim-neo-tree/neo-tree.nvim: file explorer
-    require('plugins.bufferline'), -- akinsho/bufferline.nvim: buffer tab bar
-    require('plugins.lualine'), -- nvim-lualine/lualine.nvim: statusline
+    -- require('plugins.bufferline'), -- akinsho/bufferline.nvim: buffer tab bar
+    -- require('plugins.lualine'), -- nvim-lualine/lualine.nvim: statusline
     require('plugins.guess-indent'), -- NMAC427/guess-indent.nvim: detect indentation settings
     require('plugins.persistence'), -- folke/persistence.nvim: save and restore editing sessions
-    require('plugins.gitsigns'), -- lewis6991/gitsigns.nvim: Git change markers and hunks
+    require('plugins.goyo'), -- junegunn/goyo.vim: 80-column Markdown writing layout
+    -- require('plugins.gitsigns'), -- lewis6991/gitsigns.nvim: Git change markers and hunks
     require('plugins.fugitive'), -- tpope/vim-fugitive: Git commands and history graph
     require('plugins.mason'), -- mason-org/mason.nvim: external tool manager
     require('plugins.blink'), -- saghen/blink.cmp: autocompletion
@@ -25,6 +26,7 @@ require('lazy').setup({
     require('plugins.telescope'), -- nvim-telescope/telescope.nvim: fuzzy finder
     require('plugins.treesitter'), -- nvim-treesitter/nvim-treesitter: syntax parsing and highlighting
     require('plugins.treesitter-textobjects'), -- nvim-treesitter/nvim-treesitter-textobjects: syntax-aware text objects
+    require('plugins.codediff') -- esmuellert/codediff.nvim: vscode-like diff
 })
 require('core.keymaps')
 require('core.usercommands')

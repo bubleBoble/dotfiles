@@ -155,3 +155,7 @@ Files to reference (available to all agents):
 - Do not reference them in commit messages, comments, or output
 - If you must reference them, ask the user before proceeding
 - If accidentally displayed, immediately alert the user
+
+## Ignore file for agents
+
+When working in a repository see if there's .agentignore file, it lists the files which agents should not read or write. Just line .gitignore for git.
