@@ -46,7 +46,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(
             {tool for tool, _, _ in self.links},
             {"agents", "claude", "codex", "dsh", "gdb", "git", "herdr",
-             "nvim", "omp", "pi", "tmux", "vim", "yazi", "zsh"},
+             "nvim", "omp", "pi", "tmux", "vim", "yazi", "zed", "zsh"},
         )
 
     def test_agent_selection_includes_only_its_destination(self):
@@ -66,6 +66,31 @@ class InstallerTests(unittest.TestCase):
         )
         for tool in ("claude", "codex", "dsh", "omp", "pi"):
             self.assertTrue(any("skills" in target.parts for _, target in self.select(tool)))
+
+    def test_zed_and_shared_skills_selection(self):
+        self.assertEqual(
+            set(self.select("zed")),
+            {
+                ((ROOT / "zed/settings.json").resolve(), self.home / ".config/zed/settings.json"),
+                ((ROOT / "zed/keymap.json").resolve(), self.home / ".config/zed/keymap.json"),
+                ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".config/zed/AGENTS.md"),
+            },
+        )
+        shared_skills = {
+            (skill.resolve(), self.home / ".agents/skills" / skill.name)
+            for skill in (ROOT / "agents/shared/skills").iterdir()
+        }
+        self.assertTrue(shared_skills)
+        self.assertEqual(
+            set(self.select("agents")),
+            shared_skills | {
+                ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".agents/AGENTS.md"),
+            },
+        )
+        self.assertEqual(
+            set(self.select("zed", "agents")),
+            set(self.select("zed") + self.select("agents")),
+        )
 
     def test_dsh_selection_includes_desktop_integration(self):
         selected = set(self.select("dsh"))
@@ -93,7 +118,7 @@ class InstallerTests(unittest.TestCase):
 
     @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
     def test_cli_install_and_remove_per_tool(self):
-        for tool in ("nvim", "claude", "codex", "dsh", "vim"):
+        for tool in ("nvim", "claude", "codex", "dsh", "vim", "zed", "agents"):
             with self.subTest(tool=tool):
                 result = self.cli("--install", tool)
                 self.assertEqual(result.returncode, 0, result.stderr)

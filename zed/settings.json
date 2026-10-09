@@ -1,0 +1,182 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "agent_buffer_font_size": 20.0,
+  "agent_ui_font_size": 22.0,
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "proxy": "",
+  "agent": {
+    "default_model": {
+      "provider": "openai-subscribed",
+      "model": "gpt-5.6-sol",
+      "enable_thinking": true,
+      "effort": "high"
+    },
+    "dock": "right",
+    "show_turn_stats": true,
+    "terminal_init_command": "",
+    "enable_feedback": false,
+    "threads_sidebar": {
+      "auto_open": false,
+      "position": "right"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "disable_ai": false,
+  "calls": {
+    "mute_on_join": true
+  },
+  "git": {
+    "show_stage_restore_buttons": true,
+    "path_style": "file_path_first",
+    "blame": {
+      "show_avatar": true
+    },
+    "inline_blame": {
+      "enabled": false
+    },
+    "disable_git": false
+  },
+  "window_decorations": "client",
+  "use_system_window_tabs": false,
+  "window_title_format": "${projectName}${separator}${fileName}",
+  "focus_follows_mouse": {
+    "enabled": false
+  },
+  "bottom_dock_layout": "contained",
+  "preview_tabs": {
+    "enable_preview_multibuffer_from_code_navigation": true,
+    "enable_preview_from_file_finder": true,
+    "enabled": true
+  },
+  "tabs": {
+    "show_close_button": "hidden",
+    "show_diagnostics": "off",
+    "close_position": "right",
+    "file_icons": true,
+    "git_status": false
+  },
+  "tab_bar": {
+    "show_pinned_tabs_in_separate_row": false,
+    "show_tab_bar_buttons": true,
+    "show_nav_history_buttons": false,
+    "show": true
+  },
+  "title_bar": {
+    "open_menus_on_hover": false,
+    "button_layout": "platform_default",
+    "show_menus": false,
+    "show_user_picture": false,
+    "show_user_menu": true,
+    "show_sign_in": true,
+    "show_onboarding_banner": true,
+    "show_project_items": true,
+    "show_worktree_name": true,
+    "show_branch_name": true,
+    "show_branch_status_icon": true
+  },
+  "status_bar": {
+    "show_active_file": true,
+    "line_endings_button": true,
+    "cursor_position_button": true,
+    "active_encoding_button": "enabled"
+  },
+  "project_panel": {
+    "dock": "left",
+    "button": true
+  },
+  "markdown_preview": {
+    "open_markdown_files_in_preview": false
+  },
+  "colorize_brackets": true,
+  "middle_click_paste": false,
+  "code_lens": "off",
+  "inlay_hints": {
+    "show_background": false,
+    "enabled": false
+  },
+  "show_whitespaces": "selection",
+  "accessible_mode": false,
+  "cli_default_open_behavior": "existing_window",
+  "ensure_final_newline_on_save": false,
+  "remove_trailing_whitespace_on_save": false,
+  "indent_guides": {
+    "background_coloring": "disabled",
+    "coloring": "indent_aware",
+    "enabled": true
+  },
+  "vim": {
+    "cursor_shape": {
+      "insert": "bar",
+      "normal": "block"
+    },
+    "use_smartcase_find": true,
+    "toggle_relative_line_numbers": false
+  },
+  "toolbar": {
+    "code_actions": true,
+    "breadcrumbs": true
+  },
+  "scrollbar": {
+    "axes": {
+      "horizontal": false
+    },
+    "diagnostics": "none",
+    "selected_symbol": false,
+    "selected_text": false,
+    "search_results": false,
+    "git_diff": false,
+    "cursors": false,
+    "show": "always"
+  },
+  "mouse_wheel_zoom": true,
+  "scroll_sensitivity": 1.0,
+  "diff_view_style": "unified",
+  "which_key": {
+    "delay_ms": 200,
+    "enabled": true
+  },
+  "hide_mouse": "never",
+  "cursor_animation": {
+    "enabled": true
+  },
+  "cursor_blink": false,
+  "auto_update": false,
+  "restore_on_startup": "last_workspace",
+  "icon_theme": "Zed (Default)",
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "agent_servers": {
+    "github-copilot-cli": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    },
+    "codex-acp": {
+      "default_config_options": {
+        "fast-mode": false
+      },
+      "type": "registry"
+    }
+  },
+  "ui_font_size": 22.0,
+  "buffer_font_size": 20.0,
+  "theme": "Ayu Dark",
+}

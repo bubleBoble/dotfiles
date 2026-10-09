@@ -22,6 +22,7 @@ A centralized configuration management system that maintains dotfiles (configura
 | **kitty/** | Kitty terminal emulator config |
 | **vim/** | Vim editor config |
 | **vscode/** | VS Code settings (platform-specific: lin, win) |
+| [**zed/**](<zed/>) | Zed editor configuration; install with `zed agents` for shared skills |
 | **yazi/** | Yazi file manager config and themes |
 | **herdr/** | Herdr terminal multiplexer config |
 | **gdb/** | GDB debugger configuration |
@@ -58,7 +59,7 @@ Format: `SOURCE:TARGET` where:
 - **SOURCE** — Relative path resolved from the repository root
 - **TARGET** — Path in home directory (resolved with `$HOME`)
 - **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name
-- **Tool selection** — Normally the first source directory identifies the tool (`nvim`, `vim`, etc.). For sources under `agents/`, the destination identifies the tool (`claude`, `pi`, `omp`, `codex`, `dsh`, or `agents` for `~/.agents`). Shared assets are included only for the selected destination, not for every agent.
+- **Tool selection** — Normally the first source directory identifies the tool (`nvim`, `vim`, etc.). For sources under `agents/`, the destination identifies the tool (`claude`, `pi`, `omp`, `codex`, `dsh`, `zed`, or `agents` for `~/.agents`). Shared assets are included only for the selected destination, not for every agent.
 
 Example:
 ```
