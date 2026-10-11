@@ -27,6 +27,9 @@ These instructions and skills apply to Zed's built-in agent. External agents use
 | Space E | Toggle file-explorer focus, like Ctrl-Shift-E | Normal mode; project panel outside rename input |
 | Space T B | Show / hide the tab bar | Normal mode |
 | Alt-Shift-F | Format selected text | File editor, including visual mode |
+| Alt-T | Toggle the terminal panel, preserving its maximized state | Workspace |
+
+Maximize the terminal once using its tab-bar maximize button. Alt-T then hides and reopens it maximized without ending the terminal session. Do not chain terminal focus and zoom with `action::Sequence`: Zed captures the original focus for both actions, so zoom can target the editor instead.
 
 Ctrl-Q no longer quits Zed outside a file editor. Insert-mode Tab and Shift-arrow text selection remain unchanged. Pane navigation stays inside Zed; it does not control external terminal-multiplexer panes.
 

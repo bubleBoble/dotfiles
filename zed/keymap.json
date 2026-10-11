@@ -90,6 +90,10 @@
     "unbind": {
       "ctrl-shift-w": "pane::CloseActiveItem",
     },
+    "bindings": {
+      // Override Zed's terminal-local Alt-T task shortcut.
+      "alt-t": "terminal_panel::Toggle",
+    },
   },
   {
     "context": "Workspace",
@@ -108,6 +112,12 @@
       "ctrl-alt-shift-z": "multi_workspace::ToggleWorkspaceSidebar",
       "ctrl-alt-z": "workspace::ToggleRightDock",
       "ctrl-shift-r": "pane::RevealInProjectPanel",
+    },
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-t": "terminal_panel::Toggle",
     },
   },
 ]

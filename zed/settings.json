@@ -197,7 +197,7 @@
   },
   "hide_mouse": "never",
   "cursor_animation": {
-    "enabled": true,
+    "enabled": false,
   },
   "cursor_blink": false,
   "auto_update": false,
