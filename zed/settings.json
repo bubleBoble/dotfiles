@@ -11,6 +11,34 @@
     "font_size": 16.0,
     "starts_open": false,
   },
+  "auto_install_extensions": {
+    // Languages
+    "git-firefly": true,
+    "html": true,
+    "lua": true,
+
+    // Icon themes
+    "material-icon-theme": true,
+
+    // Themes
+    "catppuccin-blur": true,
+    "everforest": true,
+    "flexoki-themes": true,
+    "github-monochrome-theme": true,
+    "high-contrast-themes": true,
+    "jetbrains-themes": true,
+    "kanso": true,
+    "macos-classic": true,
+    "macos-prism-theme": true,
+    "neovim-default": true,
+    "one-dark-darkened": true,
+    "one-dark-pro": true,
+    "one-dark-pro-max": true,
+    "ultraviolet-theme": true,
+    "vscode-dark-high-contrast": true,
+    "zedokai": true,
+    "zedokai-darkest-machine": true,
+  },
   "vim_mode": false,
   "agent_buffer_font_size": 18.0,
   "agent_ui_font_size": 18.0,
@@ -26,6 +54,11 @@
   },
   "proxy": "",
   "agent": {
+    "sandbox_permissions": {
+      "network_hosts": [
+        "zed.dev"
+      ]
+    },
     "default_model": {
       "provider": "openai-subscribed",
       "model": "gpt-5.6-sol",
@@ -126,7 +159,7 @@
   "indent_guides": {
     "background_coloring": "disabled",
     "coloring": "indent_aware",
-    "enabled": true,
+    "enabled": false,
   },
   "vim": {
     "cursor_shape": {
