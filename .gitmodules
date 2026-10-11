@@ -4,3 +4,12 @@
 [submodule "agents/matpocock_skills_repo"]
 	path = agents/matpocock_skills_repo
 	url = https://github.com/mattpocock/skills.git
+[submodule "zsh/plugins/zsh-autosuggestions"]
+	path = zsh/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "zsh/plugins/zsh-syntax-highlighting"]
+	path = zsh/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "zsh/plugins/ohmyzsh"]
+	path = zsh/plugins/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git

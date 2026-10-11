@@ -18,7 +18,7 @@ A centralized configuration management system that maintains dotfiles (configura
 | **agents/** | Coding agent configurations and shared standards |
 | **nvim/** | Neovim editor config and plugins; `lua/plugins/deps/` holds shared dependency specs |
 | **tmux/** | Tmux terminal multiplexer config (includes git submodules) |
-| **zsh/** | Zsh shell configuration |
+| [**zsh/**](<zsh/>) | Zsh configuration and plugin submodules; see [zsh/README.md](<zsh/README.md>) when changing shell startup |
 | **kitty/** | Kitty terminal emulator config |
 | **vim/** | Vim editor config |
 | **vscode/** | VS Code settings (platform-specific: lin, win) |

@@ -7,6 +7,8 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "buffer_font_weight": 400.0,
+  "buffer_font_family": "Iosevka",
   "terminal": {
     "font_size": 16.0,
     "starts_open": false,
@@ -51,13 +53,12 @@
   "git_panel": {
     "dock": "left",
     "starts_open": false,
+    "entry_primary_click_action": "file_diff",
   },
   "proxy": "",
   "agent": {
     "sandbox_permissions": {
-      "network_hosts": [
-        "zed.dev"
-      ]
+      "network_hosts": ["zed.dev"],
     },
     "default_model": {
       "provider": "openai-subscribed",
@@ -229,6 +230,6 @@
   "theme": {
     "mode": "dark",
     "light": "Flexoki Light",
-    "dark": "Flexoki Dark",
+    "dark": "Gruvbox Dark",
   },
 }

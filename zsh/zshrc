@@ -1,23 +1,23 @@
-# Packages installed without root privilages are placed under $HOME/
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+ZSH_PLUGINS_DIR="$HOME/.config/zsh/plugins"
 
-ZSH_THEME="eastwood"
+# Shell init
+autoload -Uz compinit colors
+compinit -i
+# Try case-insensitive prefixes, then partial matches (e.g. _config -> custom_config).
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+colors # init zsh color vars
+bindkey -e  # Emacs-style key bindings (e.g. ctrl+a e k u w r)
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+setopt prompt_subst
 
-# Marking untracked files under VCS as dirty.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-plugins=(
-    git
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-)
-
-source $ZSH/oh-my-zsh.sh
+# Shell history
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=10000
+setopt share_history hist_ignore_dups
 
 ################################################################################
 # fzf
@@ -61,6 +61,11 @@ function y() {
 # Aliases
 ################################################################################
 alias fzf="fzf --height 40% --layout reverse --border"
+alias ga='git add'
+alias gsr='git svn rebase'
+alias gd='git diff'
+alias gco='git checkout'
+alias glo='git log --oneline --decorate'
 alias ta="tmux attach"
 alias ha="herdr"
 alias cls="clear"
@@ -106,3 +111,12 @@ fi
 ################################################################################
 [[ -f ~/.secrets/secrets.zsh ]] && source ~/.secrets/secrets.zsh
 [[ -f ~/.local.zsh ]] && source ~/.local.zsh
+
+################################################################################
+# Plugins & themes
+# Note: zsh-syntax-highlighting.zsh have to be source last
+################################################################################
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+source "$HOME/.config/zsh/themes/custom1.zsh-theme"
+source "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
