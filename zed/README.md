@@ -25,6 +25,7 @@ These instructions and skills apply to Zed's built-in agent. External agents use
 | Shift-Left / Shift-Right | Shrink / grow the active split's width by two character widths | Normal mode |
 | Tab / Shift-Tab | Next / previous tab in the active pane | Normal mode |
 | Space E | Toggle file-explorer focus, like Ctrl-Shift-E | Normal mode; project panel outside rename input |
+| Space ? | Open the keymap editor to search actions and key bindings | Normal mode |
 | Space T B | Show / hide the tab bar | Normal mode |
 | Alt-Shift-F | Format selected text | File editor, including visual mode |
 | Alt-T | Toggle the terminal panel, preserving its maximized state | Workspace |

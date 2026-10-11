@@ -71,6 +71,7 @@
       "tab": "pane::ActivateNextItem",
       "shift-tab": "pane::ActivatePreviousItem",
       "space e": "project_panel::ToggleFocus",
+      "space ?": "zed::OpenKeymap",
       "space t t": "editor::ToggleTabBar",
       "space t b": "editor::ToggleBreadcrumb",
     },
