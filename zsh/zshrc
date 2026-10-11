@@ -116,7 +116,6 @@ fi
 # Plugins & themes
 # Note: zsh-syntax-highlighting.zsh have to be source last
 ################################################################################
-DISABLE_UNTRACKED_FILES_DIRTY="true"
 source "$HOME/.config/zsh/themes/custom1.zsh-theme"
 source "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
