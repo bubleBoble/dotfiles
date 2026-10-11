@@ -62,7 +62,12 @@ function y() {
 ################################################################################
 alias fzf="fzf --height 40% --layout reverse --border"
 alias ga='git add'
-alias gsr='git svn rebase'
+alias gst='git statis'
+alias gss='git status --short'
+alias gsb='git status --short --branch'
+alias gsi='git submodule init'
+alias gsu='git submodule update'
+alias gsuri='git submodule update --recursive --init'
 alias gd='git diff'
 alias gco='git checkout'
 alias glo='git log --oneline --decorate'
