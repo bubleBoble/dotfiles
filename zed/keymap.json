@@ -7,73 +7,107 @@
 // from the command palette.
 [
   {
-    "context": "Workspace",
-    "bindings": {
-      // "shift shift": "file_finder::Toggle"
+    // Do not let Ctrl-Q quit Zed when focus is outside a file editor.
+    "unbind": {
+      "ctrl-alt-z": "edit_prediction::RatePredictions",
+      "ctrl-q": "zed::Quit",
+      "ctrl-shift-w": "workspace::CloseWindow",
     },
-  },
-  {
-    "context": "Editor && vim_mode == insert",
-    "bindings": {
-      // "j k": "vim::NormalBefore"
-    },
-  },
-  {
-    "context": "Workspace",
-    "bindings": {
-      "ctrl-alt-shift-z": "multi_workspace::ToggleWorkspaceSidebar"
-    }
-  },
-  {
-    "context": "Workspace",
-    "unbind": {
-      "ctrl-alt-j": "multi_workspace::ToggleWorkspaceSidebar"
-    }
-  },
-  {
-    "context": "Terminal",
-    "unbind": {
-      "ctrl-shift-w": "pane::CloseActiveItem"
-    }
-  },
-  {
-    "unbind": {
-      "ctrl-shift-w": "workspace::CloseWindow"
-    }
-  },
-  {
-    "context": "Workspace",
-    "unbind": {
-      "ctrl-alt-shift-b": "git::Branch"
-    }
-  },
-  {
-    "context": "Workspace",
-    "bindings": {
-      "ctrl-alt-z": "workspace::ToggleRightDock"
-    }
-  },
-  {
-    "context": "Workspace",
-    "unbind": {
-      "ctrl-alt-b": "workspace::ToggleRightDock"
-    }
-  },
-  {
-    "context": "Editor && editor_agent_diff",
-    "unbind": {
-      "ctrl-alt-z": "agent::Reject"
-    }
   },
   {
     "context": "AgentDiff",
     "unbind": {
-      "ctrl-alt-z": "agent::Reject"
-    }
+      "ctrl-alt-z": "agent::Reject",
+    },
   },
   {
+    "context": "Editor && editor_agent_diff",
     "unbind": {
-      "ctrl-alt-z": "edit_prediction::RatePredictions"
-    }
-  }
+      "ctrl-alt-z": "agent::Reject",
+    },
+  },
+  {
+    "context": "Editor && mode == full",
+    "bindings": {
+      "ctrl-q": "pane::CloseActiveItem",
+      "alt-shift-f": "editor::FormatSelections",
+      "alt-shift-t": "editor::ToggleTabBar",
+      "alt-shift-b": "editor::ToggleBreadcrumb",
+    },
+  },
+  {
+    "context": "Editor && mode == full && (vim_mode == normal || vim_mode == visual) && !menu",
+    "bindings": {
+      "ctrl-e": ["action::Sequence", ["vim::LineDown", "vim::LineDown"]],
+      "ctrl-y": ["action::Sequence", ["vim::LineUp", "vim::LineUp"]],
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+    },
+  },
+  {
+    "context": "Editor && mode == full && vim_mode == normal && !menu",
+    // Remove longer gr chords so gr opens references without a timeout.
+    "unbind": {},
+    "bindings": {
+      // Zed's ResizePaneDown shrinks height; ResizePaneUp grows it.
+      "shift-up": [
+        "action::Sequence",
+        ["vim::ResizePaneDown", "vim::ResizePaneDown"],
+      ],
+      "shift-down": [
+        "action::Sequence",
+        ["vim::ResizePaneUp", "vim::ResizePaneUp"],
+      ],
+      "shift-left": [
+        "action::Sequence",
+        ["vim::ResizePaneLeft", "vim::ResizePaneLeft"],
+      ],
+      "shift-right": [
+        "action::Sequence",
+        ["vim::ResizePaneRight", "vim::ResizePaneRight"],
+      ],
+      "tab": "pane::ActivateNextItem",
+      "shift-tab": "pane::ActivatePreviousItem",
+      "space e": "project_panel::ToggleFocus",
+      "space t t": "editor::ToggleTabBar",
+      "space t b": "editor::ToggleBreadcrumb",
+    },
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "space e": "project_panel::ToggleFocus",
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+    },
+  },
+  {
+    "context": "Terminal",
+    "unbind": {
+      "ctrl-shift-w": "pane::CloseActiveItem",
+    },
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-alt-j": "multi_workspace::ToggleWorkspaceSidebar",
+      "ctrl-alt-shift-b": "git::Branch",
+      "ctrl-alt-b": "workspace::ToggleRightDock",
+      "ctrl-shift-r": [
+        "task::Rerun",
+        {
+          "reevaluate_context": false,
+        },
+      ],
+    },
+    "bindings": {
+      "ctrl-alt-shift-z": "multi_workspace::ToggleWorkspaceSidebar",
+      "ctrl-alt-z": "workspace::ToggleRightDock",
+      "ctrl-shift-r": "pane::RevealInProjectPanel",
+    },
+  },
 ]

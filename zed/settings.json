@@ -7,16 +7,22 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "agent_buffer_font_size": 20.0,
-  "agent_ui_font_size": 22.0,
+  "terminal": {
+    "font_size": 16.0,
+    "starts_open": false,
+  },
+  "vim_mode": false,
+  "agent_buffer_font_size": 18.0,
+  "agent_ui_font_size": 18.0,
   "outline_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "git_panel": {
-    "dock": "left"
+    "dock": "left",
+    "starts_open": false,
   },
   "proxy": "",
   "agent": {
@@ -24,7 +30,7 @@
       "provider": "openai-subscribed",
       "model": "gpt-5.6-sol",
       "enable_thinking": true,
-      "effort": "high"
+      "effort": "high",
     },
     "dock": "right",
     "show_turn_stats": true,
@@ -32,50 +38,50 @@
     "enable_feedback": false,
     "threads_sidebar": {
       "auto_open": false,
-      "position": "right"
+      "position": "right",
     },
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "disable_ai": false,
   "calls": {
-    "mute_on_join": true
+    "mute_on_join": true,
   },
   "git": {
     "show_stage_restore_buttons": true,
     "path_style": "file_path_first",
     "blame": {
-      "show_avatar": true
+      "show_avatar": true,
     },
     "inline_blame": {
-      "enabled": false
+      "enabled": false,
     },
-    "disable_git": false
+    "disable_git": false,
   },
   "window_decorations": "client",
   "use_system_window_tabs": false,
   "window_title_format": "${projectName}${separator}${fileName}",
   "focus_follows_mouse": {
-    "enabled": false
+    "enabled": false,
   },
   "bottom_dock_layout": "contained",
   "preview_tabs": {
     "enable_preview_multibuffer_from_code_navigation": true,
     "enable_preview_from_file_finder": true,
-    "enabled": true
+    "enabled": true,
   },
   "tabs": {
     "show_close_button": "hidden",
     "show_diagnostics": "off",
     "close_position": "right",
     "file_icons": true,
-    "git_status": false
+    "git_status": false,
   },
   "tab_bar": {
     "show_pinned_tabs_in_separate_row": false,
     "show_tab_bar_buttons": true,
     "show_nav_history_buttons": false,
-    "show": true
+    "show": false,
   },
   "title_bar": {
     "open_menus_on_hover": false,
@@ -88,27 +94,29 @@
     "show_project_items": true,
     "show_worktree_name": true,
     "show_branch_name": true,
-    "show_branch_status_icon": true
+    "show_branch_status_icon": true,
   },
   "status_bar": {
     "show_active_file": true,
     "line_endings_button": true,
     "cursor_position_button": true,
-    "active_encoding_button": "enabled"
+    "active_encoding_button": "enabled",
   },
   "project_panel": {
     "dock": "left",
-    "button": true
+    "button": true,
+    "starts_open": false,
+    "auto_reveal_entries": false,
   },
   "markdown_preview": {
-    "open_markdown_files_in_preview": false
+    "open_markdown_files_in_preview": false,
   },
   "colorize_brackets": true,
   "middle_click_paste": false,
   "code_lens": "off",
   "inlay_hints": {
     "show_background": false,
-    "enabled": false
+    "enabled": false,
   },
   "show_whitespaces": "selection",
   "accessible_mode": false,
@@ -118,23 +126,26 @@
   "indent_guides": {
     "background_coloring": "disabled",
     "coloring": "indent_aware",
-    "enabled": true
+    "enabled": true,
   },
   "vim": {
     "cursor_shape": {
       "insert": "bar",
-      "normal": "block"
+      "normal": "block",
     },
     "use_smartcase_find": true,
-    "toggle_relative_line_numbers": false
+    "toggle_relative_line_numbers": false,
   },
   "toolbar": {
-    "code_actions": true,
-    "breadcrumbs": true
+    "breadcrumbs": false,
+    "quick_actions": false,
+    "selections_menu": false,
+    "agent_review": false,
+    "code_actions": false,
   },
   "scrollbar": {
     "axes": {
-      "horizontal": false
+      "horizontal": false,
     },
     "diagnostics": "none",
     "selected_symbol": false,
@@ -142,41 +153,49 @@
     "search_results": false,
     "git_diff": false,
     "cursors": false,
-    "show": "always"
+    "show": "always",
   },
   "mouse_wheel_zoom": true,
   "scroll_sensitivity": 1.0,
   "diff_view_style": "unified",
   "which_key": {
     "delay_ms": 200,
-    "enabled": true
+    "enabled": true,
   },
   "hide_mouse": "never",
   "cursor_animation": {
-    "enabled": true
+    "enabled": true,
   },
   "cursor_blink": false,
   "auto_update": false,
-  "restore_on_startup": "last_workspace",
-  "icon_theme": "Zed (Default)",
+  "restore_on_startup": "launchpad",
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Material Icon Theme",
+    "dark": "Material Icon Theme",
+  },
   "session": {
-    "trust_all_worktrees": true
+    "trust_all_worktrees": true,
   },
   "agent_servers": {
     "github-copilot-cli": {
-      "type": "registry"
+      "type": "registry",
     },
     "claude-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "codex-acp": {
       "default_config_options": {
-        "fast-mode": false
+        "fast-mode": false,
       },
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
-  "ui_font_size": 22.0,
-  "buffer_font_size": 20.0,
-  "theme": "Ayu Dark",
+  "ui_font_size": 18.0,
+  "buffer_font_size": 18.0,
+  "theme": {
+    "mode": "dark",
+    "light": "Flexoki Light",
+    "dark": "Flexoki Dark",
+  },
 }
