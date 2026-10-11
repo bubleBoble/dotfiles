@@ -230,6 +230,6 @@
   "theme": {
     "mode": "dark",
     "light": "Flexoki Light",
-    "dark": "Gruvbox Dark",
+    "dark": "Flexoki Dark",
   },
 }

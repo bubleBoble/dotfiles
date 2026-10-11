@@ -102,6 +102,52 @@ class InstallerTests(unittest.TestCase):
             self.assertIn(((ROOT / "dsh/linux_desktop_app" / name).resolve(), self.home / destination), selected)
         self.assertFalse(any(src.parent == ROOT / "dsh/linux_desktop_app" for src, _ in self.select("claude")))
 
+    def test_dsh_profile_maps_only_portable_files(self):
+        profile = self.home / ".dsh/profiles/web"
+        names = {"cordis.yml", "cordis.patch.yml", "package.json", "pnpm-workspace.yaml"}
+        self.assertEqual(
+            {(src, target) for src, target in self.select("dsh")
+             if target.is_relative_to(self.home / ".dsh/profiles")},
+            {((ROOT / "dsh/profiles/web" / name).resolve(), profile / name)
+             for name in names},
+        )
+        self.assertFalse(any(target == self.home / ".dsh" for _, target in self.select("dsh")))
+
+    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    def test_dsh_installs_background_theme_directory(self):
+        source = ROOT / "dsh/any-background"
+        target = self.home / ".dsh/.dsh-any-background-data"
+        self.assertIn((source.resolve(), target), self.select("dsh"))
+        result = self.cli("--install", "dsh")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(target.is_symlink())
+        self.assertEqual(target.resolve(), source.resolve())
+        self.assertEqual(
+            (target / "theme-config.json").read_bytes(),
+            (source / "theme-config.json").read_bytes(),
+        )
+
+    def test_dsh_preserves_existing_background_theme(self):
+        target = self.home / ".dsh/.dsh-any-background-data"
+        target.mkdir(parents=True)
+        theme = target / "theme-config.json"
+        theme.write_text("{}", encoding="utf-8")
+        result = self.cli("--install", "dsh")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(target.is_symlink())
+        self.assertEqual(theme.read_text(encoding="utf-8"), "{}")
+
+    def test_dsh_install_preserves_existing_profile(self):
+        profile = self.home / ".dsh/profiles/web"
+        profile.mkdir(parents=True)
+        target = profile / "cordis.patch.yml"
+        target.write_text("[]\n", encoding="utf-8")
+        result = self.cli("--install", "dsh")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(target.is_symlink())
+        self.assertEqual(target.read_text(encoding="utf-8"), "[]\n")
+        self.assertIn("dsh plugin --profile web install", result.stdout)
+
     def test_multiple_tools_and_default_all(self):
         self.assertEqual(
             set(self.select("claude", "codex", "dsh", "claude")),

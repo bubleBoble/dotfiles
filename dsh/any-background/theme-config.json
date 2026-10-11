@@ -1,0 +1,487 @@
+{
+  "color": [
+    236.08151012502407,
+    0.0559667098365907,
+    0.1372000612802356
+  ],
+  "opacities": {
+    "bg": 0.5,
+    "sidebar": 0.5,
+    "card": 1,
+    "input": 0.78
+  },
+  "blurs": {
+    "bg": 0,
+    "sidebar": 0,
+    "card": 0,
+    "settings": 15,
+    "chat": 0,
+    "trajectory": 0,
+    "input": 0,
+    "panel": 0,
+    "produced": 0,
+    "header": 30
+  },
+  "strokes": {
+    "bg": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "sidebar": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "card": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "settings": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "chat": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "trajectory": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "input": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "panel": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "produced": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    },
+    "header": {
+      "width": 0,
+      "color": "auto",
+      "customColor": "#808080"
+    }
+  },
+  "settingsOpacity": 0.5,
+  "wallpaperOpacity": 1,
+  "blur": 55,
+  "bgState": {
+    "zoom": 1,
+    "x": 0,
+    "y": 0,
+    "iw": 0,
+    "ih": 0
+  },
+  "videoBgState": {
+    "zoom": 1,
+    "x": 0,
+    "y": 0,
+    "iw": 0,
+    "ih": 0
+  },
+  "backgroundType": "mesh",
+  "bgMode": "fit",
+  "videoMime": null,
+  "fontMime": null,
+  "fontEnabled": true,
+  "generatedBg": {
+    "type": "mesh",
+    "seed": 1165650876,
+    "scale": 0.76,
+    "intensity": 0.82
+  },
+  "regenerateOnReload": false,
+  "chatTextOpacity": 0.78,
+  "trajectoryOpacity": 1,
+  "panelOpacity": 1,
+  "producedOpacity": 1,
+  "headerOpacity": 1,
+  "profiles": [
+    {
+      "id": "p-mv0my0wl-xadllc",
+      "name": "custom2",
+      "createdAt": "2026-10-09T07:20:01.557Z",
+      "config": {
+        "color": [
+          236.08151012502407,
+          0.0559667098365907,
+          0.1372000612802356
+        ],
+        "opacities": {
+          "bg": 0.4,
+          "sidebar": 0.62,
+          "card": 0.39,
+          "input": 0.5
+        },
+        "blurs": {
+          "bg": 4,
+          "sidebar": 0,
+          "card": 0,
+          "settings": 15,
+          "chat": 60,
+          "trajectory": 0,
+          "input": 0,
+          "panel": 50,
+          "produced": 0
+        },
+        "strokes": {
+          "bg": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "sidebar": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "card": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "settings": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "chat": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "trajectory": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "input": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "panel": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "produced": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "header": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          }
+        },
+        "settingsOpacity": 0.5,
+        "wallpaperOpacity": 1,
+        "blur": 55,
+        "chatTextOpacity": 0.63,
+        "trajectoryOpacity": 0.5,
+        "panelOpacity": 0.85,
+        "producedOpacity": 0.5,
+        "headerOpacity": 0.5
+      }
+    },
+    {
+      "id": "p-mv0n106s-jf9d87",
+      "name": "custom2",
+      "createdAt": "2026-10-09T07:22:20.596Z",
+      "config": {
+        "color": [
+          236.08151012502407,
+          0.0559667098365907,
+          0.1372000612802356
+        ],
+        "opacities": {
+          "bg": 0.5,
+          "sidebar": 0.5,
+          "card": 0.5,
+          "input": 0.5
+        },
+        "blurs": {
+          "bg": 0,
+          "sidebar": 0,
+          "card": 0,
+          "settings": 20,
+          "chat": 0,
+          "trajectory": 0,
+          "input": 0,
+          "panel": 0,
+          "produced": 0
+        },
+        "strokes": {
+          "bg": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "sidebar": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "card": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "settings": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "chat": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "trajectory": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "input": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "panel": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "produced": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "header": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          }
+        },
+        "settingsOpacity": 0.5,
+        "wallpaperOpacity": 1,
+        "blur": 55,
+        "chatTextOpacity": 0.24,
+        "trajectoryOpacity": 0.49,
+        "panelOpacity": 1,
+        "producedOpacity": 0.5,
+        "headerOpacity": 0.5
+      }
+    },
+    {
+      "id": "p-mv0n2zu5-6qqkty",
+      "name": "custom1",
+      "createdAt": "2026-10-09T07:23:53.453Z",
+      "config": {
+        "color": [
+          236.08151012502407,
+          0.0559667098365907,
+          0.1372000612802356
+        ],
+        "opacities": {
+          "bg": 0.5,
+          "sidebar": 0.5,
+          "card": 0.5,
+          "input": 0.78
+        },
+        "blurs": {
+          "bg": 0,
+          "sidebar": 0,
+          "card": 0,
+          "settings": 15,
+          "chat": 0,
+          "trajectory": 0,
+          "input": 0,
+          "panel": 0,
+          "produced": 0
+        },
+        "strokes": {
+          "bg": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "sidebar": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "card": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "settings": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "chat": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "trajectory": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "input": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "panel": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "produced": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "header": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          }
+        },
+        "settingsOpacity": 0.5,
+        "wallpaperOpacity": 1,
+        "blur": 55,
+        "chatTextOpacity": 0.78,
+        "trajectoryOpacity": 0.49,
+        "panelOpacity": 1,
+        "producedOpacity": 0.5,
+        "headerOpacity": 0.5
+      }
+    },
+    {
+      "id": "p-mv0pts42-4lfxs6",
+      "name": "custom3",
+      "createdAt": "2026-10-09T08:40:42.386Z",
+      "config": {
+        "color": [
+          236.08151012502407,
+          0.0559667098365907,
+          0.1372000612802356
+        ],
+        "opacities": {
+          "bg": 0.5,
+          "sidebar": 0.5,
+          "card": 1,
+          "input": 0.78
+        },
+        "blurs": {
+          "bg": 0,
+          "sidebar": 0,
+          "card": 0,
+          "settings": 15,
+          "chat": 0,
+          "trajectory": 0,
+          "input": 0,
+          "panel": 0,
+          "produced": 0
+        },
+        "strokes": {
+          "bg": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "sidebar": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "card": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "settings": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "chat": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "trajectory": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "input": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "panel": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "produced": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          },
+          "header": {
+            "width": 0,
+            "color": "auto",
+            "customColor": "#808080"
+          }
+        },
+        "settingsOpacity": 0.5,
+        "wallpaperOpacity": 1,
+        "blur": 55,
+        "chatTextOpacity": 0.78,
+        "trajectoryOpacity": 1,
+        "panelOpacity": 1,
+        "producedOpacity": 1,
+        "headerOpacity": 1
+      }
+    }
+  ],
+  "rotation": {
+    "enabled": false,
+    "mode": "shuffle",
+    "interval": "daily",
+    "current": 0,
+    "items": [],
+    "lastRotate": null
+  },
+  "schedule": {
+    "enabled": false,
+    "mode": "time",
+    "dayProfile": null,
+    "nightProfile": null,
+    "dayStart": "07:00",
+    "nightStart": "19:00"
+  },
+  "schemeOverride": "dark",
+  "activeProfile": "p-mv0pts42-4lfxs6"
+}

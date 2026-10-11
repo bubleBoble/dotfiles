@@ -27,7 +27,7 @@ A centralized configuration management system that maintains dotfiles (configura
 | **herdr/** | Herdr terminal multiplexer config |
 | **gdb/** | GDB debugger configuration |
 | **gnome/** | GNOME desktop settings (dconf, extensions) |
-| [**dsh/linux_desktop_app/**](<dsh/linux_desktop_app/>) | Linux DSH app-window launcher, desktop entry, and icon (selected with `dsh`) |
+| [**dsh/**](<dsh/>) | DSH Web profile and Linux desktop launcher (selected with `dsh`); see [dsh/README.md](<dsh/README.md>) for profile migration and backup scope |
 | **future/** | Experimental or archived configs (vim) |
 
 ### Key Files
