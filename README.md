@@ -17,7 +17,4 @@ Install all configurations with `./install --install`, or select individual tool
 Shared agent instructions and skills follow the selected destination tool. The same
 selection works with `--remove` and `--sync-back`; `agents` selects only `~/.agents`.
 
-Run installer tests with `python3 -B -m unittest discover -s tests -v`.
-
-template:
-https://github.com/hendrikmi/dotfiles/tree/main
+Tests for agents only. Run installer tests with `python3 -B -m unittest discover -s tests -v`.

@@ -117,7 +117,7 @@
   {
     "context": "Workspace",
     "bindings": {
-      "alt-t": "terminal_panel::Toggle",
+      "alt-r": "terminal_panel::Toggle",
     },
   },
 ]
