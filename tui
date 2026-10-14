@@ -1,0 +1,267 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["textual>=8.2.8,<9"]
+# ///
+
+import asyncio
+from functools import partial
+from pathlib import Path
+import runpy
+import shlex
+import sys
+
+from rich.text import Text
+from rich.segment import Segment
+from rich.style import Style
+from textual import on, work
+from textual.app import App, ComposeResult
+from textual.binding import Binding
+from textual.containers import Horizontal, Vertical
+from textual.content import Content
+from textual.screen import ModalScreen
+from textual.strip import Strip
+from textual.theme import Theme
+from textual.widgets import Button, Checkbox, Footer, RichLog, SelectionList, Static
+
+
+class ToolList(SelectionList[str]):
+    def render_line(self, y: int) -> Strip:
+        line = super().render_line(y)
+        index = self.scroll_offset.y + y
+        if index >= self.option_count:
+            return line
+        selected = self.get_option_at_index(index).value in self.selected
+        component = "option-list--option-highlighted" if index == self.highlighted else "option-list--option"
+        style = self.get_component_rich_style(component) + Style(meta={"option": index})
+        marker = "[V]" if selected else "[ ]"
+        return Strip.join([Strip([Segment(marker, style)]), line.crop(3)])
+
+
+class PlainCheckbox(Checkbox):
+    @property
+    def _button(self) -> Content:
+        return Content(f"[{'V' if self.value else ' '}]").stylize_before(
+            self.get_visual_style("toggle--button")
+        )
+
+
+class ConfirmAction(ModalScreen[bool]):
+    DEFAULT_CSS = """
+    ConfirmAction { align: center middle; }
+    ConfirmAction > Vertical {
+        width: 70; max-width: 95%; height: auto; max-height: 95%;
+        border: solid $foreground 35%; background: $surface; padding: 1 2;
+    }
+    ConfirmAction Static { height: auto; margin-bottom: 1; }
+    ConfirmAction Horizontal { height: auto; align-horizontal: right; }
+    ConfirmAction Button { margin-left: 1; }
+    """
+    BINDINGS = [("escape", "cancel", "Cancel")]
+
+    def __init__(self, message: str):
+        super().__init__()
+        self.message = message
+
+    def compose(self) -> ComposeResult:
+        with Vertical():
+            yield Static(self.message, markup=False)
+            with Horizontal():
+                yield Button("Cancel", id="cancel")
+                yield Button("Confirm", id="confirm")
+
+    def on_mount(self) -> None:
+        self.query_one("#cancel", Button).focus()
+
+    @on(Button.Pressed)
+    def choose(self, event: Button.Pressed) -> None:
+        self.dismiss(event.button.id == "confirm")
+
+    def action_cancel(self) -> None:
+        self.dismiss(False)
+
+
+class DotfilesApp(App[None]):
+    TITLE = "Dotfiles"
+    CSS = """
+    Screen { padding: 0 1; }
+    #platform, #selection { height: 1; }
+    #tools { height: auto; max-height: 7; min-height: 3; padding: 0; border: solid $foreground 35%; }
+    #include-files { height: 1; margin: 0; padding: 0; }
+    #actions { height: 3; }
+    #actions Button { min-width: 8; margin-right: 1; }
+    #output { height: 1fr; min-height: 3; border: solid $foreground 35%; }
+    Footer { margin-top: 0; }
+    """
+    BINDINGS = [
+        Binding("q", "quit", "Quit"),
+        Binding("ctrl+q", "quit", show=False, priority=True),
+        Binding("ctrl+c", "quit", show=False, priority=True),
+        Binding("up", "navigate('up')", show=False, priority=True),
+        Binding("down", "navigate('down')", show=False, priority=True),
+        Binding("left", "navigate('left')", show=False, priority=True),
+        Binding("right", "navigate('right')", show=False, priority=True),
+    ]
+
+    def __init__(self, installer_path: Path):
+        super().__init__()
+        self.register_theme(Theme(
+            name="dotfiles",
+            primary="#b0b0b0",
+            secondary="#b0b0b0",
+            accent="#b0b0b0",
+            warning="#b0b0b0",
+            error="#b0b0b0",
+            success="#b0b0b0",
+            foreground="#dedede",
+            background="#161616",
+            surface="#161616",
+            panel="#222222",
+            variables={
+                "block-cursor-background": "#dedede",
+                "block-cursor-foreground": "#161616",
+                "footer-key-foreground": "#dedede",
+            },
+        ))
+        self.theme = "dotfiles"
+        self.installer_path = installer_path.resolve()
+        installer = runpy.run_path(str(self.installer_path))
+        self.is_windows = installer["IS_WINDOWS"]
+        config_name = "config_windows.conf" if self.is_windows else "config_linux.conf"
+        self.config_path = self.installer_path.parent / config_name
+        links = installer["parse_config"](self.config_path)
+        self.tools = list(dict.fromkeys(tool for tool, _, _ in links))
+        self.busy = False
+
+    def compose(self) -> ComposeResult:
+        yield Static(f"Dotfiles — {self.config_path.name}", id="platform", markup=False)
+        yield ToolList(*((tool, tool) for tool in self.tools), id="tools")
+        yield Static("No tools selected", id="selection")
+        yield PlainCheckbox("Include regular files (remove / sync-back)", id="include-files", compact=True)
+        with Horizontal(id="actions"):
+            yield Button("Install selected", id="install", disabled=True)
+            yield Button("Remove selected", id="remove", disabled=True)
+            yield Button("Sync back selected", id="sync-back", disabled=True)
+            yield Button("Quit", id="quit")
+        yield RichLog(id="output", wrap=True, min_width=1)
+        yield Footer()
+
+    def on_mount(self) -> None:
+        self.query_one("#tools", SelectionList).border_title = "↑/↓ Move · Space Toggle · Arrows/Tab Controls"
+        self.query_one("#tools", SelectionList).focus()
+        self.query_one("#output", RichLog).border_title = "Installer output"
+        self.query_one("#sync-back", Button).tooltip = "Requires Include regular files; replaces repository sources."
+        self.query_one("#output", RichLog).write(
+            "Select tools, then choose an action. Sync-back requires Include regular files."
+        )
+
+    def action_navigate(self, direction: str) -> None:
+        focused = self.screen.focused
+        if isinstance(focused, ToolList) and direction in ("up", "down"):
+            index = focused.highlighted
+            if direction == "up" and index is not None and index > 0:
+                focused.action_cursor_up()
+                return
+            if direction == "down" and (index is None or index < focused.option_count - 1):
+                focused.action_cursor_down()
+                return
+        if direction in ("up", "left"):
+            self.screen.focus_previous()
+        else:
+            self.screen.focus_next()
+
+    @on(SelectionList.SelectedChanged)
+    @on(Checkbox.Changed)
+    def update_controls(self) -> None:
+        selected = self.query_one("#tools", SelectionList).selected
+        include_files = self.query_one("#include-files", Checkbox).value
+        self.query_one("#selection", Static).update(f"{len(selected)} of {len(self.tools)} tools selected")
+        for action in ("install", "remove", "sync-back"):
+            self.query_one(f"#{action}", Button).disabled = (
+                self.busy or not selected or (action == "sync-back" and not include_files)
+            )
+        self.query_one("#tools", SelectionList).disabled = self.busy
+        self.query_one("#include-files", Checkbox).disabled = self.busy
+        self.query_one("#quit", Button).disabled = self.busy
+
+    @on(Button.Pressed)
+    def choose_action(self, event: Button.Pressed) -> None:
+        action = event.button.id
+        if action == "quit":
+            self.action_quit()
+            return
+        if action not in ("install", "remove", "sync-back") or self.busy:
+            return
+        selected = set(self.query_one("#tools", SelectionList).selected)
+        tools = [tool for tool in self.tools if tool in selected]
+        include_files = action != "install" and self.query_one("#include-files", Checkbox).value
+        # The CLI interprets an empty tool list as all tools. Never forward it.
+        if not tools or (action == "sync-back" and not include_files):
+            return
+        if action == "install":
+            self.start_action(action, tools, include_files)
+            return
+        if action == "sync-back":
+            effect = "Replace repository sources with installed copies. Directory mappings replace the whole directory. Symlinks are skipped."
+        elif self.is_windows:
+            effect = "Move installed targets to .old backups. Existing .old backups are replaced."
+        elif include_files:
+            effect = "Delete installed symlinks AND regular files/directories. Regular files are not backed up."
+        else:
+            effect = "Delete installed symlinks only. Regular files/directories are preserved."
+        self.push_screen(
+            ConfirmAction(f"{action}: {', '.join(tools)}\n\n{effect}"),
+            partial(self.confirmed_action, action, tools, include_files),
+        )
+
+    def confirmed_action(self, action: str, tools: list[str], include_files: bool, confirmed: bool) -> None:
+        if confirmed:
+            self.start_action(action, tools, include_files)
+
+    def start_action(self, action: str, tools: list[str], include_files: bool) -> None:
+        self.busy = True
+        self.update_controls()
+        self.run_installer(action, tools, include_files)
+
+    @work(exclusive=True)
+    async def run_installer(self, action: str, tools: list[str], include_files: bool) -> None:
+        command = [sys.executable, "-u", "-X", "utf8", str(self.installer_path), action]
+        if include_files:
+            command.append("--include-files")
+        command.extend(tools)
+        output = self.query_one("#output", RichLog)
+        output.write(Text("$ " + shlex.join(command)))
+        process = None
+        try:
+            process = await asyncio.create_subprocess_exec(
+                *command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.STDOUT,
+            )
+            assert process.stdout is not None
+            async for line in process.stdout:
+                output.write(Text(Text.from_ansi(line.decode("utf-8", errors="replace").rstrip("\r\n")).plain))
+            exit_code = await process.wait()
+            output.write(Text(f"{action} finished (exit code {exit_code})."))
+        except (OSError, ValueError) as error:
+            output.write(Text(f"Could not run installer: {error}"))
+        finally:
+            if process is not None and process.returncode is None:
+                process.terminate()
+                await process.wait()
+            self.busy = False
+            self.update_controls()
+
+    def action_quit(self) -> None:
+        if self.busy:
+            self.notify("Wait for the installer to finish before quitting.")
+        else:
+            self.exit()
+
+
+def main() -> None:
+    DotfilesApp(Path(__file__).resolve().with_name("install")).run()
+
+
+if __name__ == "__main__":
+    main()

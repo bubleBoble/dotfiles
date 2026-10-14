@@ -17,6 +17,26 @@ Install all tools listed for your platform with `./install install`, or select i
 
 Run `./install help` for full CLI help, or `./install help install` for installation options. Help is available only through the `help` command; `-h` and `--help` are not supported.
 
+## Interactive installer
+
+Run the checkbox-based terminal interface with [uv](https://docs.astral.sh/uv/):
+
+```sh
+./tui
+```
+
+On Windows, or without executable-file support, use `uv run --script tui`. The launcher declares its Textual dependency inline; uv creates an isolated environment and downloads dependencies on the first run. It requires Python 3.10 or newer. The existing `install` CLI remains dependency-free.
+
+The neutral-color layout shows at most five tools at once; the list scrolls through the rest. Installer output fills the remaining terminal space. Checkboxes show `[ ]` when empty and `[V]` when selected.
+
+Use Up/Down to move through tools. Down from the last tool moves to the next control; Up from the first tool moves to the previous control. Outside the tool list, Up/Left and Down/Right move between controls, skipping disabled buttons. Tab/Shift+Tab also changes focus. Space toggles checkboxes, Enter activates buttons, and `q` quits. Tools come from the same platform manifest as the CLI. No tools are selected initially, and actions are disabled until at least one tool is selected.
+
+Install, remove, and sync-back run the existing installer and show its output and exit status. Removal and sync-back require confirmation. **Include regular files** enables `--include-files`: on Linux, removal can delete regular files/directories without a backup; sync-back replaces repository sources with installed copies. Windows removal moves targets to `.old` and replaces existing `.old` backups. Sync-back stays disabled until this option is checked.
+
+Controls and quitting are disabled while the installer runs. The UI does not change the installer's handling of existing targets, missing sources, or platform-specific deployment.
+
+## Manifest and deployment behavior
+
 Shared agent instructions and skills belong to explicitly named tool sections. The same selection works with `remove` and `sync-back`; `agents` selects only `~/.agents`.
 
 Matt Pocock skills deploy directly from `agents/external/matpocock_skills_repo`; `agents/shared/skills` holds only locally maintained or other-source skills. Both manifests use directory-only wildcards for the engineering, productivity, and misc categories, excluding category READMEs and experimental skills.
