@@ -78,7 +78,13 @@ class InstallerTests(unittest.TestCase):
                 ((ROOT / "agents/shared/AGENTS.md").resolve(), zed / "AGENTS.md"),
             } | {
                 (skill.resolve(), zed / "skills" / skill.name)
-                for skill in (ROOT / "agents/shared/skills").iterdir()
+                for directory in (
+                    ROOT / "agents/shared/skills",
+                    *(ROOT / "agents/external/matpocock_skills_repo/skills" / category
+                      for category in ("engineering", "productivity", "misc")),
+                )
+                for skill in directory.iterdir()
+                if (skill / "SKILL.md").is_file()
             },
         )
         self.assertEqual(
@@ -243,7 +249,13 @@ class InstallerTests(unittest.TestCase):
                 ((ROOT / "agents/shared/AGENTS.md").resolve(), zed / "AGENTS.md"),
             } | {
                 (skill.resolve(), zed / "skills" / skill.name)
-                for skill in (ROOT / "agents/shared/skills").iterdir()
+                for directory in (
+                    ROOT / "agents/shared/skills",
+                    *(ROOT / "agents/external/matpocock_skills_repo/skills" / category
+                      for category in ("engineering", "productivity", "misc")),
+                )
+                for skill in directory.iterdir()
+                if (skill / "SKILL.md").is_file()
             },
         )
         self.assertTrue(all(

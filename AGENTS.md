@@ -16,6 +16,7 @@ A centralized configuration management system that maintains dotfiles (configura
 | Directory | Purpose |
 |-----------|---------|
 | **agents/** | Coding agent configurations and shared standards |
+| **agents/external/** | Third-party agent repositories; deploy assets directly from these checkouts |
 | **nvim/** | Neovim editor config and plugins; `lua/plugins/deps/` holds shared dependency specs |
 | **tmux/** | Tmux terminal multiplexer config (includes git submodules) |
 | [**zsh/**](<zsh/>) | Zsh configuration and plugin submodules; see [zsh/README.md](<zsh/README.md>) when changing shell startup |
@@ -114,6 +115,7 @@ When adding or modifying configurations:
    - Modify `agents/shared/AGENTS.md` for universal coding standards
    - Modify agent-specific files for agent-specific rules
    - Add skills to `agents/shared/skills/<skill-name>/SKILL.md`
+   - Keep third-party checkouts under `agents/external/` and map their assets directly in the platform manifests
    - Add hooks to `agents/shared/hooks/pre/` or `agents/shared/hooks/post/`
 
 5. **Document changes:**

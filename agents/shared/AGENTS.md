@@ -83,6 +83,8 @@ Follow good Git style:
 - Explain mechanisms before recommendations. Prefer concrete examples over abstract descriptions.
 - **No bare IDs:** Never refer to items exclusively by number/ID. State what it is in plain words, appending the ID in parentheses (e.g., "the migration script (PR #45)").
 
+Always! try to use ASD-STE100 Simplified Technical English.
+
 ## Natural Writing
 
 **Write like a knowledgeable person addressing this specific reader and task.**

@@ -18,6 +18,17 @@ Install all tools listed for your platform with `./install --install`, or select
 Shared agent instructions and skills follow the selected destination tool. The same
 selection works with `--remove` and `--sync-back`; `agents` selects only `~/.agents`.
 
+Matt Pocock skills deploy directly from `agents/external/matpocock_skills_repo`; `agents/shared/skills` holds only locally maintained or other-source skills. Both manifests explicitly select the upstream skills, excluding category READMEs and experimental skills.
+
+After migrating from shared copies, replace existing Linux deployment symlinks (installation alone preserves even dangling symlinks):
+
+```sh
+./install --remove claude pi omp codex dsh zed
+./install --install claude pi omp codex dsh zed
+```
+
+These commands refresh all managed symlinks for the selected agents, leaving regular files untouched. On Windows, back up existing skill copies before replacing them; deployments remain copies rather than links.
+
 Linux uses symlinks. Windows copies files and directories without requiring symlink privileges; installed copies do not update automatically when the repository changes. Use `--sync-back TOOL` to bring edits from installed copies back into the repository.
 
 The Windows manifest omits tmux, zsh, and the Linux DSH desktop launcher. Zed uses `$APPDATA/zed` on Windows and `$HOME/.config/zed` on Linux. Git Bash needs Python 3 available as `python3` for `./install`, or run `python install --install` with native Windows Python.
