@@ -50,6 +50,29 @@ class InstallerTests(unittest.TestCase):
             text=True,
         )
 
+    def test_directory_wildcards_exclude_files_but_regular_wildcards_keep_them(self):
+        source = self.scratch / "skills"
+        skill = source / "example"
+        skill.mkdir(parents=True)
+        (skill / "SKILL.md").write_text("Example skill", encoding="utf-8")
+        readme = source / "README.md"
+        readme.write_text("Category documentation", encoding="utf-8")
+        config = self.scratch / "config_linux.conf"
+        config.write_text(
+            f"./skills/*/:{self.home}/directories/*\n"
+            f"./skills/*:{self.home}/all/*\n",
+            encoding="utf-8",
+        )
+
+        self.assertEqual(
+            set(INSTALLER["parse_config"](config)),
+            {
+                ("skills", skill, self.home / "directories/example"),
+                ("skills", skill, self.home / "all/example"),
+                ("skills", readme, self.home / "all/README.md"),
+            },
+        )
+
     def test_agent_selection_includes_only_its_destination(self):
         for tool in ("agents", "claude", "codex", "dsh", "omp", "pi"):
             with self.subTest(tool=tool):

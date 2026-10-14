@@ -53,7 +53,7 @@ A centralized configuration management system that maintains dotfiles (configura
 Format: `SOURCE:TARGET` where:
 - **SOURCE** — Relative path resolved from the repository root
 - **TARGET** — Absolute destination after variable expansion (`$HOME`, or `$APPDATA` for Windows Zed); unresolved variables and relative targets are rejected before deployment
-- **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name
+- **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name. End the source with `/*/` instead to select only child directories
 - **Tool selection** — Normally the first source directory identifies the tool (`vim`, etc.). For sources under `agents/`, destinations under `$APPDATA`, `$HOME/.config`, or `$HOME` identify the receiving agent. Agent-owned sources outside those roots, such as DSH's `.local` launchers, use their source agent directory. Shared assets are included only for the selected destination, not for every agent.
 
 Example:

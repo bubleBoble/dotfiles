@@ -1,7 +1,7 @@
 [submodule "tmux/plugins/tmux-sensible"]
 	path = tmux/plugins/tmux-sensible
 	url = https://github.com/tmux-plugins/tmux-sensible
-[submodule "agents/matpocock_skills_repo"]
+[submodule "agents/external/matpocock_skills_repo"]
 	path = agents/external/matpocock_skills_repo
 	url = https://github.com/mattpocock/skills.git
 [submodule "zsh/plugins/zsh-autosuggestions"]

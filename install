@@ -85,25 +85,29 @@ def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
                         break
 
             if "*" in src_str or "*" in tgt_str:
+                directories_only = src_str.endswith("/*/")
+                src_pattern = src_str[:-1] if directories_only else src_str
                 if not (
-                    src_str.endswith("/*")
+                    src_pattern.endswith("/*")
                     and tgt_str.endswith("/*")
                     and src_str.count("*") == 1
                     and tgt_str.count("*") == 1
                 ):
                     logger.error(
-                        "Wildcard mappings must end with /* on both sides: "
+                        "Wildcard mappings require source /* or /*/ and target /*: "
                         f"{line}"
                     )
                     sys.exit(1)
 
-                src_dir = (script_dir / src_str[:-2]).expanduser().resolve()
+                src_dir = (script_dir / src_pattern[:-2]).expanduser().resolve()
                 tgt_dir = Path(tgt_str[:-2]).expanduser()
                 if not src_dir.is_dir():
                     logger.error(f"Wildcard source directory not found: {src_dir}")
                     sys.exit(1)
 
                 for src_path in sorted(src_dir.iterdir(), key=lambda path: path.name):
+                    if directories_only and not src_path.is_dir():
+                        continue
                     links.append((tool, src_path.resolve(), tgt_dir / src_path.name))
                 continue
 
