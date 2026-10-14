@@ -13,6 +13,10 @@
       "ctrl-q": "zed::Quit",
       "ctrl-shift-w": "workspace::CloseWindow",
     },
+    // Override Linux's Editor-level backward-selection shortcut.
+    "bindings": {
+      "ctrl-alt-shift-b": "multi_workspace::ToggleWorkspaceSidebar",
+    },
   },
   {
     "context": "AgentDiff",
@@ -100,7 +104,6 @@
       ],
     },
     "bindings": {
-      "ctrl-alt-shift-b": "multi_workspace::ToggleWorkspaceSidebar",
       "ctrl-alt-b": "workspace::ToggleRightDock",
       "ctrl-shift-r": "pane::RevealInProjectPanel",
     },
