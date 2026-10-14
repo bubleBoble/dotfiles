@@ -3,6 +3,7 @@
 import argparse
 import logging
 import os
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -52,22 +53,36 @@ def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
             except ValueError:
                 continue
 
-            # Evaluate variables like $HOME
+            # Evaluate variables before validating any deployment paths.
             src_str = os.path.expandvars(src_str)
             tgt_str = os.path.expandvars(tgt_str)
-            tool = Path(src_str.removesuffix("/*")).parts[0]
+            if re.search(r"\$(?:\w+|\{[^}]+\})|%[^%]+%", src_str + tgt_str):
+                logger.error(f"Unresolved variable in configuration: {line}")
+                sys.exit(1)
+            tgt_path = Path(tgt_str).expanduser()
+            if not tgt_path.is_absolute():
+                logger.error(f"Target must be an absolute path: {line}")
+                sys.exit(1)
+
+            source_parts = Path(src_str.removesuffix("/*")).parts
+            tool = source_parts[0]
             if tool == "agents":
-                # Shared sources belong to the agent receiving them, not to
-                # one aggregate "agents" tool.
-                try:
-                    target_parts = Path(tgt_str).expanduser().relative_to(Path.home()).parts
-                except ValueError:
-                    target_parts = ()
-                if target_parts:
-                    if target_parts[0] == ".config" and len(target_parts) > 1:
-                        tool = target_parts[1]
-                    else:
+                # Agent-owned sources also include Linux desktop launchers,
+                # whose targets live outside the agent's configuration directory.
+                if len(source_parts) > 1 and source_parts[1] != "shared":
+                    tool = source_parts[1]
+                home = Path(os.environ.get("HOME", str(Path.home()))).expanduser()
+                roots = [home / ".config", home]
+                if os.environ.get("APPDATA"):
+                    roots.insert(0, Path(os.environ["APPDATA"]).expanduser())
+                for root in roots:
+                    try:
+                        target_parts = tgt_path.relative_to(root).parts
+                    except ValueError:
+                        continue
+                    if target_parts and target_parts[0] != ".local":
                         tool = target_parts[0].removeprefix(".")
+                        break
 
             if "*" in src_str or "*" in tgt_str:
                 if not (
@@ -94,7 +109,6 @@ def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
 
             # Resolve relative source paths against the config file's directory
             src_path = (script_dir / src_str).expanduser().resolve()
-            tgt_path = Path(tgt_str).expanduser()
 
             links.append((tool, src_path, tgt_path))
 
@@ -215,7 +229,9 @@ def sync_back(links: list[tuple[Path, Path]]):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Manage dotfile configuration deployments across Linux and Windows.",
+        description="Manage dotfile configuration deployments across Linux and Windows.\n"
+        "Automatically selects config_windows.conf on Windows (including Git Bash),\n"
+        "or config_linux.conf on Linux and WSL.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -259,7 +275,8 @@ def main():
 
     args = parser.parse_args()
 
-    config_path = Path(__file__).resolve().parent / "config.conf"
+    config_name = "config_windows.conf" if IS_WINDOWS else "config_linux.conf"
+    config_path = Path(__file__).resolve().parent / config_name
     links = select_tools(parse_config(config_path), args.tools, parser)
 
     if args.install:

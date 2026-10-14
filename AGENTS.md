@@ -27,13 +27,13 @@ A centralized configuration management system that maintains dotfiles (configura
 | **herdr/** | Herdr terminal multiplexer config |
 | **gdb/** | GDB debugger configuration |
 | **gnome/** | GNOME desktop settings (dconf, extensions) |
-| [**dsh/**](<dsh/>) | DSH Web profile and Linux desktop launcher (selected with `dsh`); see [dsh/README.md](<dsh/README.md>) for profile migration and backup scope |
+| [**agents/dsh/**](<agents/dsh/>) | DSH Web profile and Linux desktop launcher (selected with `dsh`); see [agents/dsh/README.md](<agents/dsh/README.md>) for profile migration and backup scope |
 | **future/** | Experimental or archived configs (vim) |
 
 ### Key Files
 
-- **`config.conf`** — Master configuration defining source:target mappings
-- **`install`** — Installer that creates symlinks from config.conf
+- **`config_linux.conf` / `config_windows.conf`** — Platform-specific source:target mappings and tool sets
+- **`install`** — Automatically selects the platform manifest; symlinks on Linux, copies on Windows
 - **`AGENTS.md`** — This file; project-level guidelines for all coding agents
 - **`CLAUDE.md`** — Claude Code-specific guidelines
 
@@ -41,34 +41,28 @@ A centralized configuration management system that maintains dotfiles (configura
 
 ### Installation Flow
 
-```
-1. git clone --recurse-submodules <repo>
-                ↓
-2. ./install --install
-                ↓
-3. Reads config.conf (source:target pairs)
-                ↓
-4. Creates directories as needed
-                ↓
-5. Creates symlinks: repo files → ~/.config/, ~/.*, etc.
-```
+1. Clone the repository with submodules.
+2. Run `./install --install`.
+3. Read `config_windows.conf` on Windows (including Git Bash), or `config_linux.conf` on Linux and WSL.
+4. Create target directories as needed.
+5. Create symlinks on Linux or copy files/directories on Windows.
 
-### config.conf Format
+### Platform Manifest Format
 
 Format: `SOURCE:TARGET` where:
 - **SOURCE** — Relative path resolved from the repository root
-- **TARGET** — Path in home directory (resolved with `$HOME`)
+- **TARGET** — Absolute destination after variable expansion (`$HOME`, or `$APPDATA` for Windows Zed); unresolved variables and relative targets are rejected before deployment
 - **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name
-- **Tool selection** — Normally the first source directory identifies the tool (`nvim`, `vim`, etc.). For sources under `agents/`, the destination identifies the tool (`claude`, `pi`, `omp`, `codex`, `dsh`, `zed`, or `agents` for `~/.agents`). Shared assets are included only for the selected destination, not for every agent.
+- **Tool selection** — Normally the first source directory identifies the tool (`vim`, etc.). For sources under `agents/`, destinations under `$APPDATA`, `$HOME/.config`, or `$HOME` identify the receiving agent. Agent-owned sources outside those roots, such as DSH's `.local` launchers, use their source agent directory. Shared assets are included only for the selected destination, not for every agent.
 
 Example:
 ```
-./nvim:$HOME/.config/nvim
-./zsh/.zshrc:$HOME/.zshrc
+./vim/vimrc:$HOME/.vim/vimrc
+./zsh/zshrc:$HOME/.zshrc
 ./agents/shared/skills/*:$HOME/.claude/skills/*
 ```
 
-See the actual file for the complete mappings.
+Each manifest is complete; edit both when a mapping applies to both platforms. Linux-only tools belong only in `config_linux.conf`. Windows installations are copies: use `--sync-back TOOL` to bring installed edits back into the repository.
 
 ## Agents Directory
 
@@ -102,18 +96,18 @@ agents/
 
 When adding or modifying configurations:
 
-1. **Understand the symlink flow:**
-   - Changes to source files in repo are reflected immediately via symlinks
+1. **Understand platform deployment:**
+   - Linux symlinks reflect repository changes immediately; Windows copies require reinstalling after backing up/removing existing targets, or `--sync-back` to capture installed edits
    - If a tool doesn't load changes, check if it caches config on startup
 
-2. **Update config.conf:**
-   - Add new entries in the appropriate block (common, claude, omp, tool-specific)
+2. **Update the applicable platform manifests:**
+   - Add shared mappings to both `config_linux.conf` and `config_windows.conf`; keep platform-only tools in their respective manifest
    - Format: `./path/to/file:$HOME/.config/target` or `$HOME/.file`
    - Group related entries together with comments
 
 3. **Test changes:**
-   - Run `./install --install` after modifying config.conf
-   - Verify symlinks point to correct locations: `ls -l ~/.config/nvim` (should show arrow)
+   - Run `./install --install` with a temporary `HOME` (and temporary `APPDATA` on Windows) after modifying manifests
+   - Verify Linux symlinks point to the repository and Windows copies use the intended destinations
    - Restart affected tools to reload configs
 
 4. **Agents directory changes:**
@@ -131,7 +125,7 @@ When adding or modifying configurations:
 **Adding a new tool configuration:**
 1. Create tool directory: `mkdir <tool>`
 2. Add config files: `<tool>/config-file`
-3. Add to config.conf: `./<tool>/file:$HOME/.config/<tool>/file`
+3. Add to each applicable platform manifest: `./<tool>/file:$HOME/.config/<tool>/file`
 4. Run install script
 
 **Updating shared standards:**
@@ -198,7 +192,7 @@ When asked to modify this repository:
 
 1. **Understand the symlink structure first** — Don't edit symlink targets directly
 2. **Verify the affected tool** — Which tool/config is being modified? (nvim, tmux, etc.)
-3. **Update both source AND config.conf** — New files need to be added to config.conf
+3. **Update source and applicable platform manifests** — New mappings belong in `config_linux.conf`, `config_windows.conf`, or both
 4. **Test installation** — Run `./install --install` after changes
 5. **Document structural changes** — Update this AGENTS.md if directory layout changes
 

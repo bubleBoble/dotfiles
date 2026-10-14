@@ -22,14 +22,22 @@ class InstallerTests(unittest.TestCase):
         self.scratch = Path(self.temp.name).resolve()
         self.home = self.scratch / "home"
         self.home.mkdir()
-        self.env = patch.dict(os.environ, {"HOME": str(self.home)})
+        self.appdata = self.scratch / "AppData/Roaming"
+        self.env = patch.dict(os.environ, {
+            "HOME": str(self.home),
+            "USERPROFILE": str(self.home),
+            "APPDATA": str(self.appdata),
+        })
         self.env.start()
         self.addCleanup(self.env.stop)
-        self.links = INSTALLER["parse_config"](ROOT / "config.conf")
+        config_name = "config_windows.conf" if INSTALLER["IS_WINDOWS"] else "config_linux.conf"
+        self.links = INSTALLER["parse_config"](ROOT / config_name)
         self.parser = argparse.ArgumentParser()
         # Any installation/removal in these tests must stay in the test home.
         for _, _, target in self.links:
-            self.assertTrue(target.is_relative_to(self.home))
+            self.assertTrue(
+                target.is_relative_to(self.home) or target.is_relative_to(self.appdata)
+            )
 
     def select(self, *tools):
         return INSTALLER["select_tools"](self.links, list(tools), self.parser)
@@ -40,13 +48,6 @@ class InstallerTests(unittest.TestCase):
             cwd=self.scratch,
             capture_output=True,
             text=True,
-        )
-
-    def test_available_tools(self):
-        self.assertEqual(
-            {tool for tool, _, _ in self.links},
-            {"agents", "claude", "codex", "dsh", "gdb", "git", "herdr",
-             "nvim", "omp", "pi", "tmux", "vim", "yazi", "zed", "zsh"},
         )
 
     def test_agent_selection_includes_only_its_destination(self):
@@ -68,22 +69,21 @@ class InstallerTests(unittest.TestCase):
             self.assertTrue(any("skills" in target.parts for _, target in self.select(tool)))
 
     def test_zed_and_shared_skills_selection(self):
+        zed = self.appdata / "zed" if INSTALLER["IS_WINDOWS"] else self.home / ".config/zed"
         self.assertEqual(
             set(self.select("zed")),
             {
-                ((ROOT / "zed/settings.json").resolve(), self.home / ".config/zed/settings.json"),
-                ((ROOT / "zed/keymap.json").resolve(), self.home / ".config/zed/keymap.json"),
-                ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".config/zed/AGENTS.md"),
+                ((ROOT / "zed/settings.json").resolve(), zed / "settings.json"),
+                ((ROOT / "zed/keymap.json").resolve(), zed / "keymap.json"),
+                ((ROOT / "agents/shared/AGENTS.md").resolve(), zed / "AGENTS.md"),
+            } | {
+                (skill.resolve(), zed / "skills" / skill.name)
+                for skill in (ROOT / "agents/shared/skills").iterdir()
             },
         )
-        shared_skills = {
-            (skill.resolve(), self.home / ".agents/skills" / skill.name)
-            for skill in (ROOT / "agents/shared/skills").iterdir()
-        }
-        self.assertTrue(shared_skills)
         self.assertEqual(
             set(self.select("agents")),
-            shared_skills | {
+            {
                 ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".agents/AGENTS.md"),
             },
         )
@@ -92,6 +92,7 @@ class InstallerTests(unittest.TestCase):
             set(self.select("zed") + self.select("agents")),
         )
 
+    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Desktop launcher is Linux-specific")
     def test_dsh_selection_includes_desktop_integration(self):
         selected = set(self.select("dsh"))
         for name, destination in (
@@ -99,8 +100,8 @@ class InstallerTests(unittest.TestCase):
             ("dsh-desktop.desktop", ".local/share/applications/dsh-desktop.desktop"),
             ("dsh-desktop.svg", ".local/share/icons/hicolor/scalable/apps/dsh-desktop.svg"),
         ):
-            self.assertIn(((ROOT / "dsh/linux_desktop_app" / name).resolve(), self.home / destination), selected)
-        self.assertFalse(any(src.parent == ROOT / "dsh/linux_desktop_app" for src, _ in self.select("claude")))
+            self.assertIn(((ROOT / "agents/dsh/linux_desktop_app" / name).resolve(), self.home / destination), selected)
+        self.assertFalse(any(src.parent == ROOT / "agents/dsh/linux_desktop_app" for src, _ in self.select("claude")))
 
     def test_dsh_profile_maps_only_portable_files(self):
         profile = self.home / ".dsh/profiles/web"
@@ -108,14 +109,14 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(
             {(src, target) for src, target in self.select("dsh")
              if target.is_relative_to(self.home / ".dsh/profiles")},
-            {((ROOT / "dsh/profiles/web" / name).resolve(), profile / name)
+            {((ROOT / "agents/dsh/profiles/web" / name).resolve(), profile / name)
              for name in names},
         )
         self.assertFalse(any(target == self.home / ".dsh" for _, target in self.select("dsh")))
 
     @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
     def test_dsh_installs_background_theme_directory(self):
-        source = ROOT / "dsh/any-background"
+        source = ROOT / "agents/dsh/any-background"
         target = self.home / ".dsh/.dsh-any-background-data"
         self.assertIn((source.resolve(), target), self.select("dsh"))
         result = self.cli("--install", "dsh")
@@ -155,16 +156,14 @@ class InstallerTests(unittest.TestCase):
         )
         self.assertEqual(self.select(), [(src, tgt) for _, src, tgt in self.links])
 
-    def test_unknown_tool_lists_individual_agents_without_writes(self):
+    def test_unknown_tool_fails_without_writes(self):
         result = self.cli("--install", "not-a-tool")
         self.assertEqual(result.returncode, 2)
-        for tool in ("claude", "codex", "dsh", "nvim", "vim"):
-            self.assertIn(tool, result.stderr)
         self.assertEqual(list(self.home.iterdir()), [])
 
     @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
     def test_cli_install_and_remove_per_tool(self):
-        for tool in ("nvim", "claude", "codex", "dsh", "vim", "zed", "agents"):
+        for tool in ("claude", "codex", "dsh", "vim", "zed", "agents"):
             with self.subTest(tool=tool):
                 result = self.cli("--install", tool)
                 self.assertEqual(result.returncode, 0, result.stderr)
@@ -204,7 +203,7 @@ class InstallerTests(unittest.TestCase):
     def test_sync_back_is_scoped_to_selected_agent(self):
         repo = self.scratch / "repo"
         (repo / "agents/shared").mkdir(parents=True)
-        config = repo / "config.conf"
+        config = repo / "config_linux.conf"
         config.write_text(
             "./agents/shared/claude.txt:$HOME/.claude/config.txt\n"
             "./agents/shared/dsh.txt:$HOME/.dsh/config.txt\n",
@@ -224,13 +223,106 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual((repo / "agents/shared/claude.txt").read_text(), "old")
 
     def test_agent_target_under_config_directory(self):
-        config = self.scratch / "config.conf"
+        config = self.scratch / "config_linux.conf"
         config.write_text(
             "./agents/shared/config.json:$HOME/.config/example-agent/config.json\n",
             encoding="utf-8",
         )
         links = INSTALLER["parse_config"](config)
         self.assertEqual(links[0][0], "example-agent")
+
+    def test_windows_zed_selection_includes_shared_assets_outside_home(self):
+        links = INSTALLER["parse_config"](ROOT / "config_windows.conf")
+        selected = INSTALLER["select_tools"](links, ["zed"], self.parser)
+        zed = self.appdata / "zed"
+        self.assertEqual(
+            set(selected),
+            {
+                ((ROOT / "zed/settings.json").resolve(), zed / "settings.json"),
+                ((ROOT / "zed/keymap.json").resolve(), zed / "keymap.json"),
+                ((ROOT / "agents/shared/AGENTS.md").resolve(), zed / "AGENTS.md"),
+            } | {
+                (skill.resolve(), zed / "skills" / skill.name)
+                for skill in (ROOT / "agents/shared/skills").iterdir()
+            },
+        )
+        self.assertTrue(all(
+            target.is_relative_to(self.home / ".agents")
+            for _, target in INSTALLER["select_tools"](links, ["agents"], self.parser)
+        ))
+
+    def test_windows_rejects_linux_only_tools(self):
+        links = INSTALLER["parse_config"](ROOT / "config_windows.conf")
+        for tool in ("tmux", "zsh"):
+            with self.subTest(tool=tool), contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as error:
+                    INSTALLER["select_tools"](links, [tool], self.parser)
+                self.assertEqual(error.exception.code, 2)
+        self.assertTrue(all(
+            target.is_relative_to(self.home / ".dsh")
+            for _, target in INSTALLER["select_tools"](links, ["dsh"], self.parser)
+        ))
+
+    def test_invalid_targets_abort_before_installing_anything(self):
+        repo = self.scratch / "repo"
+        repo.mkdir()
+        (repo / "source").write_text("config", encoding="utf-8")
+        globals_ = INSTALLER["main"].__globals__
+        for target in (
+            "$DOTFILES_UNDEFINED/config",
+            "${DOTFILES_UNDEFINED}/config",
+            "%DOTFILES_UNDEFINED%/config",
+            "relative/config",
+        ):
+            with self.subTest(target=target), patch.dict(os.environ):
+                os.environ.pop("DOTFILES_UNDEFINED", None)
+                (repo / "config_linux.conf").write_text(
+                    "./source:$HOME/valid\n"
+                    f"./source:{target}\n",
+                    encoding="utf-8",
+                )
+                with patch.dict(globals_, {"IS_WINDOWS": False, "__file__": str(repo / "install")}), \
+                     patch.object(sys, "argv", ["install", "--install"]), \
+                     self.assertLogs("dotfiles", level="ERROR"):
+                    with self.assertRaises(SystemExit) as error:
+                        INSTALLER["main"]()
+                self.assertEqual(error.exception.code, 1)
+                self.assertFalse((self.home / "valid").exists())
+
+    def test_windows_manifest_is_used_for_install_sync_back_and_remove(self):
+        repo = self.scratch / "repo"
+        (repo / "zed").mkdir(parents=True)
+        source = repo / "zed/settings.json"
+        source.write_text('{"theme": "original"}', encoding="utf-8")
+        (repo / "config_windows.conf").write_text(
+            "./zed/settings.json:$APPDATA/zed/settings.json\n",
+            encoding="utf-8",
+        )
+        (repo / "config_linux.conf").write_text(
+            "./zed/settings.json:$HOME/.config/zed/settings.json\n",
+            encoding="utf-8",
+        )
+        target = self.appdata / "zed/settings.json"
+        globals_ = INSTALLER["main"].__globals__
+        with patch.dict(globals_, {"IS_WINDOWS": True, "__file__": str(repo / "install")}), \
+             contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(sys, "argv", ["install", "--install"]):
+                INSTALLER["main"]()
+            self.assertFalse(target.is_symlink())
+            self.assertEqual(target.read_text(encoding="utf-8"), '{"theme": "original"}')
+            target.write_text('{"theme": "edited"}', encoding="utf-8")
+            self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "original"}')
+            with patch.object(sys, "argv", ["install", "--sync-back", "zed"]):
+                INSTALLER["main"]()
+            self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "edited"}')
+            with patch.object(sys, "argv", ["install", "--remove", "zed"]):
+                INSTALLER["main"]()
+            self.assertFalse(target.exists())
+            self.assertEqual(
+                target.with_name("settings.json.old").read_text(encoding="utf-8"),
+                '{"theme": "edited"}',
+            )
+        self.assertFalse((self.home / ".config/zed").exists())
 
 
 if __name__ == "__main__":

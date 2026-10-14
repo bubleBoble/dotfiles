@@ -8,8 +8,8 @@ dsh plugin --profile web install
 dsh web
 ```
 
-Includes your Web settings, plugins, **dsh-any-background theme and presets**, shared skills, and desktop launcher. Sign in separately; credentials and sessions stay local.
+Includes your Web settings, plugins, **dsh-any-background theme and presets**, and shared skills. Linux also installs the desktop launcher. Sign in separately; credentials and sessions stay local.
 
-Existing setup: stop DSH, back up the existing targets listed in [config.conf](../config.conf), then rerun installation. Existing targets are never overwritten.
+Existing setup: stop DSH, back up the existing targets listed in your platform's [Linux manifest](../../config_linux.conf) or [Windows manifest](../../config_windows.conf), then rerun installation. Existing targets are never overwritten.
 
-The theme directory is symlinked so theme saves (including future wallpaper/font uploads) land in the repo. Review changes before committing and pushing. No theme export/import needed.
+On Linux, the theme directory is symlinked so theme saves (including future wallpaper/font uploads) land in the repo. On Windows, it is copied; use `./install --sync-back dsh` to bring local changes back into the repo. Review changes before committing and pushing. No theme export/import needed.

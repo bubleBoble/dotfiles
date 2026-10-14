@@ -14,7 +14,7 @@ import urllib.error
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LAUNCHER = ROOT / "dsh/linux_desktop_app/dsh-desktop"
+LAUNCHER = ROOT / "agents/dsh/linux_desktop_app/dsh-desktop"
 BASE_URL = "http://127.0.0.1:3080"
 LAUNCH_URL = BASE_URL + "/?token=test-token_123"
 BROWSER = "/mock/bin/google-chrome-stable"
