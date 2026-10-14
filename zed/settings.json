@@ -7,11 +7,19 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "buffer_font_weight": 400.0,
-  "buffer_font_family": "Iosevka",
+
+  "buffer_font_weight": 100.0,
+  "buffer_font_family": "ComicShannsMono Nerd Font",
+  "buffer_font_features": {
+    "calt": false,
+    "liga": false,
+  },
   "terminal": {
-    "font_size": 16.0,
+    "font_family": "ComicShannsMono Nerd Font",
+    "font_weight": 400.0,
+    "font_size": 18.0,
     "starts_open": false,
+    "default_height": 600,
   },
   "auto_install_extensions": {
     // Languages
@@ -51,9 +59,11 @@
     "dock": "left",
   },
   "git_panel": {
+    "tree_view": true,
     "dock": "left",
     "starts_open": false,
     "entry_primary_click_action": "file_diff",
+    "default_width": 450,
   },
   "proxy": "",
   "agent": {
@@ -73,9 +83,12 @@
     "threads_sidebar": {
       "auto_open": false,
       "position": "right",
+      "default_width": 400,
     },
     "favorite_models": [],
     "model_parameters": [],
+    "default_width": 900,
+    "flexible": false,
   },
   "disable_ai": false,
   "calls": {
@@ -115,7 +128,7 @@
     "show_pinned_tabs_in_separate_row": false,
     "show_tab_bar_buttons": true,
     "show_nav_history_buttons": false,
-    "show": false,
+    "show": true,
   },
   "title_bar": {
     "open_menus_on_hover": false,
@@ -135,13 +148,14 @@
     "line_endings_button": true,
     "cursor_position_button": true,
     "active_encoding_button": "enabled",
-    "experimental.show": false
+    "experimental.show": true,
   },
   "project_panel": {
     "dock": "left",
     "button": true,
     "starts_open": false,
     "auto_reveal_entries": false,
+    "default_width": 450,
   },
   "markdown_preview": {
     "open_markdown_files_in_preview": false,
@@ -226,11 +240,16 @@
       "type": "registry",
     },
   },
-  "ui_font_size": 18.0,
+  "ui_font_size": 22.0,
   "buffer_font_size": 18.0,
   "theme": {
     "mode": "dark",
     "light": "Flexoki Light",
-    "dark": "Flexoki Dark",
+    "dark": "One Dark - Darkened",
   },
+  "close_panel_on_toggle": true,
+  "sticky_scroll": {
+    "enabled": true,
+  },
+  "semantic_tokens": "combined",
 }
