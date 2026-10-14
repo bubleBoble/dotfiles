@@ -62,7 +62,7 @@ function y() {
 ################################################################################
 alias fzf="fzf --height 40% --layout reverse --border"
 alias ga='git add'
-alias gst='git statis'
+alias gst='git status'
 alias gss='git status --short'
 alias gsb='git status --short --branch'
 alias gsi='git submodule init'
