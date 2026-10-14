@@ -15,8 +15,7 @@ Install all tools listed for your platform with `./install --install`, or select
 ./install --install claude codex dsh
 ```
 
-Shared agent instructions and skills follow the selected destination tool. The same
-selection works with `--remove` and `--sync-back`; `agents` selects only `~/.agents`.
+Shared agent instructions and skills belong to explicitly named tool sections. The same selection works with `--remove` and `--sync-back`; `agents` selects only `~/.agents`.
 
 Matt Pocock skills deploy directly from `agents/external/matpocock_skills_repo`; `agents/shared/skills` holds only locally maintained or other-source skills. Both manifests use directory-only wildcards for the engineering, productivity, and misc categories, excluding category READMEs and experimental skills.
 
@@ -33,7 +32,11 @@ Linux uses symlinks. Windows copies files and directories without requiring syml
 
 The Windows manifest omits tmux, zsh, and the Linux DSH desktop launcher. Zed uses `$APPDATA/zed` on Windows and `$HOME/.config/zed` on Linux. Git Bash needs Python 3 available as `python3` for `./install`, or run `python install --install` with native Windows Python.
 
-Add mappings to each applicable platform manifest using `SOURCE:TARGET`. Sources are relative to the manifest's directory; targets must expand to absolute paths. Undefined variables are rejected before installation, removal, or sync-back. Existing targets are preserved during installation.
+Add mappings to each applicable platform manifest under a `[TOOL]` section using `SOURCE:TARGET`. Each mapping belongs to the section's tool, regardless of its source or target directory. Adding a tool requires only a new section, not an installer change.
+
+Section names must be nonempty and contain no whitespace or brackets. A section can repeat to add more mappings to the same tool. Mappings before the first section and malformed section headers are rejected before installation, removal, or sync-back.
+
+Sources are relative to the manifest's directory; targets must expand to absolute paths. Undefined variables are rejected before installation, removal, or sync-back. Existing targets are preserved during installation.
 
 End source and target paths with `/*` to deploy every direct child, preserving names. Use `/*/` on the source and `/*` on the target to deploy only child directories, skipping files such as category READMEs.
 

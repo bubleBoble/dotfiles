@@ -41,12 +41,29 @@ def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
 
     script_dir = config_path.parent
     links: list[tuple[str, Path, Path]] = []
+    tool = None
 
     with config_path.open("r", encoding="utf-8") as f:
-        for line in f:
+        for line_number, line in enumerate(f, start=1):
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
+
+            if line.startswith("["):
+                section = re.fullmatch(r"\[([^\[\]\s]+)\]", line)
+                if not section:
+                    logger.error(
+                        f"Invalid tool section in {config_path}:{line_number}: {line}"
+                    )
+                    sys.exit(1)
+                tool = section[1]
+                continue
+
+            if tool is None:
+                logger.error(
+                    f"Mapping requires a [TOOL] section in {config_path}:{line_number}: {line}"
+                )
+                sys.exit(1)
 
             try:
                 src_str, tgt_str = line.split(":", 1)
@@ -63,26 +80,6 @@ def parse_config(config_path: Path) -> list[tuple[str, Path, Path]]:
             if not tgt_path.is_absolute():
                 logger.error(f"Target must be an absolute path: {line}")
                 sys.exit(1)
-
-            source_parts = Path(src_str.removesuffix("/*")).parts
-            tool = source_parts[0]
-            if tool == "agents":
-                # Agent-owned sources also include Linux desktop launchers,
-                # whose targets live outside the agent's configuration directory.
-                if len(source_parts) > 1 and source_parts[1] != "shared":
-                    tool = source_parts[1]
-                home = Path(os.environ.get("HOME", str(Path.home()))).expanduser()
-                roots = [home / ".config", home]
-                if os.environ.get("APPDATA"):
-                    roots.insert(0, Path(os.environ["APPDATA"]).expanduser())
-                for root in roots:
-                    try:
-                        target_parts = tgt_path.relative_to(root).parts
-                    except ValueError:
-                        continue
-                    if target_parts and target_parts[0] != ".local":
-                        tool = target_parts[0].removeprefix(".")
-                        break
 
             if "*" in src_str or "*" in tgt_str:
                 directories_only = src_str.endswith("/*/")
@@ -272,8 +269,7 @@ def main():
         "tools",
         nargs="*",
         metavar="TOOL",
-        help="Only manage configuration for the named tool(s), e.g. nvim, claude, codex, dsh.\n"
-        "Agent configurations are grouped by destination, including shared assets.\n"
+        help="Only manage the named [TOOL] sections in the platform manifest.\n"
         "Omit to manage all tools.",
     )
 

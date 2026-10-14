@@ -59,6 +59,7 @@ class InstallerTests(unittest.TestCase):
         readme.write_text("Category documentation", encoding="utf-8")
         config = self.scratch / "config_linux.conf"
         config.write_text(
+            "[skills]\n"
             f"./skills/*/:{self.home}/directories/*\n"
             f"./skills/*:{self.home}/all/*\n",
             encoding="utf-8",
@@ -90,36 +91,6 @@ class InstallerTests(unittest.TestCase):
         )
         for tool in ("claude", "codex", "dsh", "omp", "pi"):
             self.assertTrue(any("skills" in target.parts for _, target in self.select(tool)))
-
-    def test_zed_and_shared_skills_selection(self):
-        zed = self.appdata / "zed" if INSTALLER["IS_WINDOWS"] else self.home / ".config/zed"
-        self.assertEqual(
-            set(self.select("zed")),
-            {
-                ((ROOT / "zed/settings.json").resolve(), zed / "settings.json"),
-                ((ROOT / "zed/keymap.json").resolve(), zed / "keymap.json"),
-                ((ROOT / "agents/shared/AGENTS.md").resolve(), zed / "AGENTS.md"),
-            } | {
-                (skill.resolve(), zed / "skills" / skill.name)
-                for directory in (
-                    ROOT / "agents/shared/skills",
-                    *(ROOT / "agents/external/matpocock_skills_repo/skills" / category
-                      for category in ("engineering", "productivity", "misc")),
-                )
-                for skill in directory.iterdir()
-                if (skill / "SKILL.md").is_file()
-            },
-        )
-        self.assertEqual(
-            set(self.select("agents")),
-            {
-                ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".agents/AGENTS.md"),
-            },
-        )
-        self.assertEqual(
-            set(self.select("zed", "agents")),
-            set(self.select("zed") + self.select("agents")),
-        )
 
     @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Desktop launcher is Linux-specific")
     def test_dsh_selection_includes_desktop_integration(self):
@@ -234,7 +205,9 @@ class InstallerTests(unittest.TestCase):
         (repo / "agents/shared").mkdir(parents=True)
         config = repo / "config_linux.conf"
         config.write_text(
+            "[claude]\n"
             "./agents/shared/claude.txt:$HOME/.claude/config.txt\n"
+            "[dsh]\n"
             "./agents/shared/dsh.txt:$HOME/.dsh/config.txt\n",
             encoding="utf-8",
         )
@@ -251,40 +224,46 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual((repo / "agents/shared/dsh.txt").read_text(), "new")
         self.assertEqual((repo / "agents/shared/claude.txt").read_text(), "old")
 
-    def test_agent_target_under_config_directory(self):
-        config = self.scratch / "config_linux.conf"
-        config.write_text(
-            "./agents/shared/config.json:$HOME/.config/example-agent/config.json\n",
+    def test_sections_control_selection_independent_of_paths(self):
+        repo = self.scratch / "repo"
+        assets = repo / "assets"
+        assets.mkdir(parents=True)
+        (assets / "first").write_text("first configuration", encoding="utf-8")
+        (assets / "second").write_text("second configuration", encoding="utf-8")
+        config_name = "config_windows.conf" if INSTALLER["IS_WINDOWS"] else "config_linux.conf"
+        (repo / config_name).write_text(
+            "# Ownership does not follow source or destination names.\n"
+            "[alpha]\n"
+            "./assets/*:$HOME/.local/bin/*\n"
+            "\n"
+            "[beta]\n"
+            "./assets/first:$APPDATA/alpha/config\n"
+            "[alpha]\n"
+            "./assets/first:$HOME/.config/beta/config\n",
             encoding="utf-8",
         )
-        links = INSTALLER["parse_config"](config)
-        self.assertEqual(links[0][0], "example-agent")
-
-    def test_windows_zed_selection_includes_shared_assets_outside_home(self):
-        links = INSTALLER["parse_config"](ROOT / "config_windows.conf")
-        selected = INSTALLER["select_tools"](links, ["zed"], self.parser)
-        zed = self.appdata / "zed"
-        self.assertEqual(
-            set(selected),
-            {
-                ((ROOT / "zed/settings.json").resolve(), zed / "settings.json"),
-                ((ROOT / "zed/keymap.json").resolve(), zed / "keymap.json"),
-                ((ROOT / "agents/shared/AGENTS.md").resolve(), zed / "AGENTS.md"),
-            } | {
-                (skill.resolve(), zed / "skills" / skill.name)
-                for directory in (
-                    ROOT / "agents/shared/skills",
-                    *(ROOT / "agents/external/matpocock_skills_repo/skills" / category
-                      for category in ("engineering", "productivity", "misc")),
-                )
-                for skill in directory.iterdir()
-                if (skill / "SKILL.md").is_file()
-            },
+        alpha_targets = (
+            (self.home / ".local/bin/first", "first configuration"),
+            (self.home / ".local/bin/second", "second configuration"),
+            (self.home / ".config/beta/config", "first configuration"),
         )
-        self.assertTrue(all(
-            target.is_relative_to(self.home / ".agents")
-            for _, target in INSTALLER["select_tools"](links, ["agents"], self.parser)
-        ))
+        beta_target = self.appdata / "alpha/config"
+        globals_ = INSTALLER["main"].__globals__
+        with patch.dict(globals_, {"__file__": str(repo / "install")}), \
+             contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(sys, "argv", ["install", "--install", "alpha"]):
+                INSTALLER["main"]()
+            for target, content in alpha_targets:
+                self.assertEqual(target.read_text(encoding="utf-8"), content)
+            self.assertFalse(beta_target.exists())
+
+            with patch.object(sys, "argv", ["install", "--install", "beta"]):
+                INSTALLER["main"]()
+            with patch.object(sys, "argv", ["install", "--remove", "alpha"]):
+                INSTALLER["main"]()
+            for target, _ in alpha_targets:
+                self.assertFalse(target.exists())
+            self.assertEqual(beta_target.read_text(encoding="utf-8"), "first configuration")
 
     def test_windows_rejects_linux_only_tools(self):
         links = INSTALLER["parse_config"](ROOT / "config_windows.conf")
@@ -297,6 +276,27 @@ class InstallerTests(unittest.TestCase):
             target.is_relative_to(self.home / ".dsh")
             for _, target in INSTALLER["select_tools"](links, ["dsh"], self.parser)
         ))
+
+    def test_invalid_sections_abort_before_installing_anything(self):
+        repo = self.scratch / "repo"
+        repo.mkdir()
+        (repo / "source").write_text("config", encoding="utf-8")
+        globals_ = INSTALLER["main"].__globals__
+        for config in (
+            "./source:$HOME/valid\n",
+            "[tool]\n./source:$HOME/valid\n[]\n",
+            "[tool]\n./source:$HOME/valid\n[broken\n",
+            "[tool]\n./source:$HOME/valid\n[two tools]\n",
+        ):
+            with self.subTest(config=config):
+                (repo / "config_linux.conf").write_text(config, encoding="utf-8")
+                with patch.dict(globals_, {"IS_WINDOWS": False, "__file__": str(repo / "install")}), \
+                     patch.object(sys, "argv", ["install", "--install"]), \
+                     self.assertLogs("dotfiles", level="ERROR"):
+                    with self.assertRaises(SystemExit) as error:
+                        INSTALLER["main"]()
+                self.assertEqual(error.exception.code, 1)
+                self.assertFalse((self.home / "valid").exists())
 
     def test_invalid_targets_abort_before_installing_anything(self):
         repo = self.scratch / "repo"
@@ -312,6 +312,7 @@ class InstallerTests(unittest.TestCase):
             with self.subTest(target=target), patch.dict(os.environ):
                 os.environ.pop("DOTFILES_UNDEFINED", None)
                 (repo / "config_linux.conf").write_text(
+                    "[tool]\n"
                     "./source:$HOME/valid\n"
                     f"./source:{target}\n",
                     encoding="utf-8",
@@ -330,10 +331,12 @@ class InstallerTests(unittest.TestCase):
         source = repo / "zed/settings.json"
         source.write_text('{"theme": "original"}', encoding="utf-8")
         (repo / "config_windows.conf").write_text(
+            "[zed]\n"
             "./zed/settings.json:$APPDATA/zed/settings.json\n",
             encoding="utf-8",
         )
         (repo / "config_linux.conf").write_text(
+            "[zed]\n"
             "./zed/settings.json:$HOME/.config/zed/settings.json\n",
             encoding="utf-8",
         )

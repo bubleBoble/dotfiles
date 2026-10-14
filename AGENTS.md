@@ -50,16 +50,21 @@ A centralized configuration management system that maintains dotfiles (configura
 
 ### Platform Manifest Format
 
-Format: `SOURCE:TARGET` where:
+Format: `[TOOL]` sections containing `SOURCE:TARGET` mappings:
 - **SOURCE** — Relative path resolved from the repository root
 - **TARGET** — Absolute destination after variable expansion (`$HOME`, or `$APPDATA` for Windows Zed); unresolved variables and relative targets are rejected before deployment
 - **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name. End the source with `/*/` instead to select only child directories
-- **Tool selection** — Normally the first source directory identifies the tool (`vim`, etc.). For sources under `agents/`, destinations under `$APPDATA`, `$HOME/.config`, or `$HOME` identify the receiving agent. Agent-owned sources outside those roots, such as DSH's `.local` launchers, use their source agent directory. Shared assets are included only for the selected destination, not for every agent.
+- **Tool selection** — Every mapping belongs to its explicit `[TOOL]` section until the next section header. Source and target directory names do not determine ownership. Put shared assets and launchers in the owning tool's section. See [README.md](README.md) for section syntax.
 
 Example:
 ```
+[vim]
 ./vim/vimrc:$HOME/.vim/vimrc
+
+[zsh]
 ./zsh/zshrc:$HOME/.zshrc
+
+[claude]
 ./agents/shared/skills/*:$HOME/.claude/skills/*
 ```
 
@@ -104,7 +109,7 @@ When adding or modifying configurations:
 2. **Update the applicable platform manifests:**
    - Add shared mappings to both `config_linux.conf` and `config_windows.conf`; keep platform-only tools in their respective manifest
    - Format: `./path/to/file:$HOME/.config/target` or `$HOME/.file`
-   - Group related entries together with comments
+   - Group mappings under the owning tool's `[TOOL]` section, including shared sources and launchers
 
 3. **Test changes:**
    - Run `./install --install` with a temporary `HOME` (and temporary `APPDATA` on Windows) after modifying manifests
@@ -127,7 +132,7 @@ When adding or modifying configurations:
 **Adding a new tool configuration:**
 1. Create tool directory: `mkdir <tool>`
 2. Add config files: `<tool>/config-file`
-3. Add to each applicable platform manifest: `./<tool>/file:$HOME/.config/<tool>/file`
+3. Add a `[<tool>]` section to each applicable platform manifest with mappings such as `./<tool>/file:$HOME/.config/<tool>/file`
 4. Run install script
 
 **Updating shared standards:**
