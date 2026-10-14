@@ -43,7 +43,7 @@ A centralized configuration management system that maintains dotfiles (configura
 ### Installation Flow
 
 1. Clone the repository with submodules.
-2. Run `./install --install`.
+2. Run `./install install`.
 3. Read `config_windows.conf` on Windows (including Git Bash), or `config_linux.conf` on Linux and WSL.
 4. Create target directories as needed.
 5. Create symlinks on Linux or copy files/directories on Windows.
@@ -68,7 +68,7 @@ Example:
 ./agents/shared/skills/*:$HOME/.claude/skills/*
 ```
 
-Each manifest is complete; edit both when a mapping applies to both platforms. Linux-only tools belong only in `config_linux.conf`. Windows installations are copies: use `--sync-back TOOL` to bring installed edits back into the repository.
+Each manifest is complete; edit both when a mapping applies to both platforms. Linux-only tools belong only in `config_linux.conf`. Windows installations are copies: use `./install sync-back --include-files TOOL` to bring installed edits back into the repository. Without `--include-files`, sync-back leaves repository files and directories unchanged.
 
 ## Agents Directory
 
@@ -112,7 +112,7 @@ When adding or modifying configurations:
    - Group mappings under the owning tool's `[TOOL]` section, including shared sources and launchers
 
 3. **Test changes:**
-   - Run `./install --install` with a temporary `HOME` (and temporary `APPDATA` on Windows) after modifying manifests
+   - Run `./install install` with a temporary `HOME` (and temporary `APPDATA` on Windows) after modifying manifests
    - Verify Linux symlinks point to the repository and Windows copies use the intended destinations
    - Restart affected tools to reload configs
 
@@ -159,7 +159,7 @@ When adding or modifying configurations:
 ```bash
 git clone --recurse-submodules -j8 https://github.com/bubleBoble/dotfiles.git ~/a-dev/dotfiles
 cd ~/a-dev/dotfiles
-./install --install
+./install install
 ```
 
 ### Updating Existing Setup
@@ -168,20 +168,19 @@ cd ~/a-dev/dotfiles
 cd ~/a-dev/dotfiles
 git pull
 git submodule update --recursive
-./install --install  # Update symlinks
+./install install  # Update symlinks
 ```
 
 ### Selecting Tools
 
 ```bash
-./install --install nvim
-./install --install claude
-./install --install codex
-./install --install dsh
-./install --install vim
-./install --install claude codex dsh  # Multiple tools
-./install --remove dsh              # Same selection for removal
-./install --sync-back claude        # Same selection for sync-back
+./install install claude
+./install install codex
+./install install dsh
+./install install vim
+./install install claude codex dsh  # Multiple tools
+./install remove dsh              # Same selection for removal
+./install sync-back --include-files claude  # Allow repository overwrites
 ```
 
 Omitting tool names manages all configured tools. `agents` selects only the shared `~/.agents` destination; it is not an alias for all coding agents.
@@ -189,8 +188,8 @@ Omitting tool names manages all configured tools. `agents` selects only the shar
 ### Deleting Symlinks
 
 ```bash
-./install --remove
-./install --remove --include-files  # Also removes regular-file targets
+./install remove
+./install remove --include-files  # Also removes regular-file targets
 ```
 
 ## For Coding Agents
@@ -200,7 +199,7 @@ When asked to modify this repository:
 1. **Understand the symlink structure first** — Don't edit symlink targets directly
 2. **Verify the affected tool** — Which tool/config is being modified? (nvim, tmux, etc.)
 3. **Update source and applicable platform manifests** — New mappings belong in `config_linux.conf`, `config_windows.conf`, or both
-4. **Test installation** — Run `./install --install` after changes
+4. **Test installation** — Run `./install install` after changes
 5. **Document structural changes** — Update this AGENTS.md if directory layout changes
 
 Refer to this guide when making any modifications. Ask the user for clarification if requirements are ambiguous (especially for tool-specific config semantics).

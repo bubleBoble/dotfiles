@@ -119,7 +119,7 @@ class InstallerTests(unittest.TestCase):
         source = ROOT / "agents/dsh/any-background"
         target = self.home / ".dsh/.dsh-any-background-data"
         self.assertIn((source.resolve(), target), self.select("dsh"))
-        result = self.cli("--install", "dsh")
+        result = self.cli("install", "dsh")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(target.is_symlink())
         self.assertEqual(target.resolve(), source.resolve())
@@ -133,7 +133,7 @@ class InstallerTests(unittest.TestCase):
         target.mkdir(parents=True)
         theme = target / "theme-config.json"
         theme.write_text("{}", encoding="utf-8")
-        result = self.cli("--install", "dsh")
+        result = self.cli("install", "dsh")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(target.is_symlink())
         self.assertEqual(theme.read_text(encoding="utf-8"), "{}")
@@ -143,7 +143,7 @@ class InstallerTests(unittest.TestCase):
         profile.mkdir(parents=True)
         target = profile / "cordis.patch.yml"
         target.write_text("[]\n", encoding="utf-8")
-        result = self.cli("--install", "dsh")
+        result = self.cli("install", "dsh")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(target.is_symlink())
         self.assertEqual(target.read_text(encoding="utf-8"), "[]\n")
@@ -157,7 +157,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(self.select(), [(src, tgt) for _, src, tgt in self.links])
 
     def test_unknown_tool_fails_without_writes(self):
-        result = self.cli("--install", "not-a-tool")
+        result = self.cli("install", "not-a-tool")
         self.assertEqual(result.returncode, 2)
         self.assertEqual(list(self.home.iterdir()), [])
 
@@ -165,7 +165,7 @@ class InstallerTests(unittest.TestCase):
     def test_cli_install_and_remove_per_tool(self):
         for tool in ("claude", "codex", "dsh", "vim", "zed", "agents"):
             with self.subTest(tool=tool):
-                result = self.cli("--install", tool)
+                result = self.cli("install", tool)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 selected = self.select(tool)
                 for src, target in selected:
@@ -174,7 +174,7 @@ class InstallerTests(unittest.TestCase):
                 for other, _, target in self.links:
                     if other != tool:
                         self.assertFalse(target.is_symlink(), str(target))
-                result = self.cli("--remove", tool)
+                result = self.cli("remove", tool)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 for _, target in selected:
                     self.assertFalse(target.exists(), str(target))
@@ -182,9 +182,9 @@ class InstallerTests(unittest.TestCase):
 
     @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
     def test_removing_one_agent_preserves_another(self):
-        result = self.cli("--install", "claude", "dsh")
+        result = self.cli("install", "claude", "dsh")
         self.assertEqual(result.returncode, 0, result.stderr)
-        result = self.cli("--remove", "dsh")
+        result = self.cli("remove", "dsh")
         self.assertEqual(result.returncode, 0, result.stderr)
         for _, target in self.select("claude"):
             self.assertTrue(target.is_symlink())
@@ -195,10 +195,24 @@ class InstallerTests(unittest.TestCase):
         target = self.home / ".dsh/AGENTS.md"
         target.parent.mkdir()
         target.write_text("keep me", encoding="utf-8")
-        result = self.cli("--install", "dsh")
+        result = self.cli("install", "dsh")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(target.is_symlink())
         self.assertEqual(target.read_text(encoding="utf-8"), "keep me")
+
+    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    def test_remove_preserves_regular_files_unless_requested(self):
+        target = self.home / ".vim/vimrc"
+        target.parent.mkdir()
+        target.write_text("keep me", encoding="utf-8")
+
+        result = self.cli("remove", "vim")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(target.read_text(encoding="utf-8"), "keep me")
+
+        result = self.cli("remove", "--include-files", "vim")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(target.exists())
 
     def test_sync_back_is_scoped_to_selected_agent(self):
         repo = self.scratch / "repo"
@@ -220,9 +234,48 @@ class InstallerTests(unittest.TestCase):
             target.write_text("new", encoding="utf-8")
         selected = INSTALLER["select_tools"](links, ["dsh"], self.parser)
         with contextlib.redirect_stdout(io.StringIO()):
-            INSTALLER["sync_back"](selected)
+            INSTALLER["sync_back"](selected, include_files=True)
         self.assertEqual((repo / "agents/shared/dsh.txt").read_text(), "new")
         self.assertEqual((repo / "agents/shared/claude.txt").read_text(), "old")
+
+    def test_sync_back_directories_require_include_files(self):
+        source = self.scratch / "repo/settings"
+        source.mkdir(parents=True)
+        (source / "config.txt").write_text("repository version", encoding="utf-8")
+        (source / "keep.txt").write_text("repository only", encoding="utf-8")
+        target = self.home / "settings"
+        target.mkdir()
+        (target / "config.txt").write_text("installed edits", encoding="utf-8")
+        missing_source = self.scratch / "repo/new-settings"
+        new_target = self.home / "new-settings"
+        new_target.mkdir()
+        (new_target / "config.txt").write_text("new configuration", encoding="utf-8")
+        links = [(source, target), (missing_source, new_target)]
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            INSTALLER["sync_back"](links, include_files=False)
+        self.assertEqual((source / "config.txt").read_text(), "repository version")
+        self.assertEqual((source / "keep.txt").read_text(), "repository only")
+        self.assertFalse(missing_source.exists())
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            INSTALLER["sync_back"](links, include_files=True)
+        self.assertEqual((source / "config.txt").read_text(), "installed edits")
+        self.assertFalse((source / "keep.txt").exists())
+        self.assertEqual((missing_source / "config.txt").read_text(), "new configuration")
+
+    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    def test_sync_back_never_replaces_symlink_targets(self):
+        source = self.scratch / "config.txt"
+        source.write_text("repository version", encoding="utf-8")
+        target = self.home / "config.txt"
+        target.symlink_to(source)
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            INSTALLER["sync_back"]([(source, target)], include_files=True)
+        self.assertEqual(source.read_text(), "repository version")
+        self.assertTrue(target.is_symlink())
+        self.assertEqual(target.resolve(), source)
 
     def test_sections_control_selection_independent_of_paths(self):
         repo = self.scratch / "repo"
@@ -251,15 +304,15 @@ class InstallerTests(unittest.TestCase):
         globals_ = INSTALLER["main"].__globals__
         with patch.dict(globals_, {"__file__": str(repo / "install")}), \
              contextlib.redirect_stdout(io.StringIO()):
-            with patch.object(sys, "argv", ["install", "--install", "alpha"]):
+            with patch.object(sys, "argv", ["install", "install", "alpha"]):
                 INSTALLER["main"]()
             for target, content in alpha_targets:
                 self.assertEqual(target.read_text(encoding="utf-8"), content)
             self.assertFalse(beta_target.exists())
 
-            with patch.object(sys, "argv", ["install", "--install", "beta"]):
+            with patch.object(sys, "argv", ["install", "install", "beta"]):
                 INSTALLER["main"]()
-            with patch.object(sys, "argv", ["install", "--remove", "alpha"]):
+            with patch.object(sys, "argv", ["install", "remove", "alpha"]):
                 INSTALLER["main"]()
             for target, _ in alpha_targets:
                 self.assertFalse(target.exists())
@@ -291,7 +344,7 @@ class InstallerTests(unittest.TestCase):
             with self.subTest(config=config):
                 (repo / "config_linux.conf").write_text(config, encoding="utf-8")
                 with patch.dict(globals_, {"IS_WINDOWS": False, "__file__": str(repo / "install")}), \
-                     patch.object(sys, "argv", ["install", "--install"]), \
+                     patch.object(sys, "argv", ["install", "install"]), \
                      self.assertLogs("dotfiles", level="ERROR"):
                     with self.assertRaises(SystemExit) as error:
                         INSTALLER["main"]()
@@ -318,7 +371,7 @@ class InstallerTests(unittest.TestCase):
                     encoding="utf-8",
                 )
                 with patch.dict(globals_, {"IS_WINDOWS": False, "__file__": str(repo / "install")}), \
-                     patch.object(sys, "argv", ["install", "--install"]), \
+                     patch.object(sys, "argv", ["install", "install"]), \
                      self.assertLogs("dotfiles", level="ERROR"):
                     with self.assertRaises(SystemExit) as error:
                         INSTALLER["main"]()
@@ -344,16 +397,20 @@ class InstallerTests(unittest.TestCase):
         globals_ = INSTALLER["main"].__globals__
         with patch.dict(globals_, {"IS_WINDOWS": True, "__file__": str(repo / "install")}), \
              contextlib.redirect_stdout(io.StringIO()):
-            with patch.object(sys, "argv", ["install", "--install"]):
+            with patch.object(sys, "argv", ["install", "install"]):
                 INSTALLER["main"]()
             self.assertFalse(target.is_symlink())
             self.assertEqual(target.read_text(encoding="utf-8"), '{"theme": "original"}')
             target.write_text('{"theme": "edited"}', encoding="utf-8")
             self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "original"}')
-            with patch.object(sys, "argv", ["install", "--sync-back", "zed"]):
+            with patch.object(sys, "argv", ["install", "sync-back", "zed"]):
+                INSTALLER["main"]()
+            self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "original"}')
+            self.assertEqual(target.read_text(encoding="utf-8"), '{"theme": "edited"}')
+            with patch.object(sys, "argv", ["install", "sync-back", "--include-files", "zed"]):
                 INSTALLER["main"]()
             self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "edited"}')
-            with patch.object(sys, "argv", ["install", "--remove", "zed"]):
+            with patch.object(sys, "argv", ["install", "remove", "zed"]):
                 INSTALLER["main"]()
             self.assertFalse(target.exists())
             self.assertEqual(

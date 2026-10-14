@@ -22,7 +22,7 @@ The installer creates symlinks only; it does not install these dependencies.
 From the dotfiles repository root:
 
 ```sh
-./install --install dsh
+./install install dsh
 ```
 
 | Source | Purpose |
@@ -93,7 +93,7 @@ Environment overrides must exist in the desktop launch environment, not just an 
 Close the app, then run from the repository root:
 
 ```sh
-./install --remove dsh
+./install remove dsh
 ```
 
 This removes the installed DSH symlinks, including shared instructions and skills. It does not stop an open app or delete its runtime data.

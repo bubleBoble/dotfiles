@@ -15,4 +15,4 @@ File viewer shortcuts:
 
 After updating the plugin, compare its skills/herdr-file-viewer directory with
 agents/shared/skills/herdr-file-viewer and refresh the tracked copy if needed.
-Run ./install --install to link shared skills into every agent harness.
+Run ./install install to link shared skills into every agent harness.

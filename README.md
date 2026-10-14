@@ -5,32 +5,36 @@ git clone --recurse-submodules -j8 https://github.com/bubleBoble/dotfiles.git
 
 The installer automatically selects `config_windows.conf` on Windows (including Git Bash), or `config_linux.conf` on Linux and WSL. Each manifest lists that platform's tools and target paths; shared configuration sources stay in the same repository.
 
-Install all tools listed for your platform with `./install --install`, or select individual tools:
+Install all tools listed for your platform with `./install install`, or select individual tools:
 
 ```sh
-./install --install claude
-./install --install codex
-./install --install dsh
-./install --install vim
-./install --install claude codex dsh
+./install install claude
+./install install codex
+./install install dsh
+./install install vim
+./install install claude codex dsh
 ```
 
-Shared agent instructions and skills belong to explicitly named tool sections. The same selection works with `--remove` and `--sync-back`; `agents` selects only `~/.agents`.
+Run `./install help` for full CLI help, or `./install help install` for installation options. Help is available only through the `help` command; `-h` and `--help` are not supported.
+
+Shared agent instructions and skills belong to explicitly named tool sections. The same selection works with `remove` and `sync-back`; `agents` selects only `~/.agents`.
 
 Matt Pocock skills deploy directly from `agents/external/matpocock_skills_repo`; `agents/shared/skills` holds only locally maintained or other-source skills. Both manifests use directory-only wildcards for the engineering, productivity, and misc categories, excluding category READMEs and experimental skills.
 
 After migrating from shared copies, replace existing Linux deployment symlinks (installation alone preserves even dangling symlinks):
 
 ```sh
-./install --remove claude pi omp codex dsh zed
-./install --install claude pi omp codex dsh zed
+./install remove claude pi omp codex dsh zed
+./install install claude pi omp codex dsh zed
 ```
 
 These commands refresh all managed symlinks for the selected agents, leaving regular files untouched. On Windows, back up existing skill copies before replacing them; deployments remain copies rather than links.
 
-Linux uses symlinks. Windows copies files and directories without requiring symlink privileges; installed copies do not update automatically when the repository changes. Use `--sync-back TOOL` to bring edits from installed copies back into the repository.
+Linux uses symlinks. Windows copies files and directories without requiring symlink privileges; installed copies do not update automatically when the repository changes. Use `./install sync-back --include-files TOOL` to bring edits from installed copies back into the repository.
 
-The Windows manifest omits tmux, zsh, and the Linux DSH desktop launcher. Zed uses `$APPDATA/zed` on Windows and `$HOME/.config/zed` on Linux. Git Bash needs Python 3 available as `python3` for `./install`, or run `python install --install` with native Windows Python.
+Without `--include-files`, sync-back skips copying and leaves repository files and directories unchanged. With the flag, selected repository sources are replaced with installed copies; directory mappings replace the whole directory rather than merge it. Symlinked targets are always skipped. Run `./install help sync-back` for the command's options.
+
+The Windows manifest omits tmux, zsh, and the Linux DSH desktop launcher. Zed uses `$APPDATA/zed` on Windows and `$HOME/.config/zed` on Linux. Git Bash needs Python 3 available as `python3` for `./install`, or run `python install install` with native Windows Python.
 
 Add mappings to each applicable platform manifest under a `[TOOL]` section using `SOURCE:TARGET`. Each mapping belongs to the section's tool, regardless of its source or target directory. Adding a tool requires only a new section, not an installer change.
 

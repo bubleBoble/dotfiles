@@ -12,7 +12,7 @@ From the repository root:
 
 ```bash
 git submodule update --init --recursive -- zsh/plugins
-./install --install zsh
+./install install zsh
 ```
 
 Open a new terminal after installation.
