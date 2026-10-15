@@ -16,6 +16,7 @@
     // Override Linux's Editor-level backward-selection shortcut.
     "bindings": {
       "ctrl-alt-shift-b": "multi_workspace::ToggleWorkspaceSidebar",
+      "ctrl-alt-b": "workspace::ToggleRightDock",
     },
   },
   {
@@ -104,7 +105,6 @@
       ],
     },
     "bindings": {
-      "ctrl-alt-b": "workspace::ToggleRightDock",
       "ctrl-shift-r": "pane::RevealInProjectPanel",
     },
   },
@@ -115,4 +115,21 @@
       "alt-e": "workspace::ToggleZoom",
     },
   },
+  {
+    "bindings": {
+      "ctrl-k ctrl-g": "git_graph::Open",
+    },
+  },
+  {
+    "context": "AcpThread",
+    "unbind": {
+      "alt-r": "search::ToggleRegex"
+    }
+  },
+  {
+    "context": "Pane",
+    "unbind": {
+      "alt-r": "search::ToggleRegex"
+    }
+  }
 ]

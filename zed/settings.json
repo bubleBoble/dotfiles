@@ -7,7 +7,6 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-
   "buffer_font_weight": 100.0,
   "buffer_font_family": "ComicShannsMono Nerd Font",
   "buffer_font_features": {
@@ -63,8 +62,9 @@
     "dock": "left",
     "starts_open": false,
     "entry_primary_click_action": "file_diff",
-    "default_width": 450,
+    "default_width": 800,
   },
+  "git_commit_buffer_font_size": 18,
   "proxy": "",
   "agent": {
     "sandbox_permissions": {
@@ -217,7 +217,7 @@
   },
   "cursor_blink": false,
   "auto_update": false,
-  "restore_on_startup": "launchpad",
+  "restore_on_startup": "last_session",
   "icon_theme": {
     "mode": "dark",
     "light": "Material Icon Theme",
@@ -252,4 +252,21 @@
     "enabled": true,
   },
   "semantic_tokens": "combined",
+  "show_edit_predictions": true,
+  "edit_predictions": {
+    "provider": "zed",
+    "mode": "eager",
+  },
+  "lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "lint": {
+            "ignore": ["RUF012", "I001"],
+          },
+        },
+      },
+    },
+  },
+  "soft_wrap": "none",
 }

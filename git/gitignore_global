@@ -2,3 +2,7 @@
 .secrets.zsh
 
 **/.claude/.cc-writes/
+.zed
+.vscode
+*.personal
+.agentignore
