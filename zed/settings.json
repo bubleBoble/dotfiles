@@ -25,6 +25,8 @@
         "git-firefly": true,
         "html": true,
         "lua": true,
+        "neocmake": true,
+        "toml": true,
 
         // Icon themes
         "material-icon-theme": true,
@@ -262,7 +264,7 @@
     "theme": {
         "mode": "dark",
         "light": "Flexoki Light",
-        "dark": "zedokai-darkest-machine",
+        "dark": "One Dark Pro Glass",
     },
     "close_panel_on_toggle": true,
     "sticky_scroll": {
@@ -321,9 +323,19 @@
             "formatter": {
                 "external": {
                     "command": "shfmt",
-                    "arguments": ["--filename", "{buffer_path}", "--indent", "4"],
+                    "arguments": [
+                        "--filename",
+                        "{buffer_path}",
+                        "--indent",
+                        "4",
+                    ],
                 },
             },
         },
+    },
+    "debugger": {
+        "dock": "bottom",
+        "button": true,
+        "log_dap_communications": false
     },
 }
