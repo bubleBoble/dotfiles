@@ -67,6 +67,11 @@
   "git_commit_buffer_font_size": 18,
   "proxy": "",
   "agent": {
+    "inline_assistant_model": {
+      "provider": "openai-subscribed",
+      "model": "gpt-6.1-sol",
+      "enable_thinking": false
+    },
     "sandbox_permissions": {
       "network_hosts": ["zed.dev"],
     },
@@ -245,7 +250,7 @@
   "theme": {
     "mode": "dark",
     "light": "Flexoki Light",
-    "dark": "One Dark - Darkened",
+    "dark": "ultraViolet Blur",
   },
   "close_panel_on_toggle": true,
   "sticky_scroll": {
@@ -269,4 +274,13 @@
     },
   },
   "soft_wrap": "none",
+  "languages": {
+    "Markdown": {
+      "formatter": "prettier",
+      "prettier": {
+        "allowed": true,
+      },
+      "format_on_save": "off",
+    },
+  },
 }

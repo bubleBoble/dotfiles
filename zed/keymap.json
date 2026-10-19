@@ -15,8 +15,8 @@
     },
     // Override Linux's Editor-level backward-selection shortcut.
     "bindings": {
-      "ctrl-alt-shift-b": "multi_workspace::ToggleWorkspaceSidebar",
-      "ctrl-alt-b": "workspace::ToggleRightDock",
+      "alt-shift-w": "multi_workspace::ToggleWorkspaceSidebar",
+      "ctrl-alt-shift-q": "workspace::ToggleRightDock",
     },
   },
   {
@@ -130,6 +130,22 @@
     "context": "Pane",
     "unbind": {
       "alt-r": "search::ToggleRegex"
+    }
+  },
+  {
+    "bindings": {
+      "alt-d": "multi_workspace::NextProject"
+    }
+  },
+  {
+    "bindings": {
+      "alt-w": "multi_workspace::PreviousProject"
+    }
+  },
+  {
+    "context": "AcpThread",
+    "unbind": {
+      "alt-shift-q": "agent::AllowAlways"
     }
   }
 ]
