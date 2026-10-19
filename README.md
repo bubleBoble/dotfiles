@@ -30,9 +30,11 @@ After migrating from shared copies, replace existing Linux deployment symlinks (
 ./install install claude pi omp codex dsh zed
 ```
 
-These commands refresh all managed symlinks for the selected agents, leaving regular files untouched. On Windows, back up existing skill copies before replacing them; deployments remain copies rather than links.
+These commands refresh all managed symlinks for the selected agents on Linux, leaving regular files untouched. On Windows, rerun `./install install TOOL` to update installed copies; removal is not required.
 
 Linux uses symlinks. Windows copies files and directories without requiring symlink privileges; installed copies do not update automatically when the repository changes. Use `./install sync-back --include-files TOOL` to bring edits from installed copies back into the repository.
+
+On Windows, installation lists existing destination files that will be overwritten and asks for confirmation once, before making any changes. Enter `y` or `yes` to continue; any other answer, Enter, or closed input cancels the whole installation. No force flag is needed. Directory copies merge repository contents into the destination and preserve destination-only files. If a file must replace a directory, the prompt lists that directory and its contents before replacement. Existing destination symlinks are replaced, not followed. Back up installed edits before confirming; installation does not create backups.
 
 Without `--include-files`, sync-back skips copying and leaves repository files and directories unchanged. With the flag, selected repository sources are replaced with installed copies; directory mappings replace the whole directory rather than merge it. Symlinked targets are always skipped. Run `./install help sync-back` for the command's options.
 
@@ -42,7 +44,7 @@ Add mappings to each applicable platform manifest under a `[TOOL]` section using
 
 Section names must be nonempty and contain no whitespace or brackets. A section can repeat to add more mappings to the same tool. Mappings before the first section and malformed section headers are rejected before installation, removal, or sync-back.
 
-Sources are relative to the manifest's directory; targets must expand to absolute paths. Undefined variables are rejected before installation, removal, or sync-back. Existing targets are preserved during installation.
+Sources are relative to the manifest's directory; targets must expand to absolute paths. Undefined variables are rejected before installation, removal, or sync-back. Linux installation preserves existing targets; Windows asks before overwriting them.
 
 End source and target paths with `/*` to deploy every direct child, preserving names. Use `/*/` on the source and `/*` on the target to deploy only child directories, skipping files such as category READMEs.
 

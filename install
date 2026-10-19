@@ -126,8 +126,39 @@ def select_tools(
     return [(src, tgt) for tool, src, tgt in links if not selected_tools or tool in selected_tools]
 
 
+def _windows_overwrites(src: Path, tgt: Path) -> list[Path]:
+    if not src.exists() or not (tgt.exists() or tgt.is_symlink()):
+        return []
+    if src.is_dir() and tgt.is_dir() and not tgt.is_symlink():
+        return [
+            conflict
+            for child in sorted(src.iterdir())
+            for conflict in _windows_overwrites(child, tgt / child.name)
+        ]
+    return [tgt]
+
+
 def install_config(links: list[tuple[Path, Path]]):
     logger.info("Installing configuration...")
+    conflicts = {tgt: _windows_overwrites(src, tgt) for src, tgt in links} if IS_WINDOWS else {}
+    overwritten = list(dict.fromkeys(path for paths in conflicts.values() for path in paths))
+    if overwritten:
+        print("The following destination files will be overwritten with repository copies:")
+        for path in overwritten:
+            if path.is_dir() and not path.is_symlink():
+                print(f"  {path} (directory and all contents will be replaced)")
+                for child in sorted(path.rglob("*")):
+                    print(f"    {child}")
+            else:
+                print(f"  {path}")
+        try:
+            confirmed = input("Overwrite these destinations and continue installation? [y/N] ").strip().lower()
+        except EOFError:
+            confirmed = ""
+        if confirmed not in ("y", "yes"):
+            logger.info("Installation cancelled; no files changed.")
+            return
+
     source_dirs = set()
 
     for src, tgt in links:
@@ -137,15 +168,20 @@ def install_config(links: list[tuple[Path, Path]]):
             logger.error(f"Error: Source '{src}' not found. Skipping '{tgt}'.")
             continue
 
-        if tgt.exists() or tgt.is_symlink():
+        if not IS_WINDOWS and (tgt.exists() or tgt.is_symlink()):
             logger.warning(f"Target already exists: {tgt}")
             continue
 
         tgt.parent.mkdir(parents=True, exist_ok=True)
 
         if IS_WINDOWS:
+            for path in conflicts[tgt]:
+                if path.is_dir() and not path.is_symlink():
+                    shutil.rmtree(path)
+                elif path.exists() or path.is_symlink():
+                    path.unlink()
             if src.is_dir():
-                shutil.copytree(src, tgt)
+                shutil.copytree(src, tgt, dirs_exist_ok=True)
             else:
                 shutil.copy2(src, tgt)
             logger.info(f"Copied: {tgt}")
@@ -236,7 +272,9 @@ def main():
         help="Deploy configuration files to system targets.",
         description="Deploy configuration files to system targets.\n"
         "Linux: Creates symbolic links.\n"
-        "Windows: Copies files/directories to bypass UAC.",
+        "Windows: Copies files/directories to bypass UAC.\n"
+        "Lists existing destination files and asks before overwriting.\n"
+        "Directory copies preserve destination-only files; declining cancels installation.",
         formatter_class=argparse.RawTextHelpFormatter,
         add_help=False,
     )

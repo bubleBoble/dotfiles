@@ -37,7 +37,136 @@ class TestInstaller:
             cwd=self.scratch,
             capture_output=True,
             text=True,
+            input="",
         )
+
+    @pytest.fixture
+    def windows_install(self, monkeypatch):
+        repo = self.scratch / "repo"
+        source = repo / "settings"
+        source.mkdir(parents=True)
+        (source / "config.json").write_text("repository config", encoding="utf-8")
+        (source / "nested").mkdir()
+        (source / "nested/theme.json").write_text("repository theme", encoding="utf-8")
+        (source / "new.json").write_text("new config", encoding="utf-8")
+        (repo / "config_windows.conf").write_text(
+            "[selected]\n./settings:$HOME/settings\n[other]\n./settings/config.json:$HOME/other.json\n",
+            encoding="utf-8",
+        )
+        target = self.home / "settings"
+        target.mkdir()
+        (target / "config.json").write_text("installed config", encoding="utf-8")
+        (target / "nested").mkdir()
+        (target / "nested/theme.json").write_text("installed theme", encoding="utf-8")
+        (target / "local.json").write_text("local only", encoding="utf-8")
+        other = self.home / "other.json"
+        other.write_text("other tool", encoding="utf-8")
+        globals_ = INSTALLER["main"].__globals__
+        monkeypatch.setitem(globals_, "IS_WINDOWS", True)
+        monkeypatch.setitem(globals_, "__file__", str(repo / "install"))
+        monkeypatch.setattr(sys, "argv", ["install", "install", "selected"])
+        return source, target, other
+
+    def test_windows_install_confirms_listed_overwrites_before_writing(
+        self, windows_install, monkeypatch, capsys
+    ):
+        source, target, other = windows_install
+
+        def confirm(prompt):
+            listed = capsys.readouterr().out
+            assert str(target / "config.json") in listed
+            assert str(target / "nested/theme.json") in listed
+            assert str(target / "local.json") not in listed
+            assert str(other) not in listed
+            assert (target / "config.json").read_text() == "installed config"
+            assert not (target / "new.json").exists()
+            return " YES "
+
+        monkeypatch.setattr("builtins.input", confirm)
+        INSTALLER["main"]()
+
+        for name in ("config.json", "nested/theme.json", "new.json"):
+            assert (target / name).read_bytes() == (source / name).read_bytes()
+            assert not (target / name).is_symlink()
+        assert (target / "local.json").read_text() == "local only"
+        assert other.read_text() == "other tool"
+
+    @pytest.mark.parametrize("answer", ["", "n", "anything", None])
+    def test_windows_install_without_confirmation_changes_nothing(
+        self, windows_install, monkeypatch, answer
+    ):
+        _, target, other = windows_install
+
+        def decline(prompt):
+            if answer is None:
+                raise EOFError
+            return answer
+
+        monkeypatch.setattr("builtins.input", decline)
+        INSTALLER["main"]()
+
+        assert (target / "config.json").read_text() == "installed config"
+        assert (target / "nested/theme.json").read_text() == "installed theme"
+        assert (target / "local.json").read_text() == "local only"
+        assert not (target / "new.json").exists()
+        assert other.read_text() == "other tool"
+
+    def test_windows_fresh_install_copies_without_prompt(self, windows_install, monkeypatch):
+        source, _, other = windows_install
+        monkeypatch.setattr(sys, "argv", ["install", "install", "other"])
+        other.unlink()
+        INSTALLER["main"]()
+        assert other.read_bytes() == (source / "config.json").read_bytes()
+        assert not other.is_symlink()
+
+    @pytest.mark.parametrize("source_is_directory", [False, True])
+    def test_windows_install_replaces_conflicting_destination_type(
+        self, windows_install, monkeypatch, capsys, source_is_directory
+    ):
+        source = self.scratch / "source"
+        target = self.home / "conflicting"
+        if source_is_directory:
+            source.mkdir()
+            (source / "config").write_text("repository config", encoding="utf-8")
+            target.write_text("old file", encoding="utf-8")
+        else:
+            source.write_text("repository config", encoding="utf-8")
+            target.mkdir()
+            (target / "old-config").write_text("old config", encoding="utf-8")
+
+        def confirm(prompt):
+            listed = capsys.readouterr().out
+            assert str(target) in listed
+            if not source_is_directory:
+                assert str(target / "old-config") in listed
+                assert (target / "old-config").read_text() == "old config"
+            return "y"
+
+        monkeypatch.setattr("builtins.input", confirm)
+        INSTALLER["install_config"]([(source, target)])
+
+        installed = target / "config" if source_is_directory else target
+        assert installed.read_text() == "repository config"
+        assert not (target / "old-config").exists()
+
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Creating symlinks needs Windows privileges")
+    def test_windows_copy_replaces_symlink_without_changing_its_referent(
+        self, windows_install, monkeypatch
+    ):
+        source, target, _ = windows_install
+        external = self.home / "external"
+        external.mkdir()
+        (external / "theme.json").write_text("external config", encoding="utf-8")
+        (target / "nested/theme.json").unlink()
+        (target / "nested").rmdir()
+        (target / "nested").symlink_to(external, target_is_directory=True)
+        monkeypatch.setattr("builtins.input", lambda prompt: "y")
+
+        INSTALLER["main"]()
+
+        assert not (target / "nested").is_symlink()
+        assert (target / "nested/theme.json").read_bytes() == (source / "nested/theme.json").read_bytes()
+        assert (external / "theme.json").read_text() == "external config"
 
     def test_directory_wildcards_exclude_files_but_regular_wildcards_keep_them(self):
         source = self.scratch / "skills"
@@ -111,6 +240,7 @@ class TestInstaller:
         assert target.resolve() == source.resolve()
         assert (target / "theme-config.json").read_bytes() == (source / "theme-config.json").read_bytes()
 
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Existing targets are preserved on Linux")
     def test_dsh_preserves_existing_background_theme(self):
         target = self.home / ".dsh/.dsh-any-background-data"
         target.mkdir(parents=True)
@@ -121,6 +251,7 @@ class TestInstaller:
         assert not target.is_symlink()
         assert theme.read_text(encoding="utf-8") == "{}"
 
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Existing targets are preserved on Linux")
     def test_dsh_install_preserves_existing_profile(self):
         profile = self.home / ".dsh/profiles/web"
         profile.mkdir(parents=True)
@@ -172,6 +303,7 @@ class TestInstaller:
         for _, target in self.select("dsh"):
             assert not target.is_symlink()
 
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Existing targets are preserved on Linux")
     def test_install_preserves_existing_files(self):
         target = self.home / ".dsh/AGENTS.md"
         target.parent.mkdir()

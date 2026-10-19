@@ -103,7 +103,7 @@ agents/
 When adding or modifying configurations:
 
 1. **Understand platform deployment:**
-   - Linux symlinks reflect repository changes immediately; Windows copies require reinstalling after backing up/removing existing targets, or `--sync-back` to capture installed edits
+   - Linux symlinks reflect repository changes immediately; rerun `./install install TOOL` on Windows to update copies after confirming the listed overwrites. See [README.md](README.md#manifest-and-deployment-behavior) for replacement behavior and `sync-back` to capture installed edits.
    - If a tool doesn't load changes, check if it caches config on startup
 
 2. **Update the applicable platform manifests:**
