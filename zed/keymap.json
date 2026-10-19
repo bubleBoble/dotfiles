@@ -116,6 +116,25 @@
         },
     },
     {
+        "context": "Terminal",
+        "bindings": {
+            "ctrl-a h": "workspace::ActivatePaneLeft",
+            "ctrl-a left": "workspace::ActivatePaneLeft",
+            "ctrl-a j": "workspace::ActivatePaneDown",
+            "ctrl-a down": "workspace::ActivatePaneDown",
+            "ctrl-a k": "workspace::ActivatePaneUp",
+            "ctrl-a up": "workspace::ActivatePaneUp",
+            "ctrl-a l": "workspace::ActivatePaneRight",
+            "ctrl-a right": "workspace::ActivatePaneRight",
+            "ctrl-a %": "pane::SplitRight",
+            "ctrl-a \"": "pane::SplitDown",
+            "ctrl-a c": "workspace::NewTerminal",
+            "ctrl-a x": "pane::CloseActiveItem",
+            "ctrl-a z": "workspace::ToggleZoom",
+            "ctrl-a ctrl-a": ["terminal::SendText", "\u0001"],
+        },
+    },
+    {
         "bindings": {
             "ctrl-k ctrl-g": "git_graph::Open",
         },
