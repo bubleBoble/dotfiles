@@ -17,24 +17,6 @@ Install all tools listed for your platform with `./install install`, or select i
 
 Run `./install help` for full CLI help, or `./install help install` for installation options. Help is available only through the `help` command; `-h` and `--help` are not supported.
 
-## Interactive installer
-
-Run the checkbox-based terminal interface with [uv](https://docs.astral.sh/uv/):
-
-```sh
-./tui
-```
-
-On Windows, or without executable-file support, use `uv run --script tui`. The launcher declares its Textual dependency inline; uv creates an isolated environment and downloads dependencies on the first run. It requires Python 3.10 or newer. The existing `install` CLI remains dependency-free.
-
-The neutral-color layout shows at most five tools at once; the list scrolls through the rest. Installer output fills the remaining terminal space. Checkboxes show `[ ]` when empty and `[V]` when selected.
-
-Use Up/Down to move through tools. Down from the last tool moves to the next control; Up from the first tool moves to the previous control. Outside the tool list, Up/Left and Down/Right move between controls, skipping disabled buttons. Tab/Shift+Tab also changes focus. Space toggles checkboxes, Enter activates buttons, and `q` quits. Tools come from the same platform manifest as the CLI. No tools are selected initially, and actions are disabled until at least one tool is selected.
-
-Install, remove, and sync-back run the existing installer and show its output and exit status. Removal and sync-back require confirmation. **Include regular files** enables `--include-files`: on Linux, removal can delete regular files/directories without a backup; sync-back replaces repository sources with installed copies. Windows removal moves targets to `.old` and replaces existing `.old` backups. Sync-back stays disabled until this option is checked.
-
-Controls and quitting are disabled while the installer runs. The UI does not change the installer's handling of existing targets, missing sources, or platform-specific deployment.
-
 ## Manifest and deployment behavior
 
 Shared agent instructions and skills belong to explicitly named tool sections. The same selection works with `remove` and `sync-back`; `agents` selects only `~/.agents`.
@@ -64,4 +46,25 @@ Sources are relative to the manifest's directory; targets must expand to absolut
 
 End source and target paths with `/*` to deploy every direct child, preserving names. Use `/*/` on the source and `/*` on the target to deploy only child directories, skipping files such as category READMEs.
 
-Run all tests with `python3 -B -m unittest discover -s tests -v`, or only installer tests with `python3 -B -m unittest discover -s tests -p test_install.py -v`.
+## Tests
+
+Create a local virtual environment and install the test and formatting tools from the repository root:
+
+```bash
+python3 -m venv tests/.venv
+tests/.venv/bin/python -m pip install pytest black
+```
+
+Run all tests through that environment:
+
+```bash
+tests/.venv/bin/python -B -m pytest
+```
+
+For installer tests only, append `tests/test_install.py`. Format Python tests with `tests/.venv/bin/python -m black tests/`. Black, Ruff, and pytest conventions are defined in `pyproject.toml`; keep the Black and Ruff line-length settings aligned.
+
+Activation is not required. On native Windows, create the environment with `python` and use `tests/.venv/Scripts/python.exe` instead of `tests/.venv/bin/python`.
+
+The global Zed configuration in `zed/settings.json` uses the Ruff language server for Python formatting and linting. This supports the `Alt+Shift+F` format-selection binding. Editor formatting reads `[tool.ruff]` in each project's `pyproject.toml`, not `[tool.black]`. Zed manages the Ruff language server; a global Black executable is not required.
+
+Zed formats shell scripts with `shfmt`, which must be installed on `PATH`. Shell editing and formatting use four spaces per indentation level. Zsh-specific syntax requires a version of `shfmt` with Zsh support.

@@ -12,13 +12,13 @@ state_dir="$HOME/.local/state/nvim"
 cache_dir="$HOME/.cache/nvim"
 
 print_size() {
-  local path="$1"
-  local name="$2"
-  if [ -e "$path" ]; then
-    du -sh "$path" 2>/dev/null | awk -v name="$name" -v path="$path" '{printf "%-8s %-10s %s\n", $1, name, path}'
-  else
-    printf "%-8s %-10s %s (not found)\n" "0" "$name" "$path"
-  fi
+    local path="$1"
+    local name="$2"
+    if [ -e "$path" ]; then
+        du -sh "$path" 2>/dev/null | awk -v name="$name" -v path="$path" '{printf "%-8s %-10s %s\n", $1, name, path}'
+    else
+        printf "%-8s %-10s %s (not found)\n" "0" "$name" "$path"
+    fi
 }
 
 info "Neovim storage usage"

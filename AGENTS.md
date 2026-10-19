@@ -194,6 +194,8 @@ Omitting tool names manages all configured tools. `agents` selects only the shar
 
 ## For Coding Agents
 
+Use the persistent `tests/.venv` environment for Python tests and formatting. Create and manage it with Python's `venv` and `pip`, not `uv`; see [README.md — Tests](README.md#tests) for setup. Run `tests/.venv/bin/python -B -m pytest` from the repository root (native Windows: `tests/.venv/Scripts/python.exe`). Keep Black, Ruff, and pytest conventions in `pyproject.toml`.
+
 When asked to modify this repository:
 
 1. **Understand the symlink structure first** — Don't edit symlink targets directly

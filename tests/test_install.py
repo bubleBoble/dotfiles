@@ -1,43 +1,32 @@
 import argparse
-import contextlib
-import io
-import os
-from pathlib import Path
+import logging
 import runpy
 import subprocess
 import sys
-import tempfile
-import unittest
-from unittest.mock import patch
+from pathlib import Path
 
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTALLER = runpy.run_path(str(ROOT / "install"))
 
 
-class InstallerTests(unittest.TestCase):
-    def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="dotfiles-install-test-")
-        self.addCleanup(self.temp.cleanup)
-        self.scratch = Path(self.temp.name).resolve()
+class TestInstaller:
+    @pytest.fixture(autouse=True)
+    def installer_environment(self, tmp_path, monkeypatch):
+        self.scratch = tmp_path.resolve()
         self.home = self.scratch / "home"
         self.home.mkdir()
         self.appdata = self.scratch / "AppData/Roaming"
-        self.env = patch.dict(os.environ, {
-            "HOME": str(self.home),
-            "USERPROFILE": str(self.home),
-            "APPDATA": str(self.appdata),
-        })
-        self.env.start()
-        self.addCleanup(self.env.stop)
+        monkeypatch.setenv("HOME", str(self.home))
+        monkeypatch.setenv("USERPROFILE", str(self.home))
+        monkeypatch.setenv("APPDATA", str(self.appdata))
         config_name = "config_windows.conf" if INSTALLER["IS_WINDOWS"] else "config_linux.conf"
         self.links = INSTALLER["parse_config"](ROOT / config_name)
         self.parser = argparse.ArgumentParser()
         # Any installation/removal in these tests must stay in the test home.
         for _, _, target in self.links:
-            self.assertTrue(
-                target.is_relative_to(self.home) or target.is_relative_to(self.appdata)
-            )
+            assert target.is_relative_to(self.home) or target.is_relative_to(self.appdata)
 
     def select(self, *tools):
         return INSTALLER["select_tools"](self.links, list(tools), self.parser)
@@ -59,40 +48,33 @@ class InstallerTests(unittest.TestCase):
         readme.write_text("Category documentation", encoding="utf-8")
         config = self.scratch / "config_linux.conf"
         config.write_text(
-            "[skills]\n"
-            f"./skills/*/:{self.home}/directories/*\n"
-            f"./skills/*:{self.home}/all/*\n",
+            f"[skills]\n./skills/*/:{self.home}/directories/*\n./skills/*:{self.home}/all/*\n",
             encoding="utf-8",
         )
 
-        self.assertEqual(
-            set(INSTALLER["parse_config"](config)),
-            {
-                ("skills", skill, self.home / "directories/example"),
-                ("skills", skill, self.home / "all/example"),
-                ("skills", readme, self.home / "all/README.md"),
-            },
-        )
+        assert set(INSTALLER["parse_config"](config)) == {
+            ("skills", skill, self.home / "directories/example"),
+            ("skills", skill, self.home / "all/example"),
+            ("skills", readme, self.home / "all/README.md"),
+        }
 
     def test_agent_selection_includes_only_its_destination(self):
         for tool in ("agents", "claude", "codex", "dsh", "omp", "pi"):
-            with self.subTest(tool=tool):
-                selected = self.select(tool)
-                self.assertTrue(selected)
-                self.assertEqual(
-                    set(selected),
-                    {(src, tgt) for owner, src, tgt in self.links
-                     if tgt.is_relative_to(self.home / f".{tool}")
-                     or (tool == "dsh" and owner == "dsh")},
-                )
-        self.assertIn(
-            ((ROOT / "agents/shared/AGENTS.md").resolve(), self.home / ".dsh/AGENTS.md"),
-            self.select("dsh"),
-        )
+            selected = self.select(tool)
+            assert selected
+            assert set(selected) == {
+                (src, tgt)
+                for owner, src, tgt in self.links
+                if tgt.is_relative_to(self.home / f".{tool}") or (tool == "dsh" and owner == "dsh")
+            }
+        assert (
+            (ROOT / "agents/shared/AGENTS.md").resolve(),
+            self.home / ".dsh/AGENTS.md",
+        ) in self.select("dsh")
         for tool in ("claude", "codex", "dsh", "omp", "pi"):
-            self.assertTrue(any("skills" in target.parts for _, target in self.select(tool)))
+            assert any("skills" in target.parts for _, target in self.select(tool))
 
-    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Desktop launcher is Linux-specific")
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Desktop launcher is Linux-specific")
     def test_dsh_selection_includes_desktop_integration(self):
         selected = set(self.select("dsh"))
         for name, destination in (
@@ -100,33 +82,34 @@ class InstallerTests(unittest.TestCase):
             ("dsh-desktop.desktop", ".local/share/applications/dsh-desktop.desktop"),
             ("dsh-desktop.svg", ".local/share/icons/hicolor/scalable/apps/dsh-desktop.svg"),
         ):
-            self.assertIn(((ROOT / "agents/dsh/linux_desktop_app" / name).resolve(), self.home / destination), selected)
-        self.assertFalse(any(src.parent == ROOT / "agents/dsh/linux_desktop_app" for src, _ in self.select("claude")))
+            assert (
+                (ROOT / "agents/dsh/linux_desktop_app" / name).resolve(),
+                self.home / destination,
+            ) in selected
+        assert not any(
+            src.parent == ROOT / "agents/dsh/linux_desktop_app" for src, _ in self.select("claude")
+        )
 
     def test_dsh_profile_maps_only_portable_files(self):
         profile = self.home / ".dsh/profiles/web"
         names = {"cordis.yml", "cordis.patch.yml", "package.json", "pnpm-workspace.yaml"}
-        self.assertEqual(
-            {(src, target) for src, target in self.select("dsh")
-             if target.is_relative_to(self.home / ".dsh/profiles")},
-            {((ROOT / "agents/dsh/profiles/web" / name).resolve(), profile / name)
-             for name in names},
-        )
-        self.assertFalse(any(target == self.home / ".dsh" for _, target in self.select("dsh")))
+        assert {
+            (src, target)
+            for src, target in self.select("dsh")
+            if target.is_relative_to(self.home / ".dsh/profiles")
+        } == {((ROOT / "agents/dsh/profiles/web" / name).resolve(), profile / name) for name in names}
+        assert not any(target == self.home / ".dsh" for _, target in self.select("dsh"))
 
-    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Symlink behavior is Linux-specific")
     def test_dsh_installs_background_theme_directory(self):
         source = ROOT / "agents/dsh/any-background"
         target = self.home / ".dsh/.dsh-any-background-data"
-        self.assertIn((source.resolve(), target), self.select("dsh"))
+        assert (source.resolve(), target) in self.select("dsh")
         result = self.cli("install", "dsh")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertTrue(target.is_symlink())
-        self.assertEqual(target.resolve(), source.resolve())
-        self.assertEqual(
-            (target / "theme-config.json").read_bytes(),
-            (source / "theme-config.json").read_bytes(),
-        )
+        assert result.returncode == 0, result.stderr
+        assert target.is_symlink()
+        assert target.resolve() == source.resolve()
+        assert (target / "theme-config.json").read_bytes() == (source / "theme-config.json").read_bytes()
 
     def test_dsh_preserves_existing_background_theme(self):
         target = self.home / ".dsh/.dsh-any-background-data"
@@ -134,9 +117,9 @@ class InstallerTests(unittest.TestCase):
         theme = target / "theme-config.json"
         theme.write_text("{}", encoding="utf-8")
         result = self.cli("install", "dsh")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertFalse(target.is_symlink())
-        self.assertEqual(theme.read_text(encoding="utf-8"), "{}")
+        assert result.returncode == 0, result.stderr
+        assert not target.is_symlink()
+        assert theme.read_text(encoding="utf-8") == "{}"
 
     def test_dsh_install_preserves_existing_profile(self):
         profile = self.home / ".dsh/profiles/web"
@@ -144,75 +127,73 @@ class InstallerTests(unittest.TestCase):
         target = profile / "cordis.patch.yml"
         target.write_text("[]\n", encoding="utf-8")
         result = self.cli("install", "dsh")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertFalse(target.is_symlink())
-        self.assertEqual(target.read_text(encoding="utf-8"), "[]\n")
-        self.assertIn("dsh plugin --profile web install", result.stdout)
+        assert result.returncode == 0, result.stderr
+        assert not target.is_symlink()
+        assert target.read_text(encoding="utf-8") == "[]\n"
+        assert "dsh plugin --profile web install" in result.stdout
 
     def test_multiple_tools_and_default_all(self):
-        self.assertEqual(
-            set(self.select("claude", "codex", "dsh", "claude")),
-            set(self.select("claude") + self.select("codex") + self.select("dsh")),
+        assert set(self.select("claude", "codex", "dsh", "claude")) == set(
+            self.select("claude") + self.select("codex") + self.select("dsh")
         )
-        self.assertEqual(self.select(), [(src, tgt) for _, src, tgt in self.links])
+        assert self.select() == [(src, tgt) for _, src, tgt in self.links]
 
     def test_unknown_tool_fails_without_writes(self):
         result = self.cli("install", "not-a-tool")
-        self.assertEqual(result.returncode, 2)
-        self.assertEqual(list(self.home.iterdir()), [])
+        assert result.returncode == 2
+        assert list(self.home.iterdir()) == []
 
-    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Symlink behavior is Linux-specific")
     def test_cli_install_and_remove_per_tool(self):
         for tool in ("claude", "codex", "dsh", "vim", "zed", "agents"):
-            with self.subTest(tool=tool):
-                result = self.cli("install", tool)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                selected = self.select(tool)
-                for src, target in selected:
-                    self.assertTrue(target.is_symlink(), str(target))
-                    self.assertEqual(target.resolve(), src)
-                for other, _, target in self.links:
-                    if other != tool:
-                        self.assertFalse(target.is_symlink(), str(target))
-                result = self.cli("remove", tool)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                for _, target in selected:
-                    self.assertFalse(target.exists(), str(target))
-                    self.assertFalse(target.is_symlink(), str(target))
+            result = self.cli("install", tool)
+            assert result.returncode == 0, result.stderr
+            selected = self.select(tool)
+            for src, target in selected:
+                assert target.is_symlink(), str(target)
+                assert target.resolve() == src
+            for other, _, target in self.links:
+                if other != tool:
+                    assert not target.is_symlink(), str(target)
+            result = self.cli("remove", tool)
+            assert result.returncode == 0, result.stderr
+            for _, target in selected:
+                assert not target.exists(), str(target)
+                assert not target.is_symlink(), str(target)
 
-    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Symlink behavior is Linux-specific")
     def test_removing_one_agent_preserves_another(self):
         result = self.cli("install", "claude", "dsh")
-        self.assertEqual(result.returncode, 0, result.stderr)
+        assert result.returncode == 0, result.stderr
         result = self.cli("remove", "dsh")
-        self.assertEqual(result.returncode, 0, result.stderr)
+        assert result.returncode == 0, result.stderr
         for _, target in self.select("claude"):
-            self.assertTrue(target.is_symlink())
+            assert target.is_symlink()
         for _, target in self.select("dsh"):
-            self.assertFalse(target.is_symlink())
+            assert not target.is_symlink()
 
     def test_install_preserves_existing_files(self):
         target = self.home / ".dsh/AGENTS.md"
         target.parent.mkdir()
         target.write_text("keep me", encoding="utf-8")
         result = self.cli("install", "dsh")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertFalse(target.is_symlink())
-        self.assertEqual(target.read_text(encoding="utf-8"), "keep me")
+        assert result.returncode == 0, result.stderr
+        assert not target.is_symlink()
+        assert target.read_text(encoding="utf-8") == "keep me"
 
-    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Symlink behavior is Linux-specific")
     def test_remove_preserves_regular_files_unless_requested(self):
         target = self.home / ".vim/vimrc"
         target.parent.mkdir()
         target.write_text("keep me", encoding="utf-8")
 
         result = self.cli("remove", "vim")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(target.read_text(encoding="utf-8"), "keep me")
+        assert result.returncode == 0, result.stderr
+        assert target.read_text(encoding="utf-8") == "keep me"
 
         result = self.cli("remove", "--include-files", "vim")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertFalse(target.exists())
+        assert result.returncode == 0, result.stderr
+        assert not target.exists()
 
     def test_sync_back_is_scoped_to_selected_agent(self):
         repo = self.scratch / "repo"
@@ -227,16 +208,15 @@ class InstallerTests(unittest.TestCase):
         )
         links = INSTALLER["parse_config"](config)
         for _, source, target in links:
-            self.assertTrue(source.is_relative_to(self.scratch))
-            self.assertTrue(target.is_relative_to(self.home))
+            assert source.is_relative_to(self.scratch)
+            assert target.is_relative_to(self.home)
             source.write_text("old", encoding="utf-8")
             target.parent.mkdir(parents=True)
             target.write_text("new", encoding="utf-8")
         selected = INSTALLER["select_tools"](links, ["dsh"], self.parser)
-        with contextlib.redirect_stdout(io.StringIO()):
-            INSTALLER["sync_back"](selected, include_files=True)
-        self.assertEqual((repo / "agents/shared/dsh.txt").read_text(), "new")
-        self.assertEqual((repo / "agents/shared/claude.txt").read_text(), "old")
+        INSTALLER["sync_back"](selected, include_files=True)
+        assert (repo / "agents/shared/dsh.txt").read_text() == "new"
+        assert (repo / "agents/shared/claude.txt").read_text() == "old"
 
     def test_sync_back_directories_require_include_files(self):
         source = self.scratch / "repo/settings"
@@ -252,32 +232,29 @@ class InstallerTests(unittest.TestCase):
         (new_target / "config.txt").write_text("new configuration", encoding="utf-8")
         links = [(source, target), (missing_source, new_target)]
 
-        with contextlib.redirect_stdout(io.StringIO()):
-            INSTALLER["sync_back"](links, include_files=False)
-        self.assertEqual((source / "config.txt").read_text(), "repository version")
-        self.assertEqual((source / "keep.txt").read_text(), "repository only")
-        self.assertFalse(missing_source.exists())
+        INSTALLER["sync_back"](links, include_files=False)
+        assert (source / "config.txt").read_text() == "repository version"
+        assert (source / "keep.txt").read_text() == "repository only"
+        assert not missing_source.exists()
 
-        with contextlib.redirect_stdout(io.StringIO()):
-            INSTALLER["sync_back"](links, include_files=True)
-        self.assertEqual((source / "config.txt").read_text(), "installed edits")
-        self.assertFalse((source / "keep.txt").exists())
-        self.assertEqual((missing_source / "config.txt").read_text(), "new configuration")
+        INSTALLER["sync_back"](links, include_files=True)
+        assert (source / "config.txt").read_text() == "installed edits"
+        assert not (source / "keep.txt").exists()
+        assert (missing_source / "config.txt").read_text() == "new configuration"
 
-    @unittest.skipIf(INSTALLER["IS_WINDOWS"], "Symlink behavior is Linux-specific")
+    @pytest.mark.skipif(INSTALLER["IS_WINDOWS"], reason="Symlink behavior is Linux-specific")
     def test_sync_back_never_replaces_symlink_targets(self):
         source = self.scratch / "config.txt"
         source.write_text("repository version", encoding="utf-8")
         target = self.home / "config.txt"
         target.symlink_to(source)
 
-        with contextlib.redirect_stdout(io.StringIO()):
-            INSTALLER["sync_back"]([(source, target)], include_files=True)
-        self.assertEqual(source.read_text(), "repository version")
-        self.assertTrue(target.is_symlink())
-        self.assertEqual(target.resolve(), source)
+        INSTALLER["sync_back"]([(source, target)], include_files=True)
+        assert source.read_text() == "repository version"
+        assert target.is_symlink()
+        assert target.resolve() == source
 
-    def test_sections_control_selection_independent_of_paths(self):
+    def test_sections_control_selection_independent_of_paths(self, monkeypatch):
         repo = self.scratch / "repo"
         assets = repo / "assets"
         assets.mkdir(parents=True)
@@ -302,35 +279,34 @@ class InstallerTests(unittest.TestCase):
         )
         beta_target = self.appdata / "alpha/config"
         globals_ = INSTALLER["main"].__globals__
-        with patch.dict(globals_, {"__file__": str(repo / "install")}), \
-             contextlib.redirect_stdout(io.StringIO()):
-            with patch.object(sys, "argv", ["install", "install", "alpha"]):
-                INSTALLER["main"]()
+        with monkeypatch.context() as patcher:
+            patcher.setitem(globals_, "__file__", str(repo / "install"))
+            patcher.setattr(sys, "argv", ["install", "install", "alpha"])
+            INSTALLER["main"]()
             for target, content in alpha_targets:
-                self.assertEqual(target.read_text(encoding="utf-8"), content)
-            self.assertFalse(beta_target.exists())
+                assert target.read_text(encoding="utf-8") == content
+            assert not beta_target.exists()
 
-            with patch.object(sys, "argv", ["install", "install", "beta"]):
-                INSTALLER["main"]()
-            with patch.object(sys, "argv", ["install", "remove", "alpha"]):
-                INSTALLER["main"]()
+            patcher.setattr(sys, "argv", ["install", "install", "beta"])
+            INSTALLER["main"]()
+            patcher.setattr(sys, "argv", ["install", "remove", "alpha"])
+            INSTALLER["main"]()
             for target, _ in alpha_targets:
-                self.assertFalse(target.exists())
-            self.assertEqual(beta_target.read_text(encoding="utf-8"), "first configuration")
+                assert not target.exists()
+            assert beta_target.read_text(encoding="utf-8") == "first configuration"
 
     def test_windows_rejects_linux_only_tools(self):
         links = INSTALLER["parse_config"](ROOT / "config_windows.conf")
         for tool in ("tmux", "zsh"):
-            with self.subTest(tool=tool), contextlib.redirect_stderr(io.StringIO()):
-                with self.assertRaises(SystemExit) as error:
-                    INSTALLER["select_tools"](links, [tool], self.parser)
-                self.assertEqual(error.exception.code, 2)
-        self.assertTrue(all(
+            with pytest.raises(SystemExit) as error:
+                INSTALLER["select_tools"](links, [tool], self.parser)
+            assert error.value.code == 2
+        assert all(
             target.is_relative_to(self.home / ".dsh")
             for _, target in INSTALLER["select_tools"](links, ["dsh"], self.parser)
-        ))
+        )
 
-    def test_invalid_sections_abort_before_installing_anything(self):
+    def test_invalid_sections_abort_before_installing_anything(self, monkeypatch, caplog):
         repo = self.scratch / "repo"
         repo.mkdir()
         (repo / "source").write_text("config", encoding="utf-8")
@@ -341,84 +317,86 @@ class InstallerTests(unittest.TestCase):
             "[tool]\n./source:$HOME/valid\n[broken\n",
             "[tool]\n./source:$HOME/valid\n[two tools]\n",
         ):
-            with self.subTest(config=config):
-                (repo / "config_linux.conf").write_text(config, encoding="utf-8")
-                with patch.dict(globals_, {"IS_WINDOWS": False, "__file__": str(repo / "install")}), \
-                     patch.object(sys, "argv", ["install", "install"]), \
-                     self.assertLogs("dotfiles", level="ERROR"):
-                    with self.assertRaises(SystemExit) as error:
-                        INSTALLER["main"]()
-                self.assertEqual(error.exception.code, 1)
-                self.assertFalse((self.home / "valid").exists())
+            caplog.clear()
+            (repo / "config_linux.conf").write_text(config, encoding="utf-8")
+            with monkeypatch.context() as patcher:
+                patcher.setitem(globals_, "IS_WINDOWS", False)
+                patcher.setitem(globals_, "__file__", str(repo / "install"))
+                patcher.setattr(sys, "argv", ["install", "install"])
+                with caplog.at_level(logging.ERROR, logger="dotfiles"), pytest.raises(SystemExit) as error:
+                    INSTALLER["main"]()
+            assert error.value.code == 1
+            assert any(
+                record.name == "dotfiles" and record.levelno >= logging.ERROR for record in caplog.records
+            )
+            assert not (self.home / "valid").exists()
 
-    def test_invalid_targets_abort_before_installing_anything(self):
+    def test_invalid_targets_abort_before_installing_anything(self, monkeypatch, caplog):
         repo = self.scratch / "repo"
         repo.mkdir()
         (repo / "source").write_text("config", encoding="utf-8")
         globals_ = INSTALLER["main"].__globals__
+        monkeypatch.delenv("DOTFILES_UNDEFINED", raising=False)
         for target in (
             "$DOTFILES_UNDEFINED/config",
             "${DOTFILES_UNDEFINED}/config",
             "%DOTFILES_UNDEFINED%/config",
             "relative/config",
         ):
-            with self.subTest(target=target), patch.dict(os.environ):
-                os.environ.pop("DOTFILES_UNDEFINED", None)
-                (repo / "config_linux.conf").write_text(
-                    "[tool]\n"
-                    "./source:$HOME/valid\n"
-                    f"./source:{target}\n",
-                    encoding="utf-8",
-                )
-                with patch.dict(globals_, {"IS_WINDOWS": False, "__file__": str(repo / "install")}), \
-                     patch.object(sys, "argv", ["install", "install"]), \
-                     self.assertLogs("dotfiles", level="ERROR"):
-                    with self.assertRaises(SystemExit) as error:
-                        INSTALLER["main"]()
-                self.assertEqual(error.exception.code, 1)
-                self.assertFalse((self.home / "valid").exists())
+            caplog.clear()
+            (repo / "config_linux.conf").write_text(
+                f"[tool]\n./source:$HOME/valid\n./source:{target}\n",
+                encoding="utf-8",
+            )
+            with monkeypatch.context() as patcher:
+                patcher.setitem(globals_, "IS_WINDOWS", False)
+                patcher.setitem(globals_, "__file__", str(repo / "install"))
+                patcher.setattr(sys, "argv", ["install", "install"])
+                with caplog.at_level(logging.ERROR, logger="dotfiles"), pytest.raises(SystemExit) as error:
+                    INSTALLER["main"]()
+            assert error.value.code == 1
+            assert any(
+                record.name == "dotfiles" and record.levelno >= logging.ERROR for record in caplog.records
+            )
+            assert not (self.home / "valid").exists()
 
-    def test_windows_manifest_is_used_for_install_sync_back_and_remove(self):
+    def test_windows_manifest_is_used_for_install_sync_back_and_remove(self, monkeypatch):
         repo = self.scratch / "repo"
         (repo / "zed").mkdir(parents=True)
         source = repo / "zed/settings.json"
         source.write_text('{"theme": "original"}', encoding="utf-8")
         (repo / "config_windows.conf").write_text(
-            "[zed]\n"
-            "./zed/settings.json:$APPDATA/zed/settings.json\n",
+            "[zed]\n./zed/settings.json:$APPDATA/zed/settings.json\n",
             encoding="utf-8",
         )
         (repo / "config_linux.conf").write_text(
-            "[zed]\n"
-            "./zed/settings.json:$HOME/.config/zed/settings.json\n",
+            "[zed]\n./zed/settings.json:$HOME/.config/zed/settings.json\n",
             encoding="utf-8",
         )
         target = self.appdata / "zed/settings.json"
         globals_ = INSTALLER["main"].__globals__
-        with patch.dict(globals_, {"IS_WINDOWS": True, "__file__": str(repo / "install")}), \
-             contextlib.redirect_stdout(io.StringIO()):
-            with patch.object(sys, "argv", ["install", "install"]):
-                INSTALLER["main"]()
-            self.assertFalse(target.is_symlink())
-            self.assertEqual(target.read_text(encoding="utf-8"), '{"theme": "original"}')
+        with monkeypatch.context() as patcher:
+            patcher.setitem(globals_, "IS_WINDOWS", True)
+            patcher.setitem(globals_, "__file__", str(repo / "install"))
+            patcher.setattr(sys, "argv", ["install", "install"])
+            INSTALLER["main"]()
+            assert not target.is_symlink()
+            assert target.read_text(encoding="utf-8") == '{"theme": "original"}'
             target.write_text('{"theme": "edited"}', encoding="utf-8")
-            self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "original"}')
-            with patch.object(sys, "argv", ["install", "sync-back", "zed"]):
-                INSTALLER["main"]()
-            self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "original"}')
-            self.assertEqual(target.read_text(encoding="utf-8"), '{"theme": "edited"}')
-            with patch.object(sys, "argv", ["install", "sync-back", "--include-files", "zed"]):
-                INSTALLER["main"]()
-            self.assertEqual(source.read_text(encoding="utf-8"), '{"theme": "edited"}')
-            with patch.object(sys, "argv", ["install", "remove", "zed"]):
-                INSTALLER["main"]()
-            self.assertFalse(target.exists())
-            self.assertEqual(
-                target.with_name("settings.json.old").read_text(encoding="utf-8"),
-                '{"theme": "edited"}',
+            assert source.read_text(encoding="utf-8") == '{"theme": "original"}'
+            patcher.setattr(sys, "argv", ["install", "sync-back", "zed"])
+            INSTALLER["main"]()
+            assert source.read_text(encoding="utf-8") == '{"theme": "original"}'
+            assert target.read_text(encoding="utf-8") == '{"theme": "edited"}'
+            patcher.setattr(
+                sys,
+                "argv",
+                ["install", "sync-back", "--include-files", "zed"],
             )
-        self.assertFalse((self.home / ".config/zed").exists())
-
-
-if __name__ == "__main__":
-    unittest.main()
+            INSTALLER["main"]()
+            assert source.read_text(encoding="utf-8") == '{"theme": "edited"}'
+            patcher.setattr(sys, "argv", ["install", "remove", "zed"])
+            INSTALLER["main"]()
+            assert not target.exists()
+            assert target.with_name("settings.json.old").read_text(encoding="utf-8") == '{"theme": "edited"}'
+        assert not (self.home / ".config/zed").exists()

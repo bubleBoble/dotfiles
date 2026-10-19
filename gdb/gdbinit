@@ -2,4 +2,4 @@ set debuginfod enabled on
 set pagination off
 set history save on
 set history expansion on
-# python print("Hello from GDB")
+set history filename ~/.gdb_history
