@@ -16,7 +16,7 @@
         // Override Linux's Editor-level backward-selection shortcut.
         "bindings": {
             "alt-shift-w": "multi_workspace::ToggleWorkspaceSidebar",
-            "ctrl-alt-shift-q": "workspace::ToggleRightDock",
+            "alt-shift-q": "workspace::ToggleRightDock",
         },
     },
     {
