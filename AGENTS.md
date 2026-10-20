@@ -51,10 +51,12 @@ A centralized configuration management system that maintains dotfiles (configura
 ### Platform Manifest Format
 
 Format: `[TOOL]` sections containing `SOURCE:TARGET` mappings:
-- **SOURCE** — Relative path resolved from the repository root
+- **SOURCE** — Relative path resolved from the manifest's directory (the repository root)
 - **TARGET** — Absolute destination after variable expansion (`$HOME`, or `$APPDATA` for Windows Zed); unresolved variables and relative targets are rejected before deployment
 - **Per-child mappings** — End both sides with `/*` to create one mapping for each direct child while preserving its name. End the source with `/*/` instead to select only child directories
-- **Tool selection** — Every mapping belongs to its explicit `[TOOL]` section until the next section header. Source and target directory names do not determine ownership. Put shared assets and launchers in the owning tool's section. See [README.md](README.md) for section syntax.
+- **Tool selection** — Every mapping belongs to its explicit `[TOOL]` section until the next section header. Source and target directory names do not determine ownership. Put shared assets and launchers in the owning tool's section. Adding a tool requires a new section, not an installer change.
+
+Section names must be nonempty and contain no whitespace or brackets. Sections may repeat to add mappings to the same tool. Mappings before the first section and malformed section headers are rejected before installation, removal, or sync-back.
 
 Example:
 ```
@@ -96,6 +98,19 @@ agents/
 
 **Shared assets** are symlinked to each agent's configuration directory. When modifying agent configurations or standards, edit files in `agents/` — symlinks propagate changes automatically.
 
+Matt Pocock skills deploy directly from `agents/external/matpocock_skills_repo`; `agents/shared/skills` holds only locally maintained or other-source skills. Both manifests use directory-only wildcards for the engineering, productivity, and misc categories, excluding category READMEs and experimental skills.
+
+### Refreshing deployed agent assets
+
+After migrating from shared copies, replace existing Linux deployment symlinks; installation alone preserves even dangling symlinks:
+
+```sh
+./install remove claude pi omp codex dsh zed
+./install install claude pi omp codex dsh zed
+```
+
+These commands refresh managed symlinks for the selected agents on Linux, leaving regular files untouched. On Windows, rerun `./install install TOOL` to update installed copies; removal is not required.
+
 ## Modifying This Repository
 
 ### Guidelines
@@ -126,6 +141,7 @@ When adding or modifying configurations:
 5. **Document changes:**
    - Update this file (AGENTS.md) if repo structure changes
    - Add READMEs to directories with complex configurations (e.g., nvim/readme.md)
+   - Keep maintenance conventions in AGENTS.md; reserve READMEs for durable user-facing setup and usage information.
 
 ### Common Modification Scenarios
 
@@ -151,6 +167,12 @@ When adding or modifying configurations:
 - **Git submodules:** Tmux plugins use submodules. Clone with `--recurse-submodules` and be careful when updating.
 - **Platform-specific configs:** VS Code has `lin` (Linux) and `win` (Windows) variants. Modify the appropriate one.
 - **Caching:** Some tools cache configs on startup. Restart them after changes.
+
+## Zed Configuration
+
+- **Keymaps:** Keep `zed/keymap.json` organized into shared shortcuts, default-binding overrides, and Vim-only editor shortcuts, with slash-banner section comments. Keep mode-independent bindings in the shared section, even if their keys are Vim-style.
+- **Python formatting:** `zed/settings.json` uses the Ruff language server for formatting and linting, including the `Alt+Shift+F` format-selection binding. Editor formatting reads `[tool.ruff]` in each project's `pyproject.toml`, not `[tool.black]`. Zed manages the Ruff language server; a global Black executable is not required.
+- **Shell formatting:** Use four spaces per indentation level for shell editing and formatting. See [README.md — Tool requirements](README.md#tool-requirements) for the `shfmt` dependency.
 
 ## Installation & Setup
 
@@ -194,7 +216,28 @@ Omitting tool names manages all configured tools. `agents` selects only the shar
 
 ## For Coding Agents
 
-Use the persistent `tests/.venv` environment for Python tests and formatting. Create and manage it with Python's `venv` and `pip`, not `uv`; see [README.md — Tests](README.md#tests) for setup. Run `tests/.venv/bin/python -B -m pytest` from the repository root (native Windows: `tests/.venv/Scripts/python.exe`). Keep Black, Ruff, and pytest conventions in `pyproject.toml`.
+### Tests and formatting
+
+Use the persistent `tests/.venv` environment for Python tests and formatting. Create and manage it with Python's `venv` and `pip`, not `uv`.
+
+Set up the environment from the repository root:
+
+```bash
+python3 -m venv tests/.venv
+tests/.venv/bin/python -m pip install pytest black
+```
+
+Run all tests from the repository root:
+
+```bash
+tests/.venv/bin/python -B -m pytest
+```
+
+For installer tests only, append `tests/test_install.py`. Format Python tests with `tests/.venv/bin/python -m black tests/`. Keep Black, Ruff, and pytest conventions in `pyproject.toml`, with aligned Black and Ruff line-length settings.
+
+Activation is not required. On native Windows, create the environment with `python` and use `tests/.venv/Scripts/python.exe` instead of `tests/.venv/bin/python`.
+
+### Workflow
 
 When asked to modify this repository:
 

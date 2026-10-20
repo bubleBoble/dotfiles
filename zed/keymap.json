@@ -1,22 +1,125 @@
 // Zed keymap
+// Documentation: https://zed.dev/docs/key-bindings
+// Run `zed: open default keymap` to see the defaults.
 //
-// For information on binding keys, see the Zed
-// documentation: https://zed.dev/docs/key-bindings
-//
-// To see the default key bindings run `zed: open default keymap`
-// from the command palette.
+// Shared shortcuts come first and work with Vim mode on or off.
+// Vim-only editor bindings are isolated at the end of this file.
 [
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Shared shortcuts
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     {
-        // Do not let Ctrl-Q quit Zed when focus is outside a file editor.
+        "bindings": {
+            // Projects
+            "alt-w": "multi_workspace::PreviousProject",
+            "alt-d": "multi_workspace::NextProject",
+
+            // Docks (override Linux's Editor-level backward-selection shortcut)
+            "alt-shift-w": "multi_workspace::ToggleWorkspaceSidebar",
+            "alt-shift-q": "workspace::ToggleRightDock",
+
+            "ctrl-k ctrl-g": "git_graph::Open",
+        },
+    },
+
+    // Workspace shortcuts
+    {
+        "context": "Workspace",
+        "bindings": {
+            "alt-r": "terminal_panel::ToggleFocus",
+            "alt-e": "workspace::ToggleZoom",
+            "ctrl-shift-r": "pane::RevealInProjectPanel",
+        },
+    },
+
+    // Editor (standard editing and all Vim modes)
+    {
+        "context": "Editor && mode == full",
+        "bindings": {
+            // Tabs and editor display
+            "ctrl-q": "pane::CloseActiveItem",
+            "alt-shift-t": "editor::ToggleTabBar",
+            "alt-shift-b": "editor::ToggleBreadcrumb",
+
+            // Formatting and selection
+            "alt-shift-f": "editor::FormatSelections",
+            // Select all with the tmux-style prefix, then a.
+            "ctrl-a a": "editor::SelectAll",
+        },
+    },
+
+    // Tmux-style pane shortcuts (editors and terminals)
+    {
+        "context": "Terminal || (Editor && mode == full)",
+        "bindings": {
+            // Focus panes
+            "ctrl-a h": "workspace::ActivatePaneLeft",
+            "ctrl-a left": "workspace::ActivatePaneLeft",
+            "ctrl-a j": "workspace::ActivatePaneDown",
+            "ctrl-a down": "workspace::ActivatePaneDown",
+            "ctrl-a k": "workspace::ActivatePaneUp",
+            "ctrl-a up": "workspace::ActivatePaneUp",
+            "ctrl-a l": "workspace::ActivatePaneRight",
+            "ctrl-a right": "workspace::ActivatePaneRight",
+
+            // Split, close, and zoom
+            "ctrl-a %": "pane::SplitRight",
+            "ctrl-a \"": "pane::SplitDown",
+            "ctrl-a c": "pane::SplitRight",
+            "ctrl-a x": "pane::CloseActiveItem",
+            "ctrl-a z": "workspace::ToggleZoom",
+        },
+    },
+    {
+        "context": "Terminal",
+        "bindings": {
+            // Send a literal Ctrl-A instead of starting a pane chord.
+            "ctrl-a ctrl-a": ["terminal::SendText", "\u0001"],
+        },
+    },
+
+    // Project panel: Vim-style keys, but active even when Vim mode is off.
+    {
+        "context": "ProjectPanel && not_editing",
+        "bindings": {
+            "space e": "project_panel::ToggleFocus",
+            "ctrl-h": "workspace::ActivatePaneLeft",
+            "ctrl-j": "workspace::ActivatePaneDown",
+            "ctrl-k": "workspace::ActivatePaneUp",
+            "ctrl-l": "workspace::ActivatePaneRight",
+        },
+    },
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Default-binding overrides
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    {
         "unbind": {
             "ctrl-alt-z": "edit_prediction::RatePredictions",
+            // Ctrl-Q closes editor tabs, but must not quit Zed elsewhere.
             "ctrl-q": "zed::Quit",
             "ctrl-shift-w": "workspace::CloseWindow",
         },
-        // Override Linux's Editor-level backward-selection shortcut.
-        "bindings": {
-            "alt-shift-w": "multi_workspace::ToggleWorkspaceSidebar",
-            "alt-shift-q": "workspace::ToggleRightDock",
+    },
+    {
+        "context": "Workspace",
+        "unbind": {
+            "ctrl-alt-j": "multi_workspace::ToggleWorkspaceSidebar",
+            "ctrl-alt-b": "workspace::ToggleRightDock",
+            "ctrl-alt-shift-b": "git::Branch",
+            "ctrl-shift-r": [
+                "task::Rerun",
+                {
+                    "reevaluate_context": false,
+                },
+            ],
+        },
+    },
+    {
+        "context": "Editor && mode == full",
+        "unbind": {
+            // Reserve Ctrl-A for the shared tmux-style chords.
+            "ctrl-a": "editor::SelectAll",
         },
     },
     {
@@ -32,24 +135,30 @@
         },
     },
     {
-        "context": "Editor && mode == full",
+        "context": "AcpThread",
         "unbind": {
-            "ctrl-a": "editor::SelectAll",
-        },
-        "bindings": {
-            "ctrl-q": "pane::CloseActiveItem",
-            "alt-shift-f": "editor::FormatSelections",
-            "alt-shift-t": "editor::ToggleTabBar",
-            "alt-shift-b": "editor::ToggleBreadcrumb",
-            // Select all with the tmux-style prefix, then a.
-            "ctrl-a a": "editor::SelectAll",
+            "alt-r": "search::ToggleRegex",
+            "alt-shift-q": "agent::AllowAlways",
         },
     },
     {
+        "context": "Pane",
+        "unbind": {
+            "alt-r": "search::ToggleRegex",
+        },
+    },
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Vim-only editor shortcuts
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    {
         "context": "Editor && mode == full && (vim_mode == normal || vim_mode == visual) && !menu",
         "bindings": {
+            // Scroll two lines
             "ctrl-e": ["action::Sequence", ["vim::LineDown", "vim::LineDown"]],
             "ctrl-y": ["action::Sequence", ["vim::LineUp", "vim::LineUp"]],
+
+            // Focus panes
             "ctrl-h": "workspace::ActivatePaneLeft",
             "ctrl-j": "workspace::ActivatePaneDown",
             "ctrl-k": "workspace::ActivatePaneUp",
@@ -58,10 +167,8 @@
     },
     {
         "context": "Editor && mode == full && vim_mode == normal && !menu",
-        // Remove longer gr chords so gr opens references without a timeout.
-        "unbind": {},
         "bindings": {
-            // Zed's ResizePaneDown shrinks height; ResizePaneUp grows it.
+            // Resize panes (ResizePaneDown shrinks height; ResizePaneUp grows it)
             "shift-up": [
                 "action::Sequence",
                 ["vim::ResizePaneDown", "vim::ResizePaneDown"],
@@ -78,104 +185,16 @@
                 "action::Sequence",
                 ["vim::ResizePaneRight", "vim::ResizePaneRight"],
             ],
+
+            // Switch tabs
             "tab": "pane::ActivateNextItem",
             "shift-tab": "pane::ActivatePreviousItem",
+
+            // Space-leader shortcuts
             "space e": "project_panel::ToggleFocus",
             "space ?": "zed::OpenKeymap",
             "space t t": "editor::ToggleTabBar",
             "space t b": "editor::ToggleBreadcrumb",
-        },
-    },
-    {
-        "context": "ProjectPanel && not_editing",
-        "bindings": {
-            "space e": "project_panel::ToggleFocus",
-            "ctrl-h": "workspace::ActivatePaneLeft",
-            "ctrl-j": "workspace::ActivatePaneDown",
-            "ctrl-k": "workspace::ActivatePaneUp",
-            "ctrl-l": "workspace::ActivatePaneRight",
-        },
-    },
-    {
-        "context": "Workspace",
-        "unbind": {
-            "ctrl-alt-j": "multi_workspace::ToggleWorkspaceSidebar",
-            "ctrl-alt-shift-b": "git::Branch",
-            "ctrl-alt-b": "workspace::ToggleRightDock",
-            "ctrl-shift-r": [
-                "task::Rerun",
-                {
-                    "reevaluate_context": false,
-                },
-            ],
-        },
-        "bindings": {
-            "ctrl-shift-r": "pane::RevealInProjectPanel",
-        },
-    },
-    {
-        "context": "Workspace",
-        "bindings": {
-            "alt-r": "terminal_panel::ToggleFocus",
-            "alt-e": "workspace::ToggleZoom",
-        },
-    },
-    {
-        // Share tmux-style pane chords with full editors in all modes.
-        "context": "Terminal || (Editor && mode == full)",
-        "bindings": {
-            "ctrl-a h": "workspace::ActivatePaneLeft",
-            "ctrl-a left": "workspace::ActivatePaneLeft",
-            "ctrl-a j": "workspace::ActivatePaneDown",
-            "ctrl-a down": "workspace::ActivatePaneDown",
-            "ctrl-a k": "workspace::ActivatePaneUp",
-            "ctrl-a up": "workspace::ActivatePaneUp",
-            "ctrl-a l": "workspace::ActivatePaneRight",
-            "ctrl-a right": "workspace::ActivatePaneRight",
-            "ctrl-a %": "pane::SplitRight",
-            "ctrl-a \"": "pane::SplitDown",
-            "ctrl-a c": "pane::SplitRight",
-            "ctrl-a x": "pane::CloseActiveItem",
-            "ctrl-a z": "workspace::ToggleZoom",
-        },
-    },
-    {
-        "context": "Terminal",
-        "bindings": {
-            "ctrl-a ctrl-a": ["terminal::SendText", "\u0001"],
-        },
-    },
-    {
-        "bindings": {
-            "ctrl-k ctrl-g": "git_graph::Open",
-        },
-    },
-    {
-        "context": "AcpThread",
-        "unbind": {
-            "alt-r": "search::ToggleRegex",
-        },
-    },
-    {
-        "context": "Pane",
-        "unbind": {
-            "alt-r": "search::ToggleRegex",
-        },
-    },
-    {
-        "bindings": {
-            "alt-d": "multi_workspace::NextProject",
-        },
-    },
-    {
-        "bindings": {
-            "alt-w": "multi_workspace::PreviousProject",
-        },
-    },
-    {
-        "context": "AcpThread",
-        "unbind": {
-            "alt-shift-q": "agent::AllowAlways",
         },
     },
 ]
