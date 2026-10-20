@@ -33,11 +33,16 @@
     },
     {
         "context": "Editor && mode == full",
+        "unbind": {
+            "ctrl-a": "editor::SelectAll",
+        },
         "bindings": {
             "ctrl-q": "pane::CloseActiveItem",
             "alt-shift-f": "editor::FormatSelections",
             "alt-shift-t": "editor::ToggleTabBar",
             "alt-shift-b": "editor::ToggleBreadcrumb",
+            // Select all with the tmux-style prefix, then a.
+            "ctrl-a a": "editor::SelectAll",
         },
     },
     {
@@ -116,7 +121,8 @@
         },
     },
     {
-        "context": "Terminal",
+        // Share tmux-style pane chords with full editors in all modes.
+        "context": "Terminal || (Editor && mode == full)",
         "bindings": {
             "ctrl-a h": "workspace::ActivatePaneLeft",
             "ctrl-a left": "workspace::ActivatePaneLeft",
@@ -128,9 +134,14 @@
             "ctrl-a right": "workspace::ActivatePaneRight",
             "ctrl-a %": "pane::SplitRight",
             "ctrl-a \"": "pane::SplitDown",
-            "ctrl-a c": "workspace::NewTerminal",
+            "ctrl-a c": "pane::SplitRight",
             "ctrl-a x": "pane::CloseActiveItem",
             "ctrl-a z": "workspace::ToggleZoom",
+        },
+    },
+    {
+        "context": "Terminal",
+        "bindings": {
             "ctrl-a ctrl-a": ["terminal::SendText", "\u0001"],
         },
     },
