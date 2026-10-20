@@ -57,7 +57,7 @@ Zed's extension IDs are not VS Code extension IDs. HTML and Git support are buil
 ## Editing and formatting
 
 - Editor and terminal fonts use ComicShannsMono Nerd Font at 18 px. Editor font weight is 100; terminal font weight is 400. Ligatures are off.
-- Vim is off by default. Word wrap, CodeLens, inlay hints, indentation guides, and cursor animation/blinking are off. Whitespace appears only in selections; sticky scroll and semantic highlighting remain on.
+- Vim is disabled, with no Vim-specific keymaps. Word wrap, CodeLens, inlay hints, indentation guides, and cursor animation/blinking are off. Whitespace appears only in selections; sticky scroll and semantic highlighting remain on.
 - Formatting is manual. Saving does not format files, trim trailing whitespace, or insert a final newline. Markdown explicitly keeps format-on-save off.
 - JSON and JSONC use four spaces and Prettier. Python uses Ruff, with `RUF012` and `I001` ignored. Shell formatting uses shfmt with four spaces.
 - `Alt+Shift+F` means **Format Selection**, matching Zed rather than VS Code's usual Format Document shortcut. A language provider must support range formatting. Use **Format Document** from the Command Palette when it does not.
@@ -71,12 +71,17 @@ These shortcuts work without Vim:
 |---|---|
 | `Ctrl+Q` | Close the active text editor; does not quit the application elsewhere |
 | `Ctrl+Shift+W` | Default Close Window binding removed |
-| `Ctrl+K Ctrl+G` | Focus the built-in Source Control Graph |
+| `Ctrl+Shift+A` | Toggle the activity bar |
+| `Ctrl+K L` | Toggle the status bar |
+| `Ctrl+K G` or `Ctrl+K Ctrl+G` | Show the built-in Source Control Graph, or hide its primary sidebar when the graph is visible |
+| `Ctrl+K Z` | Toggle Zen Mode |
+| `Ctrl+Alt+/` | Open the integrated browser |
+| `Ctrl+'` | Toggle a block comment, such as `/* ... */` in C/C++ |
 | `Alt+R` | Toggle the terminal panel/focus |
 | `Alt+Shift+Q` | Toggle the secondary sidebar |
 | `Alt+E` | Maximize the active editor group, or the terminal panel when terminal-focused |
 | `Ctrl+Shift+R` | Reveal the active file in Explorer |
-| `Alt+Shift+T` | Toggle normal-layout editor tabs |
+| `Alt+Shift+T` | Toggle normal-layout editor tabs, regardless of focus |
 | `Alt+Shift+B` | Toggle breadcrumbs |
 | `Alt+Shift+F` | Format the selection |
 | `Ctrl+A A` | Select all in a text editor |
@@ -87,29 +92,14 @@ These shortcuts work without Vim:
 | `Ctrl+A X` | Close an editor, or terminate the active terminal |
 | `Ctrl+A Z` | Maximize an editor group or terminal panel |
 | `Ctrl+A Ctrl+A` | Send a literal Ctrl+A to the terminal shell |
-| Explorer `Space E` | Return focus to the active editor group |
-| Explorer `Ctrl+H/J/K/L` | Move focus between workbench parts |
 
-Chords are sequential: press and release `Ctrl+A`, then press the next key. `%`, `"`, and `?` are encoded as US-layout `Shift+5`, `Shift+'`, and `Shift+/`; adjust these bindings for another keyboard layout. `Ctrl+A` is a prefix in editors and terminals, not immediate Select All or shell beginning-of-line. Ordinary text inputs retain their normal selection behavior. Explorer bindings exclude rename/filter inputs.
+VS Code uses `Ctrl+K` as a prefix for many built-in commands. Chords are sequential: press and release `Ctrl+K`, then press `L`, `G`, or `Z`. The graph shortcut also accepts `Ctrl+K Ctrl+G`. No custom bare `Ctrl+K` binding intercepts these chords in Explorer.
+
+For `Ctrl+A` chords, press and release `Ctrl+A`, then press the next key. `%` and `"` are encoded as US-layout `Shift+5` and `Shift+'`; adjust these bindings for another keyboard layout. `Ctrl+A` is a prefix in editors and terminals, not immediate Select All or shell beginning-of-line. Ordinary text inputs retain their normal selection behavior.
+
+`Ctrl+Alt+/` opens VS Code's built-in integrated browser, not the external system browser. `Ctrl+/` retains VS Code's default line-comment shortcut. The graph shortcut uses the built-in Source Control Graph, not the third-party Git Graph extension, and assumes the graph remains in the primary sidebar.
 
 Terminal chords are handled by VS Code, not sent to the shell. They can intercept a nested tmux session's prefix; use `Ctrl+A Ctrl+A` when the shell or tmux must receive Ctrl+A. In terminal split groups, left/up go to the previous split and right/down to the next split. This is split order, not Zed's geometric navigation. Outside a split group, directional commands navigate visible workbench parts.
-
-## Optional Vim bindings
-
-To enable the dormant Vim-only shortcuts, install `vscodevim.vim`, then set `vim.disableExtension` to `false`. It is explicitly `true` in this configuration so installing the extension alone does not change the current non-Vim behavior. Without that extension, its settings and command references are inactive and can appear as unknown in the editor.
-
-In Normal and Visual modes, `Ctrl+E` / `Ctrl+Y` scroll two lines and `Ctrl+H/J/K/L` move focus. Normal mode also has:
-
-| Shortcut | Action |
-|---|---|
-| `Shift+Up/Down/Left/Right` | Resize the editor layout by two VS Code increments |
-| `Tab` / `Shift+Tab` | Next / previous editor in the current group |
-| `Space E` | Focus Explorer |
-| `Space ?` | Open user keyboard shortcuts JSON |
-| `Space T T` | Toggle editor tabs |
-| `Space T B` | Toggle breadcrumbs |
-
-These bindings require an active VSCodeVim mode and do not intercept ordinary Insert-mode typing. Zed's two-step resize distance differs from VS Code's increments. Normal mode uses a block cursor, Insert mode a line cursor, and smartcase search is enabled.
 
 ## Differences and manual layout
 
@@ -129,4 +119,4 @@ These bindings require an active VSCodeVim mode and do not intercept ordinary In
 - [Terminal chords and shell key handling](https://code.visualstudio.com/docs/terminal/advanced)
 - [Ruff VS Code settings](https://docs.astral.sh/ruff/editors/settings/)
 - [shfmt extension](https://github.com/mkhl/shfmt)
-- [VSCodeVim configuration](https://github.com/VSCodeVim/Vim#settings)
+- [Integrated browser](https://code.visualstudio.com/docs/debugtest/integrated-browser)

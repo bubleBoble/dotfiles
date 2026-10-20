@@ -17,15 +17,11 @@
     "window.titleBarStyle": "custom",
     "window.title": "${rootName}${separator}${activeEditorShort}",
     "window.titleSeparator": " — ",
-    "window.menuBarVisibility": "hidden",
     "workbench.sideBar.location": "left",
     "workbench.panel.defaultLocation": "bottom",
-    "workbench.statusBar.visible": true,
     "explorer.autoReveal": false,
     "breadcrumbs.enabled": false,
     "workbench.navigationControl.enabled": false,
-
-    "workbench.editor.showTabs": "multiple",
     "workbench.editor.showIcons": true,
     "workbench.editor.enablePreview": true,
     "workbench.editor.enablePreviewFromQuickOpen": true,
@@ -133,10 +129,12 @@
     // mkhl.shfmt supplies --filename itself and requires shfmt on PATH.
     "shfmt.executableArgs": ["--indent", "4"],
 
-    // Optional vscodevim.vim: installing it must not change Zed's Vim-off default.
+    // Keep VSCodeVim disabled if it is installed; no Vim keymaps are configured.
     "vim.disableExtension": true,
-    "vim.cursorStylePerMode.insert": "line",
-    "vim.cursorStylePerMode.normal": "block",
-    "vim.smartcase": true,
-    "vim.smartRelativeLine": false
+    "window.menuBarVisibility": "compact",
+    "window.commandCenter": false,
+    "chat.titleBar.signIn.enabled": false,
+    "workbench.layoutControl.enabled": false,
+    "chat.titleBar.openInAgentsWindow.enabled": false,
+    "workbench.browser.showInTitleBar": true
 }

@@ -1,27 +1,35 @@
-// Translated from zed/keymap.json. See README.md for differences and optional Vim support.
+// Translated from zed/keymap.json. See README.md for VS Code differences.
 [
     // Do not quit/close the window with the source's explicitly disabled shortcuts.
     { "key": "ctrl+q", "command": "-workbench.action.quit" },
     { "key": "ctrl+shift+w", "command": "-workbench.action.closeWindow" },
     // Reserve Ctrl+A for chords only in full editors; keep ordinary input/list selection.
     { "key": "ctrl+a", "command": "-editor.action.selectAll", "when": "editorTextFocus" },
-    { "key": "ctrl+a", "command": "-extension.vim_ctrl+a" },
 
     // Shared workspace actions. VS Code has no Zed multi-project sidebar/history equivalent.
     { "key": "alt+shift+q", "command": "workbench.action.toggleAuxiliaryBar" },
-    { "key": "ctrl+k ctrl+g", "command": "workbench.scm.history.focus" },
+    { "key": "ctrl+shift+a", "command": "workbench.action.toggleActivityBarVisibility" },
+    { "key": "ctrl+k l", "command": "workbench.action.toggleStatusbarVisibility" },
+    { "key": "ctrl+k z", "command": "workbench.action.toggleZenMode" },
+    // The built-in graph lives in the primary sidebar; hide it when already visible.
+    { "key": "ctrl+k g", "command": "workbench.scm.history.focus", "when": "!view.workbench.scm.history.visible" },
+    { "key": "ctrl+k g", "command": "workbench.action.toggleSidebarVisibility", "when": "view.workbench.scm.history.visible" },
+    { "key": "ctrl+k ctrl+g", "command": "workbench.scm.history.focus", "when": "!view.workbench.scm.history.visible" },
+    { "key": "ctrl+k ctrl+g", "command": "workbench.action.toggleSidebarVisibility", "when": "view.workbench.scm.history.visible" },
+    { "key": "ctrl+alt+/", "command": "workbench.action.browser.open" },
     { "key": "alt+r", "command": "workbench.action.terminal.toggleTerminal" },
     { "key": "alt+e", "command": "workbench.action.toggleMaximizeEditorGroup", "when": "!terminalFocus" },
     { "key": "alt+e", "command": "workbench.action.toggleMaximizedPanel", "when": "terminalFocus" },
     { "key": "ctrl+shift+r", "command": "revealInExplorer", "when": "activeEditor != ''" },
 
-    // Shared editor actions (including Insert mode when optional VSCodeVim is enabled).
+    // Shared editor actions.
     { "key": "ctrl+q", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus && !inDebugRepl" },
     // These two supported actions form a normal-layout, profile-wide tab-bar toggle.
-    { "key": "alt+shift+t", "command": "workbench.action.hideEditorTabs", "when": "editorTextFocus && !inDebugRepl && config.workbench.editor.showTabs != 'none'" },
-    { "key": "alt+shift+t", "command": "workbench.action.showMultipleEditorTabs", "when": "editorTextFocus && !inDebugRepl && config.workbench.editor.showTabs == 'none'" },
+    { "key": "alt+shift+t", "command": "workbench.action.hideEditorTabs", "when": "config.workbench.editor.showTabs != 'none'" },
+    { "key": "alt+shift+t", "command": "workbench.action.showMultipleEditorTabs", "when": "config.workbench.editor.showTabs == 'none'" },
     { "key": "alt+shift+b", "command": "breadcrumbs.toggle", "when": "editorTextFocus && !inDebugRepl" },
     { "key": "alt+shift+f", "command": "editor.action.formatSelection", "when": "editorTextFocus && !editorReadonly && !inDebugRepl" },
+    { "key": "ctrl+'", "command": "editor.action.blockComment", "when": "editorTextFocus && !editorReadonly && !inDebugRepl" },
     { "key": "ctrl+a a", "command": "editor.action.selectAll", "when": "editorTextFocus && !inDebugRepl" },
 
     // Workbench navigation crosses editor groups and visible workbench parts, not
@@ -54,34 +62,5 @@
     { "key": "ctrl+a c", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
     { "key": "ctrl+a x", "command": "workbench.action.terminal.kill", "when": "terminalFocus" },
     { "key": "ctrl+a z", "command": "workbench.action.toggleMaximizedPanel", "when": "terminalFocus" },
-    { "key": "ctrl+a ctrl+a", "command": "workbench.action.terminal.sendSequence", "args": { "text": "\u0001" }, "when": "terminalFocus" },
-
-    // Explorer navigation remains shared, but never intercepts rename/filter text inputs.
-    { "key": "space e", "command": "workbench.action.focusActiveEditorGroup", "when": "filesExplorerFocus && !inputFocus" },
-    { "key": "ctrl+h", "command": "workbench.action.navigateLeft", "when": "filesExplorerFocus && !inputFocus" },
-    { "key": "ctrl+j", "command": "workbench.action.navigateDown", "when": "filesExplorerFocus && !inputFocus" },
-    { "key": "ctrl+k", "command": "workbench.action.navigateUp", "when": "filesExplorerFocus && !inputFocus" },
-    { "key": "ctrl+l", "command": "workbench.action.navigateRight", "when": "filesExplorerFocus && !inputFocus" },
-
-    // Dormant unless optional vscodevim.vim is installed AND explicitly enabled.
-    // VisualLine/VisualBlock are the VSCodeVim variants of Zed's visual mode.
-    { "key": "ctrl+e", "command": "runCommands", "args": { "commands": ["extension.vim_ctrl+e", "extension.vim_ctrl+e"] }, "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualLine' || vim.mode == 'VisualBlock') && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "ctrl+y", "command": "runCommands", "args": { "commands": ["extension.vim_ctrl+y", "extension.vim_ctrl+y"] }, "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualLine' || vim.mode == 'VisualBlock') && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "ctrl+h", "command": "workbench.action.navigateLeft", "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualLine' || vim.mode == 'VisualBlock') && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "ctrl+j", "command": "workbench.action.navigateDown", "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualLine' || vim.mode == 'VisualBlock') && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "ctrl+k", "command": "workbench.action.navigateUp", "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualLine' || vim.mode == 'VisualBlock') && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "ctrl+l", "command": "workbench.action.navigateRight", "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualLine' || vim.mode == 'VisualBlock') && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-
-    // Two VS Code resize increments (currently 60 CSS pixels each), not Zed's step size.
-    { "key": "shift+up", "command": "runCommands", "args": { "commands": ["workbench.action.decreaseViewHeight", "workbench.action.decreaseViewHeight"] }, "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "shift+down", "command": "runCommands", "args": { "commands": ["workbench.action.increaseViewHeight", "workbench.action.increaseViewHeight"] }, "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "shift+left", "command": "runCommands", "args": { "commands": ["workbench.action.decreaseViewWidth", "workbench.action.decreaseViewWidth"] }, "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "shift+right", "command": "runCommands", "args": { "commands": ["workbench.action.increaseViewWidth", "workbench.action.increaseViewWidth"] }, "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "tab", "command": "workbench.action.nextEditorInGroup", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "shift+tab", "command": "workbench.action.previousEditorInGroup", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "space e", "command": "workbench.view.explorer", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "space shift+/", "command": "workbench.action.openGlobalKeybindingsFile", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" },
-    { "key": "space t t", "command": "workbench.action.hideEditorTabs", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl && config.workbench.editor.showTabs != 'none'" },
-    { "key": "space t t", "command": "workbench.action.showMultipleEditorTabs", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl && config.workbench.editor.showTabs == 'none'" },
-    { "key": "space t b", "command": "breadcrumbs.toggle", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen && !inDebugRepl" }
+    { "key": "ctrl+a ctrl+a", "command": "workbench.action.terminal.sendSequence", "args": { "text": "\u0001" }, "when": "terminalFocus" }
 ]
