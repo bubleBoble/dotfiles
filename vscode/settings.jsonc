@@ -1,0 +1,142 @@
+{
+    // The official VS Code One Dark Pro extension has no Glass variant.
+    "workbench.colorTheme": "One Dark Pro",
+    "window.autoDetectColorScheme": false,
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "'ComicShannsMono Nerd Font', monospace",
+    "editor.fontSize": 18,
+    "editor.fontWeight": "100",
+    "editor.fontLigatures": "'calt' off, 'liga' off",
+    "terminal.integrated.fontFamily": "'ComicShannsMono Nerd Font', monospace",
+    "terminal.integrated.fontSize": 18,
+    "terminal.integrated.fontWeight": "400",
+    "scm.inputFontSize": 18,
+    "chat.fontSize": 22,
+    "chat.editor.fontSize": 18,
+
+    "window.titleBarStyle": "custom",
+    "window.title": "${rootName}${separator}${activeEditorShort}",
+    "window.titleSeparator": " — ",
+    "window.menuBarVisibility": "hidden",
+    "workbench.sideBar.location": "left",
+    "workbench.panel.defaultLocation": "bottom",
+    "workbench.statusBar.visible": true,
+    "explorer.autoReveal": false,
+    "breadcrumbs.enabled": false,
+    "workbench.navigationControl.enabled": false,
+
+    "workbench.editor.showTabs": "multiple",
+    "workbench.editor.showIcons": true,
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "workbench.editor.tabActionCloseVisibility": false,
+    "workbench.editor.tabActionLocation": "right",
+    "workbench.editor.pinnedTabsOnSeparateRow": false,
+    "workbench.editor.editorActionsLocation": "default",
+    "workbench.editor.decorations.badges": false,
+    "workbench.editor.decorations.colors": false,
+
+    "editor.bracketPairColorization.enabled": true,
+    "editor.codeLens": false,
+    "editor.inlayHints.enabled": "off",
+    "editor.renderWhitespace": "selection",
+    "editor.accessibilitySupport": "off",
+    "editor.selectionClipboard": false,
+    "editor.guides.indentation": false,
+    "editor.guides.highlightActiveIndentation": false,
+    "editor.lightbulb.enabled": "off",
+    "editor.stickyScroll.enabled": true,
+    "editor.semanticHighlighting.enabled": true,
+    "editor.wordWrap": "off",
+    "editor.mouseWheelZoom": true,
+    "editor.mouseWheelScrollSensitivity": 1,
+    "editor.cursorBlinking": "solid",
+    "editor.cursorSmoothCaretAnimation": "off",
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.scrollbar.vertical": "visible",
+    // Hide overview-ruler markers without disabling diagnostics or text highlights.
+    "workbench.colorCustomizations": {
+        "editorOverviewRuler.errorForeground": "#00000000",
+        "editorOverviewRuler.warningForeground": "#00000000",
+        "editorOverviewRuler.infoForeground": "#00000000",
+        "editorOverviewRuler.findMatchForeground": "#00000000",
+        "editorOverviewRuler.rangeHighlightForeground": "#00000000",
+        "editorOverviewRuler.selectionHighlightForeground": "#00000000",
+        "editorOverviewRuler.wordHighlightForeground": "#00000000",
+        "editorOverviewRuler.wordHighlightStrongForeground": "#00000000",
+        "editorOverviewRuler.wordHighlightTextForeground": "#00000000",
+        "editorOverviewRuler.bracketMatchForeground": "#00000000"
+    },
+    "editor.hideCursorInOverviewRuler": true,
+    "editor.minimap.enabled": false,
+    "diffEditor.renderSideBySide": false,
+
+    "git.enabled": true,
+    "git.openDiffOnClick": true,
+    "git.blame.editorDecoration.enabled": false,
+    "github.showAvatar": true,
+    "scm.defaultViewMode": "tree",
+    "scm.defaultViewSortKey": "path",
+    "scm.alwaysShowActions": true,
+    "scm.diffDecorations": "gutter",
+
+    "http.proxy": "",
+    "window.restoreWindows": "all",
+    "window.openFilesInNewWindow": "off",
+    "window.openFoldersInNewWindow": "off",
+    "update.mode": "none",
+    "files.autoSave": "off",
+    "files.insertFinalNewline": false,
+    "files.trimTrailingWhitespace": false,
+    // Zed's default is manual formatting; Markdown also explicitly disables save formatting.
+    "editor.formatOnSave": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.inlineSuggest.enabled": true,
+
+    // Let the translated terminal shortcuts/chords reach VS Code, not the shell.
+    "terminal.integrated.allowChords": true,
+    "terminal.integrated.sendKeybindingsToShell": false,
+
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "prettier.tabWidth": 4,
+        "prettier.useTabs": false
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "prettier.tabWidth": 4,
+        "prettier.useTabs": false
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": false,
+        "editor.wordWrap": "off"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "ruff.lint.ignore": ["RUF012", "I001"],
+    "[shellscript]": {
+        "editor.defaultFormatter": "mkhl.shfmt",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
+    },
+    // mkhl.shfmt supplies --filename itself and requires shfmt on PATH.
+    "shfmt.executableArgs": ["--indent", "4"],
+
+    // Optional vscodevim.vim: installing it must not change Zed's Vim-off default.
+    "vim.disableExtension": true,
+    "vim.cursorStylePerMode.insert": "line",
+    "vim.cursorStylePerMode.normal": "block",
+    "vim.smartcase": true,
+    "vim.smartRelativeLine": false
+}

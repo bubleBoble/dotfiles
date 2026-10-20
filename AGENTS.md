@@ -22,7 +22,7 @@ A centralized configuration management system that maintains dotfiles (configura
 | [**zsh/**](<zsh/>) | Zsh configuration and plugin submodules; see [zsh/README.md](<zsh/README.md>) when changing shell startup |
 | **kitty/** | Kitty terminal emulator config |
 | **vim/** | Vim editor config |
-| **vscode/** | VS Code settings (platform-specific: lin, win) |
+| [**vscode/**](<vscode/>) | Default-profile VS Code settings translated from Zed; see [vscode/README.md](<vscode/README.md>) for extensions, shortcuts, and differences |
 | [**zed/**](<zed/>) | Zed editor configuration; install with `zed agents` for shared skills |
 | **yazi/** | Yazi file manager config and themes |
 | **herdr/** | Herdr terminal multiplexer config |
