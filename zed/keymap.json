@@ -15,8 +15,8 @@
             "alt-d": "multi_workspace::NextProject",
 
             // Docks (override Linux's Editor-level backward-selection shortcut)
-            "alt-shift-w": "multi_workspace::ToggleWorkspaceSidebar",
-            "alt-shift-q": "workspace::ToggleRightDock",
+            "alt-`": "multi_workspace::ToggleWorkspaceSidebar",
+            "alt-q": "workspace::ToggleRightDock",
 
             "ctrl-k ctrl-g": "git_graph::Open",
         },
