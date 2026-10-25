@@ -270,8 +270,8 @@
         "One Dark Pro Max": {
             "background.appearance": "transparent",
             "background": "#10101472",
-            "editor.background": "#10101472"
-        }
+            "editor.background": "#10101472",
+        },
     },
     "close_panel_on_toggle": true,
     "sticky_scroll": {
@@ -343,6 +343,17 @@
     "debugger": {
         "dock": "bottom",
         "button": true,
-        "log_dap_communications": false
+        "log_dap_communications": false,
     },
+    "file_scan_exclusions": [
+        // "**/.git",
+        // "**/.svn",
+        // "**/.hg",
+        // "**/.jj",
+        // "**/CVS",
+        // "**/.DS_Store",
+        // "**/Thumbs.db",
+        // "**/.classpath",
+        // "**/.settings",
+    ],
 }
