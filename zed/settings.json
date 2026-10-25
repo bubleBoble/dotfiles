@@ -264,7 +264,14 @@
     "theme": {
         "mode": "dark",
         "light": "Flexoki Light",
-        "dark": "One Dark Pro Glass",
+        "dark": "One Dark Pro Max",
+    },
+    "theme_overrides": {
+        "One Dark Pro Max": {
+            "background.appearance": "transparent",
+            "background": "#10101472",
+            "editor.background": "#10101472"
+        }
     },
     "close_panel_on_toggle": true,
     "sticky_scroll": {
