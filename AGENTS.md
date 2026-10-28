@@ -91,6 +91,9 @@ agents/
 ├── pi/                 # Pi coding agent configuration
 │   ├── keybindings.json
 │   └── settings.json
+├── opencode/           # OpenCode configuration
+│   ├── opencode.json   # Runtime settings
+│   └── tui.json        # Interface settings
 └── omp/                # OMP configuration
     └── agent/
         └── config.yml

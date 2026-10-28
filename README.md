@@ -8,12 +8,15 @@ Git Bash), or `config_linux.conf` on Linux and WSL. Each manifest lists that
 platform's tools and target paths; shared configuration sources stay in the same
 repository.
 
+Individual directories may contain their own `README.md` files with tool-specific setup and usage instructions.
+
 Install all tools listed for your platform with `./install install`, or select
 individual tools:
 
 ```sh
 ./install install claude
 ./install install codex
+./install install opencode
 ./install install dsh
 ./install install vim
 ./install install claude codex dsh
