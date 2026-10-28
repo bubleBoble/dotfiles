@@ -29,7 +29,7 @@ loop:
 web_search:
   enabled: true
 modelRoles:
-  default: openai-codex/gpt-6.1-sol:off
+  default: openrouter/z-ai/glm-5.3-flash:low
 colorBlindMode: false
 terminal:
   showProgress: false

@@ -17,9 +17,14 @@ Startup hides the welcome logo, tips, and update notes, and does not check for
 updates. Run `omp update` when you want to update manually.
 The local `quiet-editor` extension renders the prompt as a dark blue-gray panel
 (`#252a36`). Half-block top and bottom edges meet the input background without
-gaps or coloring the outer half of either border row. Completion rows outside
-the panel remain unchanged. It also hides empty-prompt keyboard hints without
-changing shortcuts.
+gaps or coloring the outer half of either border row. `@` and autocomplete
+suggestion rows render above the panel instead of below it, so the input stays
+at the bottom of the editor block and stops sliding while the suggestion list
+filters on each keystroke; selection, Tab, and Enter behavior are unchanged.
+OMP hides the status line while the completion list is open, so the editor
+also renders a fallback dim status row (model, path, Git branch, context
+tokens) below the panel for exactly as long as completion rows exist.
+It also hides empty-prompt keyboard hints without changing shortcuts.
 
 Run the following commands from the repository root.
 
