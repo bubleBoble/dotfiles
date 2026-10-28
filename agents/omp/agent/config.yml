@@ -2,32 +2,34 @@ symbolPreset: nerd
 composer:
   shape: claude
 theme:
-  dark: dark-lunar
+  dark: dark-lunar-messages
 setupVersion: 2
 tools:
-  approvalMode: always-ask
+  approvalMode: yolo
 statusLine:
-  preset: full
-  contextLine: embedded
-  sessionAccent: true
+  preset: custom
+  leftSegments:
+    - model
+    - path
+    - git
+    - status
+  rightSegments: []
+  contextLine: "off"
+  sessionAccent: false
   transparent: true
   compactThinkingLevel: false
-  showHookStatus: true
+  showHookStatus: false
 startup:
+  quiet: true
+  checkUpdate: false
+  changelogMode: hidden
 loop:
   mode: fullscreen
   quiet: true
 web_search:
   enabled: true
 modelRoles:
-  default: anthropic/claude-sonnet-5:medium
-  smol: anthropic/claude-haiku-4-5:medium
-  plan: anthropic/claude-sonnet-4-5:medium
-  slow: anthropic/claude-sonnet-5:medium
-  tiny: anthropic/claude-haiku-4-5:medium
-  commit: anthropic/claude-haiku-4-5
-  task: anthropic/claude-haiku-4-5:medium
-  advisor: anthropic/claude-sonnet-4-5:medium
+  default: openai-codex/gpt-6.1-sol:off
 colorBlindMode: false
 terminal:
   showProgress: false
@@ -56,3 +58,5 @@ bash:
 task:
   disabledAgents:
     - agent-creator-demo
+dev:
+  autoqaConsent: granted
