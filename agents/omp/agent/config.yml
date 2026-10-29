@@ -10,8 +10,6 @@ statusLine:
   preset: custom
   leftSegments:
     - model
-    - path
-    - git
     - status
   rightSegments: []
   contextLine: "off"

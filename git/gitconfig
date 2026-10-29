@@ -8,8 +8,13 @@
 [core]
 	editor = vim
 	fileMode = false
-	pager = less
+	pager = delta --color-only
 	excludesfile = ~/.gitignore_global
+[delta]
+    side-by-side = true
+    line-numbers = true
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
 [merge]
 	tool = meld
 [mergetool "meld"]

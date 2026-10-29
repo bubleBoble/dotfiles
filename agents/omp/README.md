@@ -1,11 +1,16 @@
 # OMP configuration
 
 `agent/config.yml` keeps the Claude-style composer with a custom status line:
-model and thinking effort, working directory, Git branch, and context.
-The local `context-tokens` extension supplies the inline `status` segment with
-estimated occupied tokens and the window limit, for example `56K/500K`.
-It refreshes once per second and repaints only when the displayed value changes.
-The count comes from OMP's current context usage, not session totals.
+model and thinking effort, plus the `context-tokens` extension's `status`
+segment with estimated occupied tokens and the window limit, for example
+`56K/500K`, and a `context-bar` segment: a 16-cell proportional bar of the
+context window with the system prompt in accent and conversation messages in
+the message color, free space dimmed. Both segments refresh once per second
+and repaint only when the displayed value changes; counts come from OMP's
+current context usage, not session totals. The bar estimates both sides at
+about four characters per token because OMP does not expose its exact
+per-category breakdown to extensions. Working directory and Git branch
+segments are disabled.
 Separate hook status rows and the session-color accent are disabled.
 
 The dark theme `dark-lunar-messages`, stored in `agent/themes/`, preserves the
