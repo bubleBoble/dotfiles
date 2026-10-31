@@ -1,6 +1,4 @@
 {
-    // The official VS Code One Dark Pro extension has no Glass variant.
-    "workbench.colorTheme": "One Dark Pro",
     "window.autoDetectColorScheme": false,
     "workbench.iconTheme": "material-icon-theme",
     "editor.fontFamily": "'ComicShannsMono Nerd Font', monospace",
@@ -15,12 +13,10 @@
     "chat.editor.fontSize": 18,
 
     "window.titleBarStyle": "custom",
-    "window.title": "${rootName}${separator}${activeEditorShort}",
-    "window.titleSeparator": " — ",
+    "window.title": "${remoteName}${separator}${rootNameShort}",
     "workbench.sideBar.location": "left",
     "workbench.panel.defaultLocation": "bottom",
     "explorer.autoReveal": false,
-    "breadcrumbs.enabled": false,
     "workbench.navigationControl.enabled": false,
     "workbench.editor.showIcons": true,
     "workbench.editor.enablePreview": true,
@@ -29,20 +25,19 @@
     "workbench.editor.tabActionCloseVisibility": false,
     "workbench.editor.tabActionLocation": "right",
     "workbench.editor.pinnedTabsOnSeparateRow": false,
-    "workbench.editor.editorActionsLocation": "default",
     "workbench.editor.decorations.badges": false,
     "workbench.editor.decorations.colors": false,
 
     "editor.bracketPairColorization.enabled": true,
     "editor.codeLens": false,
     "editor.inlayHints.enabled": "off",
-    "editor.renderWhitespace": "selection",
+    "editor.renderWhitespace": "none",
     "editor.accessibilitySupport": "off",
     "editor.selectionClipboard": false,
     "editor.guides.indentation": false,
     "editor.guides.highlightActiveIndentation": false,
     "editor.lightbulb.enabled": "off",
-    "editor.stickyScroll.enabled": true,
+    "editor.stickyScroll.enabled": false,
     "editor.semanticHighlighting.enabled": true,
     "editor.wordWrap": "off",
     "editor.mouseWheelZoom": true,
@@ -71,6 +66,7 @@
     "git.enabled": true,
     "git.openDiffOnClick": true,
     "git.blame.editorDecoration.enabled": false,
+    "gitlens.currentLine.enabled": false,
     "github.showAvatar": true,
     "scm.defaultViewMode": "tree",
     "scm.defaultViewSortKey": "path",
@@ -81,10 +77,11 @@
     "window.restoreWindows": "none",
     "window.openFilesInNewWindow": "off",
     "window.openFoldersInNewWindow": "off",
-    // Start with no startup editor; keep the status bar and terminal hidden.
-    "workbench.statusBar.visible": false,
     "workbench.startupEditor": "none",
     "terminal.integrated.hideOnStartup": "always",
+    "terminal.integrated.showHistoryOnRestore": false,
+    "terminal.integrated.stickyScroll.enabled": false,
+    "terminal.integrated.shellIntegration.showCommandGuide": false,
     "update.mode": "none",
     "files.autoSave": "off",
     "files.insertFinalNewline": false,
@@ -93,7 +90,13 @@
     "editor.formatOnSave": false,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
-    "editor.inlineSuggest.enabled": true,
+    // Disable inline AI completions and edit predictions without disabling Chat.
+    "editor.inlineSuggest.enabled": false,
+    "github.copilot.enable": {
+        "*": false
+    },
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "terminal.integrated.suggest.enabled": false,
 
     // Let the translated terminal shortcuts/chords reach VS Code, not the shell.
     "terminal.integrated.allowChords": true,
@@ -131,15 +134,17 @@
         "editor.detectIndentation": false
     },
     // mkhl.shfmt supplies --filename itself and requires shfmt on PATH.
-    "shfmt.executableArgs": ["--indent", "4"],
-
-    // Keep VSCodeVim disabled if it is installed; no Vim keymaps are configured.
-    "window.menuBarVisibility": "compact",
+    "shfmt.executableArgs": [
+        "--indent",
+        "4"
+    ],
     "window.commandCenter": false,
     "chat.titleBar.signIn.enabled": false,
     "workbench.layoutControl.enabled": false,
     "chat.titleBar.openInAgentsWindow.enabled": false,
     "workbench.browser.showInTitleBar": false,
-    "workbench.activityBar.location": "hidden",
-    "workbench.editor.showTabs": "none"
+    "workbench.editor.useModal": "off",
+    "window.menuBarVisibility": "compact",
+    "workbench.colorTheme": "Dark Modern",
+    "workbench.editor.empty.hint": "hidden"
 }

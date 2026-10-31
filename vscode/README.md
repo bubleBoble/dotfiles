@@ -23,6 +23,8 @@ Use VS Code's **Default** profile. No named profiles, profile registrations, ext
 
 On startup, VS Code opens without a startup editor or restored project windows. Launch without a folder or file argument to use this startup behavior. Use `Ctrl+R` to open the Recent list.
 
+The window title shows the remote connection name (when present) and the short workspace name, without the active filename. Title-bar colors come from the theme.
+
 Reload VS Code after installation. For a disposable preview, copy both files into a separate user-data directory's `User/` subdirectory and start `code --user-data-dir /path/to/preview --extensions-dir /path/to/preview-extensions`; this does not use the live default profile.
 
 ## Extensions and tools
@@ -32,6 +34,7 @@ Install the extensions used by the settings, with the Default profile active:
 ```sh
 code --install-extension zhuangtongfa.material-theme
 code --install-extension pkief.material-icon-theme
+code --install-extension mhutchie.git-graph
 code --install-extension esbenp.prettier-vscode
 code --install-extension charliermarsh.ruff
 code --install-extension mkhl.shfmt
@@ -41,6 +44,7 @@ code --install-extension mkhl.shfmt
 |---|---|
 | One Dark Pro (`zhuangtongfa.material-theme`) | Closest maintained theme to the active Zed theme |
 | Material Icon Theme (`pkief.material-icon-theme`) | Explorer and editor file icons |
+| Git Graph (`mhutchie.git-graph`) | Repository graph opened by the graph shortcuts |
 | Prettier (`esbenp.prettier-vscode`) | JSON, JSONC, and Markdown formatting |
 | Ruff (`charliermarsh.ruff`) | Python formatting and linting |
 | shfmt (`mkhl.shfmt`) | Shell formatting with four-space indentation |
@@ -59,7 +63,10 @@ Zed's extension IDs are not VS Code extension IDs. HTML and Git support are buil
 ## Editing and formatting
 
 - Editor and terminal fonts use ComicShannsMono Nerd Font at 18 px. Editor font weight is 100; terminal font weight is 400. Ligatures are off.
-- Vim is disabled, with no Vim-specific keymaps. Word wrap, CodeLens, inlay hints, indentation guides, and cursor animation/blinking are off. Whitespace appears only in selections; sticky scroll and semantic highlighting remain on.
+- Vim is disabled, with no Vim-specific keymaps. Word wrap, CodeLens, inlay hints, indentation guides, and cursor animation/blinking are off. Whitespace markers and editor sticky scroll are off; semantic highlighting remains on.
+- Editor inline suggestions, Copilot completions and next-edit suggestions, and VS Code's terminal suggestion popup are disabled. Chat and terminal agents remain available. Shell-generated suggestions are controlled separately by the shell configuration.
+- The terminal's "History restored" banner, sticky scroll, and hover command-guide bars are hidden. Terminal session persistence and shell integration remain enabled.
+- Current-line inline blame is disabled for both built-in Git and GitLens.
 - Formatting is manual. Saving does not format files, trim trailing whitespace, or insert a final newline. Markdown explicitly keeps format-on-save off.
 - JSON and JSONC use four spaces and Prettier. Python uses Ruff, with `RUF012` and `I001` ignored. Shell formatting uses shfmt with four spaces.
 - `Alt+Shift+F` means **Format Selection**, matching Zed rather than VS Code's usual Format Document shortcut. A language provider must support range formatting. Use **Format Document** from the Command Palette when it does not.
@@ -73,14 +80,15 @@ These shortcuts work without Vim:
 |---|---|
 | `Ctrl+Q` | Close the active text editor; does not quit the application elsewhere |
 | `Ctrl+Shift+W` | Default Close Window binding removed |
+| `Ctrl+Alt+,` | Open user settings as JSON in the main editor; modal editor overlays are disabled |
 | `Ctrl+Shift+A` | Toggle the activity bar |
 | `Ctrl+K L` | Toggle the status bar |
-| `Ctrl+K G` or `Ctrl+K Ctrl+G` | Show the built-in Source Control Graph, or hide its primary sidebar when the graph is visible |
+| `Ctrl+K G` or `Ctrl+K Ctrl+G` | Open the Git Graph extension |
 | `Ctrl+K Z` | Toggle Zen Mode |
 | `Ctrl+Alt+/` | Open the integrated browser |
 | `Ctrl+'` | Toggle a block comment, such as `/* ... */` in C/C++ |
 | `Alt+R` | Toggle the terminal panel/focus |
-| `Alt+Shift+Q` | Toggle the secondary sidebar |
+| `Alt+Q` | Toggle the secondary sidebar |
 | `Alt+E` | Maximize the active editor group, or the terminal panel when terminal-focused |
 | `Ctrl+Shift+R` | Reveal the active file in Explorer |
 | `Ctrl+Shift+E` | Focus the Explorer, or hide the sidebar when the Explorer is visible |
@@ -100,7 +108,7 @@ VS Code uses `Ctrl+K` as a prefix for many built-in commands. Chords are sequent
 
 For `Ctrl+A` chords, press and release `Ctrl+A`, then press the next key. `%` and `"` are encoded as US-layout `Shift+5` and `Shift+'`; adjust these bindings for another keyboard layout. `Ctrl+A` is a prefix in editors and terminals, not immediate Select All or shell beginning-of-line. Ordinary text inputs retain their normal selection behavior.
 
-`Ctrl+Alt+/` opens VS Code's built-in integrated browser, not the external system browser. `Ctrl+/` retains VS Code's default line-comment shortcut. The graph shortcut uses the built-in Source Control Graph, not the third-party Git Graph extension, and assumes the graph remains in the primary sidebar.
+`Ctrl+Alt+/` opens VS Code's built-in integrated browser, not the external system browser. `Ctrl+/` retains VS Code's default line-comment shortcut. The graph shortcut requires `mhutchie.git-graph` and opens its editor view, not the built-in Source Control Graph.
 
 Terminal chords are handled by VS Code, not sent to the shell. They can intercept a nested tmux session's prefix; use `Ctrl+A Ctrl+A` when the shell or tmux must receive Ctrl+A. In terminal split groups, left/up go to the previous split and right/down to the next split. This is split order, not Zed's geometric navigation. Outside a split group, directional commands navigate visible workbench parts.
 
