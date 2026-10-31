@@ -78,9 +78,13 @@
     "scm.diffDecorations": "gutter",
 
     "http.proxy": "",
-    "window.restoreWindows": "all",
+    "window.restoreWindows": "none",
     "window.openFilesInNewWindow": "off",
     "window.openFoldersInNewWindow": "off",
+    // Start with no startup editor; keep the status bar and terminal hidden.
+    "workbench.statusBar.visible": false,
+    "workbench.startupEditor": "none",
+    "terminal.integrated.hideOnStartup": "always",
     "update.mode": "none",
     "files.autoSave": "off",
     "files.insertFinalNewline": false,
@@ -130,11 +134,12 @@
     "shfmt.executableArgs": ["--indent", "4"],
 
     // Keep VSCodeVim disabled if it is installed; no Vim keymaps are configured.
-    "vim.disableExtension": true,
     "window.menuBarVisibility": "compact",
     "window.commandCenter": false,
     "chat.titleBar.signIn.enabled": false,
     "workbench.layoutControl.enabled": false,
     "chat.titleBar.openInAgentsWindow.enabled": false,
-    "workbench.browser.showInTitleBar": true
+    "workbench.browser.showInTitleBar": false,
+    "workbench.activityBar.location": "hidden",
+    "workbench.editor.showTabs": "none"
 }

@@ -50,7 +50,6 @@
         "zedokai": true,
         "zedokai-darkest-machine": true,
     },
-    "vim_mode": false,
     "agent_buffer_font_size": 18.0,
     "agent_ui_font_size": 22.0,
     "outline_panel": {
@@ -196,14 +195,6 @@
         "coloring": "indent_aware",
         "enabled": false,
     },
-    "vim": {
-        "cursor_shape": {
-            "insert": "bar",
-            "normal": "block",
-        },
-        "use_smartcase_find": true,
-        "toggle_relative_line_numbers": false,
-    },
     "toolbar": {
         "breadcrumbs": false,
         "quick_actions": false,
@@ -269,8 +260,8 @@
     "theme_overrides": {
         "One Dark Pro Max": {
             "background.appearance": "transparent",
-            "background": "#10101472",
-            "editor.background": "#10101472",
+            "background": "#10101485",
+            "editor.background": "#10101485",
         },
     },
     "close_panel_on_toggle": true,

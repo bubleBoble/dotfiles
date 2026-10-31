@@ -21,6 +21,8 @@ On Linux, move existing destination files or symlinks aside first: the installer
 
 Use VS Code's **Default** profile. No named profiles, profile registrations, extension binaries, credentials, or workspace state are deployed. Leave Settings Sync off during migration so cloud settings do not replace the local configuration. Workspace settings in `.vscode/settings.json` and `*.code-workspace` files can still override these user settings. VS Code Insiders, VSCodium, portable mode, and custom `--user-data-dir` locations need different deployment paths.
 
+On startup, VS Code opens without a startup editor or restored project windows. Launch without a folder or file argument to use this startup behavior. Use `Ctrl+R` to open the Recent list.
+
 Reload VS Code after installation. For a disposable preview, copy both files into a separate user-data directory's `User/` subdirectory and start `code --user-data-dir /path/to/preview --extensions-dir /path/to/preview-extensions`; this does not use the live default profile.
 
 ## Extensions and tools
@@ -81,6 +83,7 @@ These shortcuts work without Vim:
 | `Alt+Shift+Q` | Toggle the secondary sidebar |
 | `Alt+E` | Maximize the active editor group, or the terminal panel when terminal-focused |
 | `Ctrl+Shift+R` | Reveal the active file in Explorer |
+| `Ctrl+Shift+E` | Focus the Explorer, or hide the sidebar when the Explorer is visible |
 | `Alt+Shift+T` | Toggle normal-layout editor tabs, regardless of focus |
 | `Alt+Shift+B` | Toggle breadcrumbs |
 | `Alt+Shift+F` | Format the selection |
@@ -105,7 +108,8 @@ Terminal chords are handled by VS Code, not sent to the shell. They can intercep
 
 - **Projects:** Zed's previous/next project shortcuts (`Alt+W`, `Alt+D`) and workspace sidebar (`Alt+Shift+W`) have no faithful built-in equivalent. They are not reassigned to unrelated editor-tab actions. Use VS Code's Open Recent/window commands for projects.
 - **Layout:** move Explorer, Outline, and Source Control to the primary left sidebar, Chat to the right sidebar, and Terminal/Debug Console to the bottom as needed. Drag dividers to reproduce Zed's widths: Explorer 450 px, Git 800 px, agent 900 px, and terminal height 600 px. VS Code persists layout separately; user settings cannot reliably seed those pixel sizes, every view position, or the source's start-hidden behavior. The agent thread sidebar is extension-specific.
-- **Zoom and splitting:** VS Code maximizes editor groups and panels through separate commands. Terminal `Ctrl+A C` follows VS Code's panel split orientation; directional terminal `%` / `"` splits are not implemented. Native VS Code terminal split shortcuts remain available.
+- **Layout defaults:** the activity bar and status bar are hidden in all windows, and the terminal panel hides on startup. Primary sidebar (Explorer) visibility is per-window workspace state; user settings cannot force it closed in new windows. Use `Ctrl+Shift+E` to close it.
+- **Zoom and splitting:** VS Code maximizes editor groups and panels through separate commands. Terminal `Ctrl+A C`, `Ctrl+A %`, and `Ctrl+A "` all split the terminal following the panel's configured orientation; Zed's directional split has no equivalent. Native VS Code terminal split shortcuts remain available.
 - **Tabs:** the tab toggle changes the profile-wide normal-layout setting and restores multiple tabs, not a previous single-tab layout. Zen Mode can override it. Zed's per-pane tabbar state is not available.
 - **Appearance:** One Dark Pro is used instead of One Dark Pro Glass. Glass/blur, Zed's exact chrome, separate 22 px UI font and agent font controls, close-button visibility details, title/branch widgets, and panel-specific toolbars do not map exactly. VS Code zoom scales the entire window, so it is not forced to imitate only Zed's UI font. The inactive Flexoki light theme is not selected or installed.
 - **AI and collaboration:** Zed model IDs, subscriptions, edit-prediction provider, ACP servers, tool approvals, sandbox permissions, call muting, and agent thread UI do not transfer. VS Code AI tools need their own installation, sign-in, model selection, and permissions. No credentials or automatic tool approvals are copied.

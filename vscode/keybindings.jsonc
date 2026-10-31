@@ -21,6 +21,10 @@
     { "key": "alt+e", "command": "workbench.action.toggleMaximizeEditorGroup", "when": "!terminalFocus" },
     { "key": "alt+e", "command": "workbench.action.toggleMaximizedPanel", "when": "terminalFocus" },
     { "key": "ctrl+shift+r", "command": "revealInExplorer", "when": "activeEditor != ''" },
+    // Focus the Explorer like Zed's Ctrl+Shift+E, or hide the sidebar when the Explorer is visible.
+    { "key": "ctrl+shift+e", "command": "-workbench.view.explorer" },
+    { "key": "ctrl+shift+e", "command": "workbench.view.explorer", "when": "!explorerViewletVisible" },
+    { "key": "ctrl+shift+e", "command": "workbench.action.toggleSidebarVisibility", "when": "explorerViewletVisible" },
 
     // Shared editor actions.
     { "key": "ctrl+q", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus && !inDebugRepl" },
@@ -60,6 +64,8 @@
     { "key": "ctrl+a z", "command": "workbench.action.toggleMaximizeEditorGroup", "when": "editorTextFocus && !inDebugRepl" },
     // Terminal splits follow the panel's configured orientation; no fake directional split.
     { "key": "ctrl+a c", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
+    { "key": "ctrl+a shift+5", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
+    { "key": "ctrl+a shift+'", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
     { "key": "ctrl+a x", "command": "workbench.action.terminal.kill", "when": "terminalFocus" },
     { "key": "ctrl+a z", "command": "workbench.action.toggleMaximizedPanel", "when": "terminalFocus" },
     { "key": "ctrl+a ctrl+a", "command": "workbench.action.terminal.sendSequence", "args": { "text": "\u0001" }, "when": "terminalFocus" }

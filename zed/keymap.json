@@ -2,8 +2,6 @@
 // Documentation: https://zed.dev/docs/key-bindings
 // Run `zed: open default keymap` to see the defaults.
 //
-// Shared shortcuts come first and work with Vim mode on or off.
-// Vim-only editor bindings are isolated at the end of this file.
 [
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Shared shortcuts
@@ -32,7 +30,7 @@
         },
     },
 
-    // Editor (standard editing and all Vim modes)
+    // Editor
     {
         "context": "Editor && mode == full",
         "bindings": {
@@ -78,7 +76,7 @@
         },
     },
 
-    // Project panel: Vim-style keys, but active even when Vim mode is off.
+    // Project panel (active even when editing is not in progress)
     {
         "context": "ProjectPanel && not_editing",
         "bindings": {
@@ -148,53 +146,4 @@
         },
     },
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // Vim-only editor shortcuts
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    {
-        "context": "Editor && mode == full && (vim_mode == normal || vim_mode == visual) && !menu",
-        "bindings": {
-            // Scroll two lines
-            "ctrl-e": ["action::Sequence", ["vim::LineDown", "vim::LineDown"]],
-            "ctrl-y": ["action::Sequence", ["vim::LineUp", "vim::LineUp"]],
-
-            // Focus panes
-            "ctrl-h": "workspace::ActivatePaneLeft",
-            "ctrl-j": "workspace::ActivatePaneDown",
-            "ctrl-k": "workspace::ActivatePaneUp",
-            "ctrl-l": "workspace::ActivatePaneRight",
-        },
-    },
-    {
-        "context": "Editor && mode == full && vim_mode == normal && !menu",
-        "bindings": {
-            // Resize panes (ResizePaneDown shrinks height; ResizePaneUp grows it)
-            "shift-up": [
-                "action::Sequence",
-                ["vim::ResizePaneDown", "vim::ResizePaneDown"],
-            ],
-            "shift-down": [
-                "action::Sequence",
-                ["vim::ResizePaneUp", "vim::ResizePaneUp"],
-            ],
-            "shift-left": [
-                "action::Sequence",
-                ["vim::ResizePaneLeft", "vim::ResizePaneLeft"],
-            ],
-            "shift-right": [
-                "action::Sequence",
-                ["vim::ResizePaneRight", "vim::ResizePaneRight"],
-            ],
-
-            // Switch tabs
-            "tab": "pane::ActivateNextItem",
-            "shift-tab": "pane::ActivatePreviousItem",
-
-            // Space-leader shortcuts
-            "space e": "project_panel::ToggleFocus",
-            "space ?": "zed::OpenKeymap",
-            "space t t": "editor::ToggleTabBar",
-            "space t b": "editor::ToggleBreadcrumb",
-        },
-    },
 ]
