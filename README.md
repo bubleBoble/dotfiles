@@ -56,6 +56,26 @@ uses `$APPDATA/zed` on Windows and `$HOME/.config/zed` on Linux. Git Bash needs
 Python 3 available as `python3` for `./install`, or run `python install install`
 with native Windows Python.
 
+## Updating and removing configurations
+
+- Pull repository updates with `git pull`, then update submodules with `git submodule update --recursive`.
+- Run `./install install` after updating, or append tool names to limit deployment.
+- Restart affected tools if they cache configuration on startup.
+- Run `./install remove TOOL` to remove a selected tool, or omit tool names for all configured tools.
+- On Linux, removal preserves regular files unless `--include-files` is supplied; use that flag only when those files should also be removed.
+
+### Refreshing agent symlinks
+
+- After migrating shared asset sources, remove and reinstall the managed Linux symlinks; installation alone preserves existing symlinks, even dangling ones.
+- These commands leave regular files untouched:
+
+```sh
+./install remove claude pi omp codex dsh zed
+./install install claude pi omp codex dsh zed
+```
+
+- On Windows, rerun `./install install TOOL` to update copies; removal is not required.
+
 ## Tool requirements
 
 Zed shell formatting requires `shfmt` on `PATH`. Use a version with Zsh support

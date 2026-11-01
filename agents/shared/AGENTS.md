@@ -38,6 +38,9 @@
 
 ## Formatting
 
+- Organize agent instruction files such as `AGENTS.md` and `CLAUDE.md` with short headings and concise bullet points, not long multi-sentence paragraphs.
+- Keep each bullet focused on one rule; retain conditions and exceptions when shortening instructions.
+
 - Keep copy-paste text plain or fenced, not blockquoted.
 - Let paragraphs soft-wrap; do not insert manual line breaks.
 - Use clickable code references: `path/to/file:line_number`.
