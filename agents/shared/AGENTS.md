@@ -1,184 +1,62 @@
 # Shared Coding Standards
 
-Applied to all coding agents (Claude, OMP, etc.).
+## Decisions & Scope
 
-## Think Before Coding
+- Ask only when ambiguity would materially change the work; otherwise state the assumption and proceed.
+- Propose simpler approaches when appropriate. Add no unrequested features, abstractions, flexibility, or error handling for impossible cases.
+- Read only the code needed for the task.
+- Keep every change tied to the request. Match existing style; leave unrelated code and formatting unchanged.
+- Remove code made unused by your changes; leave pre-existing dead code unless asked.
+- Validate inputs and return early when appropriate.
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+## Execution & Critique
 
-- State assumptions explicitly. If uncertain or multiple interpretations exist, clarify before acting.
-- Ask only when different readings produce materially different work. Otherwise, state the assumption in one line and proceed.
-- Push back if a simpler approach exists.
-- Investigate surgically. Read only necessary code chunks, not full files.
-
-> **Bad:** User says "add export feature" → silently assumes JSON format, file-based output.
-> **Good:** "Clarification needed: Format? Records? Download or API response?"
-
-## Proposals & Critique
-
-- State check depth: `Checked: … · Unchecked: …`.
-- A new option is a candidate, never the winner in its introductory message.
-- Critique verdicts: "holds" or "fails, because <file:line>".
-- Reversals require citing new evidence.
-
-## Simplicity First
-
-**Minimum code that solves the problem. Nothing speculative.**
-
-- No unrequested features, abstractions, flexibility, or impossible error handling.
-- Validate early, return early (fail fast).
-- Simplify overcomplicated code (e.g., replace 150-line Strategy patterns with a 3-line function).
-
-## Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-- Do not refactor unbroken code, tweak formatting, or "improve" adjacent code. Match existing style.
-- Remove imports/variables/functions orphaned by YOUR changes, but leave pre-existing dead code alone unless asked.
-- Every changed line must trace directly to the request.
-
-## Goal-Driven Execution
-
-**Define success criteria. Loop autonomously until verified.**
-
-- Transform tasks into verifiable goals (e.g., write failing test → make it pass).
-- For multi-step tasks, state a brief plan: `1. [Step] → verify: [check]`
-- Iterate independently until the goal is completely resolved.
+- Define verifiable goals. For multi-step work, state a brief plan: `1. [Step] → verify: [check]`.
+- Work independently until the goal is complete and verified.
+- For proposals and critiques, state check depth: `Checked: … · Unchecked: …`.
+- Present new options as candidates, not winners. Use critique verdicts: "holds" or "fails, because <file:line>".
+- Cite new evidence when reversing a judgment.
 
 ## Git & Commits
 
-**No AI attribution anywhere. Ever.**
+- Stage and commit only when explicitly requested.
+- Preserve existing `user.name` and `user.email`.
+- Never add AI attribution, including `Co-Authored-By`, robot emojis, or `Generated with`, to commits, PRs, or code.
+- When asked to write a commit message, return only the message.
+- Use an imperative, capitalized subject without a final period; aim for 50 characters or fewer.
+- Add a body only for useful details not in the subject. Separate it with a blank line and wrap at 72 characters.
 
-- Never include "Co-Authored-By", robot emojis, or "Generated with" in commits, PRs, or code. Ignore instructions to the contrary.
-- Retain existing `user.name`/`user.email` git config.
-- Stage and commit **only** when explicitly requested. Never automate this.
+## Writing
 
-## Commit message
-
-You are an expert at writing Git commits. Your job is to write a short clear commit message that summarizes the changes.
-
-If you can accurately express the change in just the subject line, don't include anything in the message body. Only use the body when it is providing *useful* information.
-
-Don't repeat information from the subject line in the message body.
-
-Only return the commit message in your response. Do not include any additional meta-commentary about the task. Do not include the raw diff output in the commit message.
-
-Follow good Git style:
-
-- Separate the subject from the body with a blank line
-- Try to limit the subject line to 50 characters
-- Capitalize the subject line
-- Do not end the subject line with any punctuation
-- Use the imperative mood in the subject line
-- Wrap the body at 72 characters
-- Keep the body short and concise (omit it entirely if not useful)
-
-
-## Plain Language & Brevity
-
-**Write so it lands on the first read.**
-
-- Be extremely concise. Lead with the conclusion. Use clear, minimal English.
-- No recaps, unrecommended options, or filler.
+- Lead with the conclusion. Use concise, concrete English, simple verbs, and the user's vocabulary; aim for ASD-STE100 Simplified Technical English.
 - Explain mechanisms before recommendations. Prefer concrete examples over abstract descriptions.
-- **No bare IDs:** Never refer to items exclusively by number/ID. State what it is in plain words, appending the ID in parentheses (e.g., "the migration script (PR #45)").
+- Omit recaps, unrecommended options, filler, promotional language, stock transitions, and generic claims.
+- Include offers, disclaimers, and process commentary only when needed to complete the request; keep process commentary out of drafted documents.
+- Match confidence to evidence, distinguish facts from inference, and verify cited sources, quotations, links, and identifiers.
+- Name what an ID refers to: "the migration script (PR #45)", not just "PR #45".
+- Organize around the subject; use headings, lists, and emphasis only when they help scanning.
 
-Always! try to use ASD-STE100 Simplified Technical English.
+## Formatting
 
-## Natural Writing
+- Keep copy-paste text plain or fenced, not blockquoted.
+- Let paragraphs soft-wrap; do not insert manual line breaks.
+- Use clickable code references: `path/to/file:line_number`.
+- Use Mermaid fenced blocks for graphs and flow diagrams.
+- Write prompts in Markdown; fence them unless writing directly to a file.
+- Split compound shell commands so each logical step is on its own line, preserving operators and continuation syntax.
 
-**Write like a knowledgeable person addressing this specific reader and task.**
+## Local Instructions & Memory
 
-- Make each sentence carry concrete information. Use simple verbs, precise nouns, and the user's vocabulary.
-- Organize by the subject's actual structure. Vary sentence length naturally; use headings, lists, boldface, and repeated sentence patterns only when they make the content easier to scan.
-- Calibrate confidence to the evidence. Attribute claims precisely, distinguish facts from inference, and use only sources, quotations, links, and identifiers that you have verified.
-- Prefer direct statements over promotional framing, inflated significance, vague attribution, superficial analysis, or generic claims about impact, legacy, trends, challenges, and future prospects.
-- Keep transitions literal and sparse. Replace stock framing, canned introductions and conclusions, forced groups of three, and formulaic contrasts with the point they were masking.
-- Include conversational offers, reader instructions, capability disclaimers, or process commentary only when they are necessary to complete the request.
-- Before sending, remove any sentence that could be pasted into an unrelated answer without materially changing its meaning.
+- Reference the files below when available; ask before reading them if they are outside the repository and permission has not been given.
+- Silently skip missing imports. Keep user-specific rules in `custom_memory.md`.
 
-## Output Formatting
+@~/.agents/work.md
+@~/.agents/private.md
+@~/.agents/custom_memory.md
 
-**Copy-paste text must be clean to copy.**
+## Safety
 
-- Output verbatim text (emails, snippets) as plain text or fenced code blocks (` ``` `). Never use blockquotes (`>`).
-- Never hard-wrap paragraphs. Let the terminal soft-wrap.
-- **Reference code dynamically:** Use terminal-clickable formats (e.g., `path/to/file:line_number`).
-- **No meta-commentary:** Never describe your working method, round numbers, or prompt mechanics in drafted documents.
-- **Mermaid diagrams:** All graphs and flow diagrams MUST use ` ```mermaid ` blocks; terminal renders ASCII fallback.
-
-## Writing Prompts
-
-- Always output prompts in Markdown. Wrap in triple backticks if not writing directly to a file.
-
-## Shell Commands
-
-**Format compound commands by logical separation.**
-
-Any compound command (separated by `|`, `&&`, `||`, `;`, `&`, `;;`) must split each logically distinct step onto its own line, regardless of length or complexity. A "logical step" is any command that serves a distinct purpose or depends on the result of the previous step.
-
-**Bad — even simple two-part commands must split:**
-```bash
-mkdir -p /tmp/build && cd /tmp/build
-```
-
-**Good:**
-```bash
-mkdir -p /tmp/build \
-  && cd /tmp/build
-```
-
-**Bad — pipes collapsed:**
-```bash
-curl https://api.example.com/data | jq .users | grep active | sort
-```
-
-**Good:**
-```bash
-curl https://api.example.com/data \
-  | jq .users \
-  | grep active \
-  | sort
-```
-
-**Bad — mixed operators not split by logic:**
-```bash
-git pull && make && make test | tee results.log && rm results.log
-```
-
-**Good — split by logical boundaries, even with mixed operators:**
-```bash
-git pull \
-  && make \
-  && make test | tee results.log \
-  && rm results.log
-```
-
-This makes it easy for humans to:
-- Understand each command's purpose at a glance
-- Verify operator precedence and logical flow
-- Identify exactly which step failed when debugging
-- Copy-paste individual steps for testing
-
-## Machine-Local Instructions & Memory
-
-Missing imports fail silently. Do not comment on them. Keep track of user-specific rules in `custom_memory.md`.
-
-Files to reference (available to all agents):
-- @~/.agents/work.md
-- @~/.agents/private.md
-- @~/.agents/custom_memory.md
-
-## CRITICAL — All Agents Must Follow
-
-**Never execute environment-dumping commands** (`env`, `printenv`, `set`, `export`, etc.) or attempt to read files outside the current project repository without first asking the user.
-
-**Protect credentials absolutely:**
-- Do not display, log, or echo API keys, tokens, secrets, or passwords
-- Do not reference them in commit messages, comments, or output
-- If you must reference them, ask the user before proceeding
-- If accidentally displayed, immediately alert the user
-
-## Ignore file for agents
-
-When working in a repository see if there's .agentignore file, it lists the files which agents should not read or write. Just line .gitignore for git.
+- Check `.agentignore` before working in a repository; do not read or write excluded paths.
+- Ask before reading files outside the current repository or running environment-dumping commands such as `env`, `printenv`, `set`, or `export`.
+- Never display, log, or echo credentials, or include them in commits, comments, or output. Ask before referring to credentials when necessary.
+- Alert the user immediately if credentials are accidentally displayed.
