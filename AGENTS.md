@@ -5,8 +5,10 @@
 - This repository manages tool configurations through Linux symlinks and Windows copies.
 - Edit repository sources, never installed symlink targets such as `~/.config/nvim/init.lua`.
 - Identify the affected tool and platform before editing; ask when tool-specific behavior is materially ambiguous.
-- Keep maintenance conventions here and user-facing setup and usage in READMEs.
-- Update this guide when repository structure changes; document complex configurations in their directory's README.
+- Write READMEs for humans: purpose, setup, usage, and necessary warnings.
+- Put coding-agent workflow and maintenance instructions in `AGENTS.md`, not READMEs.
+- Keep the root README concise; link to tool-specific READMEs for detailed human-facing guidance.
+- Update this guide when repository structure changes.
 - Read [README.md](README.md) for installation, updates, removal, and deployment behavior.
 
 ## Repository Map
@@ -72,3 +74,4 @@
 - Format Python tests: `tests/.venv/bin/python -m black tests/`.
 - Keep Black, Ruff, and pytest conventions in `pyproject.toml`, with matching Black and Ruff line lengths.
 - Activation is unnecessary; on native Windows, create the environment with `python` and use `tests/.venv/Scripts/python.exe`.
+- After changing the OpenCode changes plugin, run `node --test agents/opencode/plugins/changes/changes.test.mjs` from the repository root.

@@ -15,12 +15,6 @@ The initial mode is Git status. Data refreshes on server events and every three
 seconds. The API groups untracked files as added and does not expose staging
 details. Errors are shown rather than reported as a clean working tree.
 
-Run the plugin's data-loading tests with:
-
-```sh
-node --test agents/opencode/plugins/changes/changes.test.mjs
-```
-
 - `opencode.json` holds runtime settings.
 - `cli.json` holds OpenCode V2 terminal interface settings. Automatic copying on
   text selection is disabled with `terminal.copy: "manual"`.

@@ -1,82 +1,51 @@
-Clone with:
+# Dotfiles
+
+## Setup
+
 ```sh
 git clone --recurse-submodules -j8 https://github.com/bubleBoble/dotfiles.git
+cd dotfiles
+
+./install install             # All tools
+# Or select tools; agents installs shared ~/.agents files:
+./install install zed agents
+
+./install help
+./install help install
+
+# Native Windows (Git Bash uses the commands above and needs python3):
+python install install
 ```
 
-The installer automatically selects `config_windows.conf` on Windows (including
-Git Bash), or `config_linux.conf` on Linux and WSL. Each manifest lists that
-platform's tools and target paths; shared configuration sources stay in the same
-repository.
-
-Individual directories may contain their own `README.md` files with tool-specific setup and usage instructions.
-
-Install all tools listed for your platform with `./install install`, or select
-individual tools:
-
-```sh
-./install install claude
-./install install codex
-./install install opencode
-./install install dsh
-./install install vim
-./install install claude codex dsh
-```
-
-Run `./install help` for full CLI help, or `./install help install` for
-installation options. Help is available only through the `help` command; `-h`
-and `--help` are not supported.
-
-## Manifest and deployment behavior
-
-The same tool selection works with `remove` and `sync-back`; `agents` selects
-only `~/.agents`, not all coding agents.
-
-Linux uses symlinks. Windows copies files and directories without requiring
-symlink privileges; installed copies do not update automatically when the
-repository changes. Use `./install sync-back --include-files TOOL` to bring
-edits from installed copies back into the repository.
-
-On Windows, installation lists existing destination files that will be
-overwritten and asks for confirmation once, before making any changes. Enter `y`
-or `yes` to continue; any other answer, Enter, or closed input cancels the whole
-installation. No force flag is needed. Directory copies merge repository
-contents into the destination and preserve destination-only files. If a file
-must replace a directory, the prompt lists that directory and its contents
-before replacement. Existing destination symlinks are replaced, not followed.
-Back up installed edits before confirming; installation does not create backups.
-
-Without `--include-files`, sync-back skips copying and leaves repository files
-and directories unchanged. With the flag, selected repository sources are
-replaced with installed copies; directory mappings replace the whole directory
-rather than merge it. Symlinked targets are always skipped. Run `./install help
-sync-back` for the command's options.
-
-The Windows manifest omits tmux, zsh, and the Linux DSH desktop launcher. Zed
-uses `$APPDATA/zed` on Windows and `$HOME/.config/zed` on Linux. Git Bash needs
-Python 3 available as `python3` for `./install`, or run `python install install`
-with native Windows Python.
+See individual tool READMEs for additional setup.
 
 ## Updating and removing configurations
 
-- Pull repository updates with `git pull`, then update submodules with `git submodule update --recursive`.
-- Run `./install install` after updating, or append tool names to limit deployment.
-- Restart affected tools if they cache configuration on startup.
-- Run `./install remove TOOL` to remove a selected tool, or omit tool names for all configured tools.
-- On Linux, removal preserves regular files unless `--include-files` is supplied; use that flag only when those files should also be removed.
+```sh
+git pull
+git submodule update --recursive
+./install install             # Refresh installed configurations; restart affected tools
+
+./install remove zed          # Omit tool names to remove all
+# Linux removal preserves regular files unless --include-files is supplied.
+
+# Copy installed edits back; replaces repository files and whole mapped directories:
+./install sync-back --include-files zed
+# Symlinked targets are skipped; without --include-files, nothing is copied back.
+```
+
+Back up installed edits before reinstalling on Windows: overwrites require confirmation, but no backups are created. Directory copies merge; replacing a directory with a file removes its contents. Destination symlinks are replaced, not followed.
 
 ### Refreshing agent symlinks
 
-- After migrating shared asset sources, remove and reinstall the managed Linux symlinks; installation alone preserves existing symlinks, even dangling ones.
-- These commands leave regular files untouched:
-
 ```sh
+# Linux: replace old asset links after migration; regular files remain untouched.
+# Installation alone preserves existing links, including dangling ones.
 ./install remove claude pi omp codex dsh zed
 ./install install claude pi omp codex dsh zed
+# Windows: reinstall only; no removal needed.
 ```
-
-- On Windows, rerun `./install install TOOL` to update copies; removal is not required.
 
 ## Tool requirements
 
-Zed shell formatting requires `shfmt` on `PATH`. Use a version with Zsh support
-when editing Zsh files.
+Zed shell formatting needs `shfmt` on `PATH`, with Zsh support when editing Zsh files.

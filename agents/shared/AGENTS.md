@@ -36,6 +36,13 @@
 - Name what an ID refers to: "the migration script (PR #45)", not just "PR #45".
 - Organize around the subject; use headings, lists, and emphasis only when they help scanning.
 
+## Documentation Audiences
+
+- Write `README.md` and similar user-facing documentation for humans: purpose, setup, usage, and necessary warnings.
+- Put coding-agent instructions in `AGENTS.md` or the agent's equivalent instruction file, not READMEs.
+- Keep READMEs concise; omit agent workflow, response rules, and agent-only maintenance instructions.
+- Link to detailed documentation when needed instead of duplicating it; retain information humans need to use the project safely.
+
 ## Formatting
 
 - Organize agent instruction files such as `AGENTS.md` and `CLAUDE.md` with short headings and concise bullet points, not long multi-sentence paragraphs.
