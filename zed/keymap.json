@@ -71,6 +71,9 @@
     {
         "context": "Terminal",
         "bindings": {
+            "ctrl-a c": "workspace::NewTerminal",
+            "ctrl-a n": "pane::ActivateNextItem",
+            "ctrl-a p": "pane::ActivatePreviousItem",
             // Send a literal Ctrl-A instead of starting a pane chord.
             "ctrl-a ctrl-a": ["terminal::SendText", "\u0001"],
         },

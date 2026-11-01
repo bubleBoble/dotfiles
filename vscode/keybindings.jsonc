@@ -23,6 +23,7 @@
     { "key": "ctrl+shift+e", "command": "-workbench.view.explorer" },
     { "key": "ctrl+shift+e", "command": "workbench.view.explorer", "when": "!explorerViewletVisible" },
     { "key": "ctrl+shift+e", "command": "workbench.action.toggleSidebarVisibility", "when": "explorerViewletVisible" },
+    { "key": "ctrl+shift+g", "command": "workbench.view.scm" },
 
     // Shared editor actions.
     { "key": "ctrl+q", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus && !inDebugRepl" },
@@ -31,6 +32,7 @@
     { "key": "alt+shift+t", "command": "workbench.action.showMultipleEditorTabs", "when": "config.workbench.editor.showTabs == 'none'" },
     { "key": "alt+shift+b", "command": "breadcrumbs.toggle", "when": "editorTextFocus && !inDebugRepl" },
     { "key": "alt+shift+f", "command": "editor.action.formatSelection", "when": "editorTextFocus && !editorReadonly && !inDebugRepl" },
+    { "key": "ctrl+k q", "command": "rewrap.rewrapComment", "when": "editorTextFocus && !editorReadonly && !inDebugRepl" },
     { "key": "ctrl+'", "command": "editor.action.blockComment", "when": "editorTextFocus && !editorReadonly && !inDebugRepl" },
     { "key": "ctrl+a a", "command": "editor.action.selectAll", "when": "editorTextFocus && !inDebugRepl" },
 
@@ -61,7 +63,9 @@
     { "key": "ctrl+a x", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus && !inDebugRepl" },
     { "key": "ctrl+a z", "command": "workbench.action.toggleMaximizeEditorGroup", "when": "editorTextFocus && !inDebugRepl" },
     // Terminal splits follow the panel's configured orientation; no fake directional split.
-    { "key": "ctrl+a c", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
+    { "key": "ctrl+a c", "command": "workbench.action.terminal.new", "when": "terminalFocus" },
+    { "key": "ctrl+a n", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
+    { "key": "ctrl+a p", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
     { "key": "ctrl+a shift+5", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
     { "key": "ctrl+a shift+'", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
     { "key": "ctrl+a x", "command": "workbench.action.terminal.kill", "when": "terminalFocus" },

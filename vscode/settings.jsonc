@@ -34,6 +34,7 @@
     "editor.renderWhitespace": "none",
     "editor.accessibilitySupport": "off",
     "editor.selectionClipboard": false,
+    "editor.dragAndDrop": false,
     "editor.guides.indentation": false,
     "editor.guides.highlightActiveIndentation": false,
     "editor.lightbulb.enabled": "off",
@@ -123,6 +124,8 @@
         "editor.formatOnSave": false,
         "editor.wordWrap": "off"
     },
+    "python-envs.terminal.autoActivationType": "off",
+    "python.terminal.activateEnvironment": false,
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
@@ -138,13 +141,16 @@
         "--indent",
         "4"
     ],
-    "window.commandCenter": false,
     "chat.titleBar.signIn.enabled": false,
     "workbench.layoutControl.enabled": false,
-    "chat.titleBar.openInAgentsWindow.enabled": false,
     "workbench.browser.showInTitleBar": false,
     "workbench.editor.useModal": "off",
     "window.menuBarVisibility": "compact",
     "workbench.colorTheme": "Dark Modern",
-    "workbench.editor.empty.hint": "hidden"
+    "workbench.editor.empty.hint": "hidden",
+    "makefile.configureOnOpen": true,
+    "terminal.integrated.initialHint": false,
+    "workbench.editor.showTabs": "none",
+    "workbench.editor.editorActionsLocation": "hidden",
+    "window.commandCenter": false
 }

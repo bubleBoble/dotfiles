@@ -173,6 +173,8 @@ When adding or modifying configurations:
 
 ## Zed Configuration
 
+- **Editor parity:** Keep Zed and VS Code settings and keymaps synced as closely as each editor supports. When changing either editor, apply the equivalent behavior to the other and document unavoidable differences in `vscode/README.md`.
+
 - **Keymaps:** Keep `zed/keymap.json` organized into shared shortcuts, default-binding overrides, and Vim-only editor shortcuts, with slash-banner section comments. Keep mode-independent bindings in the shared section, even if their keys are Vim-style.
 - **Python formatting:** `zed/settings.json` uses the Ruff language server for formatting and linting, including the `Alt+Shift+F` format-selection binding. Editor formatting reads `[tool.ruff]` in each project's `pyproject.toml`, not `[tool.black]`. Zed manages the Ruff language server; a global Black executable is not required.
 - **Shell formatting:** Use four spaces per indentation level for shell editing and formatting. See [README.md — Tool requirements](README.md#tool-requirements) for the `shfmt` dependency.

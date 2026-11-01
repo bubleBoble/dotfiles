@@ -66,7 +66,9 @@ Zed's extension IDs are not VS Code extension IDs. HTML and Git support are buil
 - Vim is disabled, with no Vim-specific keymaps. Word wrap, CodeLens, inlay hints, indentation guides, and cursor animation/blinking are off. Whitespace markers and editor sticky scroll are off; semantic highlighting remains on.
 - Editor inline suggestions, Copilot completions and next-edit suggestions, and VS Code's terminal suggestion popup are disabled. Chat and terminal agents remain available. Shell-generated suggestions are controlled separately by the shell configuration.
 - The terminal's "History restored" banner, sticky scroll, and hover command-guide bars are hidden. Terminal session persistence and shell integration remain enabled.
+- Python virtual environments do not activate automatically in new terminals. Interpreter selection for running and debugging remains separate.
 - Current-line inline blame is disabled for both built-in Git and GitLens.
+- Dragging selected editor text to move or copy it is disabled.
 - Formatting is manual. Saving does not format files, trim trailing whitespace, or insert a final newline. Markdown explicitly keeps format-on-save off.
 - JSON and JSONC use four spaces and Prettier. Python uses Ruff, with `RUF012` and `I001` ignored. Shell formatting uses shfmt with four spaces.
 - `Alt+Shift+F` means **Format Selection**, matching Zed rather than VS Code's usual Format Document shortcut. A language provider must support range formatting. Use **Format Document** from the Command Palette when it does not.
@@ -91,7 +93,9 @@ These shortcuts work without Vim:
 | `Alt+Q` | Toggle the secondary sidebar |
 | `Alt+E` | Maximize the active editor group, or the terminal panel when terminal-focused |
 | `Ctrl+Shift+R` | Reveal the active file in Explorer |
+| `Ctrl+K Q` | Rewrap comments or text with Rewrap Revived |
 | `Ctrl+Shift+E` | Focus the Explorer, or hide the sidebar when the Explorer is visible |
+| `Ctrl+Shift+G` | Open/focus Source Control |
 | `Alt+Shift+T` | Toggle normal-layout editor tabs, regardless of focus |
 | `Alt+Shift+B` | Toggle breadcrumbs |
 | `Alt+Shift+F` | Format the selection |
@@ -99,7 +103,8 @@ These shortcuts work without Vim:
 | `Ctrl+A H/J/K/L` or `Ctrl+A` then an arrow | Focus left/down/up/right |
 | `Ctrl+A %` | Split a text editor right |
 | `Ctrl+A "` | Split a text editor down |
-| `Ctrl+A C` | Split an editor right, or split the active terminal |
+| `Ctrl+A C` | Split an editor right, or create a separate terminal |
+| `Ctrl+A N/P` | Focus the next/previous terminal tab/group (also configured in Zed) |
 | `Ctrl+A X` | Close an editor, or terminate the active terminal |
 | `Ctrl+A Z` | Maximize an editor group or terminal panel |
 | `Ctrl+A Ctrl+A` | Send a literal Ctrl+A to the terminal shell |
@@ -117,7 +122,7 @@ Terminal chords are handled by VS Code, not sent to the shell. They can intercep
 - **Projects:** Zed's previous/next project shortcuts (`Alt+W`, `Alt+D`) and workspace sidebar (`Alt+Shift+W`) have no faithful built-in equivalent. They are not reassigned to unrelated editor-tab actions. Use VS Code's Open Recent/window commands for projects.
 - **Layout:** move Explorer, Outline, and Source Control to the primary left sidebar, Chat to the right sidebar, and Terminal/Debug Console to the bottom as needed. Drag dividers to reproduce Zed's widths: Explorer 450 px, Git 800 px, agent 900 px, and terminal height 600 px. VS Code persists layout separately; user settings cannot reliably seed those pixel sizes, every view position, or the source's start-hidden behavior. The agent thread sidebar is extension-specific.
 - **Layout defaults:** the activity bar and status bar are hidden in all windows, and the terminal panel hides on startup. Primary sidebar (Explorer) visibility is per-window workspace state; user settings cannot force it closed in new windows. Use `Ctrl+Shift+E` to close it.
-- **Zoom and splitting:** VS Code maximizes editor groups and panels through separate commands. Terminal `Ctrl+A C`, `Ctrl+A %`, and `Ctrl+A "` all split the terminal following the panel's configured orientation; Zed's directional split has no equivalent. Native VS Code terminal split shortcuts remain available.
+- **Zoom and splitting:** VS Code maximizes editor groups and panels through separate commands. Terminal `Ctrl+A C` creates a separate terminal; `Ctrl+A %` and `Ctrl+A "` split the active terminal following the panel's configured orientation. Zed's directional split has no equivalent. Native VS Code terminal split shortcuts remain available.
 - **Tabs:** the tab toggle changes the profile-wide normal-layout setting and restores multiple tabs, not a previous single-tab layout. Zen Mode can override it. Zed's per-pane tabbar state is not available.
 - **Appearance:** One Dark Pro is used instead of One Dark Pro Glass. Glass/blur, Zed's exact chrome, separate 22 px UI font and agent font controls, close-button visibility details, title/branch widgets, and panel-specific toolbars do not map exactly. VS Code zoom scales the entire window, so it is not forced to imitate only Zed's UI font. The inactive Flexoki light theme is not selected or installed.
 - **AI and collaboration:** Zed model IDs, subscriptions, edit-prediction provider, ACP servers, tool approvals, sandbox permissions, call muting, and agent thread UI do not transfer. VS Code AI tools need their own installation, sign-in, model selection, and permissions. No credentials or automatic tool approvals are copied.
