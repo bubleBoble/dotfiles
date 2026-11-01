@@ -67,6 +67,8 @@
     "git.enabled": true,
     "git.openDiffOnClick": true,
     "git.blame.editorDecoration.enabled": false,
+    "git.detectWorktrees": true,
+    "git.detectSubmodules": true,
     "gitlens.currentLine.enabled": false,
     "github.showAvatar": true,
     "scm.defaultViewMode": "tree",
@@ -152,5 +154,7 @@
     "terminal.integrated.initialHint": false,
     "workbench.editor.showTabs": "none",
     "workbench.editor.editorActionsLocation": "hidden",
-    "window.commandCenter": false
+    "window.commandCenter": false,
+    "chat.titleBar.openInAgentsWindow.enabled": false,
+    "workbench.activityBar.location": "hidden"
 }
