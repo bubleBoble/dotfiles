@@ -44,6 +44,16 @@
 - Link to detailed documentation when needed instead of duplicating it; retain information humans need to use the project safely.
 - For skills and other agent-facing documentation, keep multi-line helper scripts in separate files and link to them from Markdown. Single-line commands, such as `cmake --build ./vsc_cmake_build`, may stay inline or in code blocks.
 
+## Reusable Project Knowledge
+
+- Preserve non-obvious, reusable knowledge gained during project discovery in project-local skills; extend an existing skill when it covers the same workflow.
+- Record prerequisites, applicability limits, expected results, and what was actually verified; label untested steps rather than presenting them as proven.
+- Link to authoritative project files and commands instead of duplicating information that is easy to look up.
+- Put reusable multi-step automation in related scripts, following project conventions; prefer existing commands and build targets over new wrappers.
+- Keep skills discoverable through the project's established mechanism or a short pointer in its agent instructions.
+- Update affected skills and scripts when changing the behavior they describe.
+- Keep skills focused on durable know-how, not work logs, task status, or session history.
+
 ## Formatting
 
 - Organize agent instruction files such as `AGENTS.md` and `CLAUDE.md` with short headings and concise bullet points, not long multi-sentence paragraphs.
