@@ -255,15 +255,15 @@
     "theme": {
         "mode": "dark",
         "light": "Flexoki Light",
-        "dark": "Zedokai Darker (Filter Spectrum)",
+        "dark": "One Dark Pro Max",
     },
-    "theme_overrides": {
-        "One Dark Pro Max": {
-            "background.appearance": "transparent",
-            "background": "#10101485",
-            "editor.background": "#10101485",
-        },
-    },
+    // "theme_overrides": {
+    //     "One Dark Pro Max": {
+    //         "background.appearance": "transparent",
+    //         "background": "#10101485",
+    //         "editor.background": "#10101485",
+    //     },
+    // },
     "close_panel_on_toggle": true,
     "sticky_scroll": {
         "enabled": true,
