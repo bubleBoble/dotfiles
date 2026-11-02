@@ -7,7 +7,34 @@
     { "key": "ctrl+a", "command": "-editor.action.selectAll", "when": "editorTextFocus" },
 
     // Shared workspace actions. VS Code has no Zed multi-project sidebar/history equivalent.
-    { "key": "alt+q", "command": "workbench.action.toggleAuxiliaryBar" },
+    // Park editor terminals without killing the shell; restore the active panel terminal.
+    { "key": "alt+q", "command": "workbench.action.terminal.createTerminalEditorSide", "when": "!terminalEditorActive && !dotfiles.terminalParked" },
+    {
+        "key": "alt+q",
+        "command": "runCommands",
+        "when": "!terminalEditorActive && dotfiles.terminalParked",
+        "args": {
+            "commands": [
+                "workbench.action.terminal.focus",
+                "workbench.action.terminal.moveToEditor",
+                "workbench.action.moveEditorToNextGroup",
+                "workbench.action.closePanel",
+                { "command": "setContext", "args": ["dotfiles.terminalParked", false] }
+            ]
+        }
+    },
+    {
+        "key": "alt+q",
+        "command": "runCommands",
+        "when": "terminalEditorActive",
+        "args": {
+            "commands": [
+                "workbench.action.terminal.moveToTerminalPanel",
+                "workbench.action.closePanel",
+                { "command": "setContext", "args": ["dotfiles.terminalParked", true] }
+            ]
+        }
+    },
     { "key": "ctrl+alt+,", "command": "workbench.action.openSettingsJson" },
     { "key": "ctrl+shift+a", "command": "workbench.action.toggleActivityBarVisibility" },
     { "key": "ctrl+k l", "command": "workbench.action.toggleStatusbarVisibility" },

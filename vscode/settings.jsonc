@@ -166,5 +166,8 @@
     "workbench.editor.showTabs": "none",
     "workbench.activityBar.location": "hidden",
     "workbench.statusBar.visible": false,
-    "cmake.languageServerOnlyMode": true
+    "cmake.languageServerOnlyMode": true,
+    "cmake.automaticReconfigure": false,
+    "atlascode.bitbucket.enabled": true,
+    "atlascode.jira.enabled": false
 }

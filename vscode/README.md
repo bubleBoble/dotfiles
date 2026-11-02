@@ -90,7 +90,7 @@ These shortcuts work without Vim:
 | `Ctrl+Alt+/` | Open the integrated browser |
 | `Ctrl+'` | Toggle a block comment, such as `/* ... */` in C/C++ |
 | `Alt+R` | Toggle the terminal panel/focus |
-| `Alt+Q` | Toggle the secondary sidebar |
+| `Alt+Q` | Create a terminal beside the editor, or park/restore it through the hidden terminal panel |
 | `Alt+E` | Maximize the active editor group, or the terminal panel when terminal-focused |
 | `Ctrl+Shift+R` | Reveal the active file in Explorer |
 | `Ctrl+K Q` | Rewrap comments or text with Rewrap Revived |
@@ -108,6 +108,8 @@ These shortcuts work without Vim:
 | `Ctrl+A X` | Close an editor, or terminate the active terminal |
 | `Ctrl+A Z` | Maximize an editor group or terminal panel |
 | `Ctrl+A Ctrl+A` | Send a literal Ctrl+A to the terminal shell |
+
+`Alt+Q` parks the active editor terminal without stopping its shell. Press it again from a non-terminal editor to restore the active panel terminal beside your code. Selecting a different panel terminal changes which terminal is restored. The parked-state flag resets when VS Code reloads.
 
 VS Code uses `Ctrl+K` as a prefix for many built-in commands. Chords are sequential: press and release `Ctrl+K`, then press `L`, `G`, or `Z`. The graph shortcut also accepts `Ctrl+K Ctrl+G`. No custom bare `Ctrl+K` binding intercepts these chords in Explorer.
 
