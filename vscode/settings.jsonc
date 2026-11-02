@@ -6,7 +6,7 @@
     "editor.fontWeight": "100",
     "editor.fontLigatures": "'calt' off, 'liga' off",
     "terminal.integrated.fontFamily": "'ComicShannsMono Nerd Font', monospace",
-    "terminal.integrated.fontSize": 18,
+    "terminal.integrated.fontSize": 15,
     "terminal.integrated.fontWeight": "400",
     "scm.inputFontSize": 18,
     "chat.fontSize": 22,
@@ -150,11 +150,20 @@
     "window.menuBarVisibility": "compact",
     "workbench.colorTheme": "Dark Modern",
     "workbench.editor.empty.hint": "hidden",
-    "makefile.configureOnOpen": true,
+    "makefile.configureOnOpen": false,
     "terminal.integrated.initialHint": false,
-    "workbench.editor.showTabs": "none",
     "workbench.editor.editorActionsLocation": "hidden",
     "window.commandCenter": false,
     "chat.titleBar.openInAgentsWindow.enabled": false,
-    "workbench.activityBar.location": "hidden"
+    "remote.SSH.remotePlatform": {
+        "buble_rpi": "linux"
+    },
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
+    "cmake.configureOnOpen": false,
+    "cmake.configureOnEdit": false,
+    "workbench.editor.showTabs": "none",
+    "workbench.activityBar.location": "hidden",
+    "workbench.statusBar.visible": false
 }

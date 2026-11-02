@@ -24,7 +24,7 @@ code --profile Default \
     --install-extension ms-vscode.remote-explorer \
     --install-extension pkief.material-icon-theme \
     --install-extension pkief.material-product-icons \
-    --install-extension tomoki1207.pdf
+    --install-extension tomoki1207.pdf \
     --install-extension cheshirekow.cmake-format \
     --install-extension eclipse-cdt.memory-inspector \
     --install-extension eclipse-cdt.serial-monitor \
@@ -54,9 +54,9 @@ code --profile Default \
     --install-extension surajbarkale.ninja \
     --install-extension tamasfe.even-better-toml \
     --install-extension trond-snekvik.gnu-mapfiles \
-    --install-extension zixuanwang.linkerscript
+    --install-extension zixuanwang.linkerscript \
     --install-extension bierner.markdown-preview-github-styles \
-    --install-extension shd101wyy.markdown-preview-enhanced
+    --install-extension shd101wyy.markdown-preview-enhanced \
     --install-extension ms-vscode.cmake-tools \
     --install-extension usernamehw.errorlens
 ```
