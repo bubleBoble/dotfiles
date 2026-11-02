@@ -42,6 +42,7 @@
 - Put coding-agent instructions in `AGENTS.md` or the agent's equivalent instruction file, not READMEs.
 - Keep READMEs concise; omit agent workflow, response rules, and agent-only maintenance instructions.
 - Link to detailed documentation when needed instead of duplicating it; retain information humans need to use the project safely.
+- For skills and other agent-facing documentation, keep multi-line helper scripts in separate files and link to them from Markdown. Single-line commands, such as `cmake --build ./vsc_cmake_build`, may stay inline or in code blocks.
 
 ## Formatting
 
