@@ -25,6 +25,32 @@ The installer symlinks `~/.config/tern/settings.json` on Linux and copies `%APPD
 
 If settings already exist, back them up first. Windows lists the file and asks before overwriting it. Linux leaves existing files and symlinks unchanged: after backing up, move an existing regular `settings.json` out of the way and rerun the install command.
 
+## Herdr-style shortcuts
+
+These bindings apply on Linux and Windows. Press and release `Ctrl+A` before each prefix sequence.
+
+| Action | Keys after `Ctrl+A` |
+| --- | --- |
+| Split side by side | `%` |
+| Split top/bottom | `"` |
+| Focus pane left/down/up/right | `h` / `j` / `k` / `l`, or arrow keys |
+| Next/previous pane | `Tab` / `Shift+Tab` |
+| New tab | `c` |
+| Select tab 1–9 | `1`–`9` |
+| Rename tab | `,` |
+| Close pane/tab | `x` / `Shift+X` |
+| Toggle pane zoom | `z` |
+| Toggle sidebar | `a` |
+| Resize divider left/down/up/right | `r`, then `h` / `j` / `k` / `l`, or an arrow key |
+
+Switch tabs directly with `Alt+Left` / `Alt+Right` or `Alt+H` / `Alt+L`.
+
+Resizing is a three-key sequence, not Herdr's persistent resize mode: repeat `Ctrl+A`, `r`, direction for each adjustment. Herdr workspace navigation, indexed workspace selection, and detach are not mapped because Tern does not document equivalent actions. Other Tern default shortcuts remain available except where these bindings override them.
+
+The prefix consumes `Ctrl+A`, so it no longer goes straight to the shell's start-of-line shortcut. When running Herdr inside Tern, these shared shortcuts are handled by Tern first.
+
+See Tern's [binding syntax](https://docs.stencil.so/tern/guides/commands.html#binds) and [built-in actions](https://docs.stencil.so/tern/reference/actions.html).
+
 ## Save later changes
 
 On Windows, quit Tern, then copy its installed settings back into this repository:
