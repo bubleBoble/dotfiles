@@ -1,0 +1,26 @@
+{
+  "theme": "Dark",
+  "theme_dark": "dark-cosmos",
+  "link_click": "Command",
+  "font_size": 22,
+  "ui_font_size": 19,
+  "font_family": "ComicShannsMono Nerd Font",
+  "font_weight": 600,
+  "tabs": "Vertical",
+  "pane_headers": "Always",
+  "opacity": 70,
+  "density": "Islands",
+  "surface_tab_width": 4,
+  "prefs_width": 481,
+  "files": {
+    "wrap_prose": false
+  },
+  "file_tree": {
+    "open": true,
+    "width": 379
+  },
+  "git": {
+    "diff_hunk_view": true,
+    "path_tree": true
+  }
+}

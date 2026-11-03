@@ -27,7 +27,12 @@ loop:
 web_search:
   enabled: true
 modelRoles:
-  default: openai-codex/gpt-6.1-sol:off
+  default: openai-codex/gpt-6.1-sol:medium
+  smol: "@default:low"
+  slow: "@default:high"
+  plan: "@slow"
+  task: "@default"
+  review: "@slow"
 colorBlindMode: false
 terminal:
   showProgress: false
@@ -56,5 +61,11 @@ bash:
 task:
   disabledAgents:
     - agent-creator-demo
+  agentModelOverrides:
+    scout: "@smol"
+    sonic: "@smol"
+    task: "@task"
+    reviewer: "@review"
+    security-reviewer: "@review"
 dev:
   autoqaConsent: granted

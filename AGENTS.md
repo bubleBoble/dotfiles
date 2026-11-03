@@ -20,6 +20,7 @@
 - Read [zsh/README.md](zsh/README.md) before changing shell startup.
 - `zed/` and `vscode/`: editor configurations; VS Code has `lin` and `win` variants.
 - Read [vscode/README.md](vscode/README.md) for extensions, shortcuts, and editor differences.
+- `tern/`: shared terminal settings for Linux and Windows; see [tern/README.md](tern/README.md) for setup and sync-back.
 - `agents/dsh/`: DSH Web profile and Linux launcher, selected with `dsh`.
 - Read [agents/dsh/README.md](agents/dsh/README.md) before changing profile migration or backup scope.
 - Other tool directories: `kitty/`, `vim/`, `yazi/`, `herdr/`, `gdb/`, and `gnome/`; `future/` holds experimental or archived configurations.

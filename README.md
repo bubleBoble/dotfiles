@@ -17,7 +17,7 @@ cd dotfiles
 python install install
 ```
 
-See individual tool READMEs for additional setup.
+See individual tool READMEs for additional setup, including [Tern](tern/README.md).
 
 ## Updating and removing configurations
 
