@@ -38,6 +38,8 @@
 
 ## Documentation Audiences
 
+- Leave README files unchanged unless the user explicitly requests README edits; if a code change makes a README inaccurate, report the discrepancy instead.
+- Update other user-facing documentation or changelogs only when the change affects their accuracy or necessary setup, usage, or safety information; code changes alone do not require documentation edits.
 - Write `README.md` and similar user-facing documentation for humans: purpose, setup, usage, and necessary warnings.
 - Put coding-agent instructions in `AGENTS.md` or the agent's equivalent instruction file, not READMEs.
 - Keep READMEs concise; omit agent workflow, response rules, and agent-only maintenance instructions.

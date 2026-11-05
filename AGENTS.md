@@ -15,6 +15,7 @@
 
 - `agents/`: agent-specific configurations; `agents/shared/`: universal standards, skills, hooks, and extensions.
 - `agents/external/`: third-party checkouts; deploy assets directly from them.
+- `agents/omp/agent/commands/`: reusable omp slash-command templates; use `$ARGUMENTS` for inline input.
 - `nvim/`: Neovim; shared dependency specs live in `lua/plugins/deps/`.
 - `tmux/` and `zsh/`: configurations with plugin submodules; clone with `--recurse-submodules` and preserve submodule changes.
 - Read [zsh/README.md](zsh/README.md) before changing shell startup.
