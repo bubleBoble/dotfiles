@@ -1,6 +1,6 @@
 # Tern
 
-Shared Tern terminal settings for Linux and Windows. Only `settings.json` is managed; login credentials, sessions, file history, logs, and runtime state stay on each machine.
+Shared Tern terminal settings and CSS themes for Linux and Windows. Login credentials, sessions, file history, logs, and runtime state stay on each machine.
 
 ## Setup
 
@@ -21,9 +21,17 @@ Shared Tern terminal settings for Linux and Windows. Only `settings.json` is man
 
 5. Start Tern again.
 
-The installer symlinks `~/.config/tern/settings.json` on Linux and copies `%APPDATA%\Tern\settings.json` on Windows. These are Tern's [default configuration directories](https://docs.stencil.so/tern/concepts/packages.html#directories); custom `XDG_CONFIG_HOME` or `TERN_CONFIG_DIR` locations are not targeted.
+The installer symlinks `settings.json` and `themes/` into `~/.config/tern/` on Linux. On Windows, it copies `settings_windows.json` as `%APPDATA%\Tern\settings.json` and copies `themes/` alongside it. These are Tern's [default configuration directories](https://docs.stencil.so/tern/concepts/packages.html#directories); custom `XDG_CONFIG_HOME` or `TERN_CONFIG_DIR` locations are not targeted.
 
 If settings already exist, back them up first. Windows lists the file and asks before overwriting it. Linux leaves existing files and symlinks unchanged: after backing up, move an existing regular `settings.json` out of the way and rerun the install command.
+
+The Windows settings select Git Bash at `C:/Users/adam.domrazek/AppData/Local/Programs/Git/bin/bash.exe`; change `shell` in `settings_windows.json` if Git is installed elsewhere. Tern starts it as a login shell. Linux keeps its default shell.
+
+## Sidebar appearance
+
+The `dark-cosmos-sidebar` theme inherits `dark-cosmos` and displays hosts, sessions, and tabs as three indented levels. Rounded outlines sit inside each button, leaving space between neighboring outlines without changing Tern's tab-row sizing. Borders use the theme's subtle line color; host and session headings use secondary text with bold and semibold weights. Tab labels use normal weight. Native hover backgrounds and active-tab highlights stay unchanged. No plugin is needed.
+
+Edit `themes/dark-cosmos-sidebar.css` to adjust the sidebar. Select `dark-cosmos` in Settings › Appearance › Theme to return to the stock appearance. See Tern's [custom themes](https://docs.stencil.so/tern/guides/themes.md).
 
 ## Herdr-style shortcuts
 
