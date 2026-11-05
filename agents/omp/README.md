@@ -2,21 +2,22 @@
 
 ## Models and agents
 
-The configuration uses Codex `gpt-6.1-sol` with separate thinking levels:
+The configuration uses Codex Astra as the lead model and Sol for routine work:
 
-| Role | Thinking | Used for |
-| --- | --- | --- |
-| `default` | medium | Daily conversation and implementation |
-| `smol` | low | Bundled `scout` and `sonic` agents |
-| `slow` | high | Explicit deep-analysis sessions |
-| `plan` | high | Plan mode |
-| `task` | medium | Bundled general-purpose task agent |
-| `review` | high | Bundled `reviewer` and `security-reviewer` agents |
+| Role | Model | Thinking | Used for |
+| --- | --- | --- | --- |
+| `default` | `gpt-6-astra` | medium | Lead agent and integration |
+| `smol` | `gpt-6.1-sol` | low | Lightweight agent work |
+| `slow` | `gpt-6-astra` | high | Explicit deep-analysis sessions |
+| `plan` | `gpt-6-astra` | high | Plan mode |
+| `task` | `gpt-6.1-sol` | medium | General-purpose implementation |
+| `review` | `gpt-6-astra` | high | Review |
 
-Roles reference `default`, `smol`, or `slow`, so changing the base model does not
-require editing every agent mapping. These are effort differences, not separate
-model price tiers. The bundled agent prompts and tool restrictions stay intact.
-No custom agent files are needed.
+`task.perCallModel` is enabled, so the lead agent can choose an approved model
+for each delegated task. The explicit `task.agentModelOverrides` entries are
+removed because they conflict with per-call model choices. Calls without a model
+use the bundled agent's routing. The bundled prompts and tool restrictions stay
+intact; no custom agent files are needed.
 
 - Use `Alt+M` to inspect or assign model roles.
 - Toggle plan mode with `Alt+Shift+P`; assigning the `plan` role alone does not enter it.
@@ -29,9 +30,8 @@ Roles select models when a workload runs; they do not force delegation on every
 request. Add a custom agent only when a recurring job needs instructions or tool
 restrictions that the bundled agents do not provide.
 
-Routing was smoke-tested with OMP v18.14.1: read-only `sonic` and `reviewer`
-tasks completed on `gpt-6.1-sol` at low and high effort respectively. The same
-model provider is shared, so this is not an independent-model review.
+This routing configuration has not been smoke-tested. Model selection permits
+delegation; it does not guarantee that every request uses both models.
 
 ## Interface
 
