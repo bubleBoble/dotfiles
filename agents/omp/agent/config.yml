@@ -11,7 +11,8 @@ statusLine:
   leftSegments:
     - model
     - status
-  rightSegments: []
+  rightSegments:
+    - usage
   contextLine: "off"
   sessionAccent: false
   transparent: true
@@ -27,12 +28,7 @@ loop:
 web_search:
   enabled: true
 modelRoles:
-  default: openai-codex/gpt-6.1-sol:medium
-  smol: "@default:low"
-  slow: "@default:high"
-  plan: "@slow"
-  task: "@default"
-  review: "@slow"
+  default: openai-codex/gpt-6.1-sol:off
 colorBlindMode: false
 terminal:
   showProgress: false
