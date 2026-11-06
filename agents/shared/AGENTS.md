@@ -1,23 +1,26 @@
-# Shared Coding Standards
+# Shared Agent Instructions
 
-## Decisions & Scope
+## Agent Coding Rules
 
-- Ask only when ambiguity would materially change the work; otherwise state the assumption and proceed.
+- Long function and variable names are fine - it's not 1982.
+- Prefer concise code.
+- No cryptic nested code, example: python nested single-line for loop with one or many if statements - BIG NO NO.
+- Optimize for human readability
 - Propose simpler approaches when appropriate. Add no unrequested features, abstractions, flexibility, or error handling for impossible cases.
 - Read only the code needed for the task.
 - Keep every change tied to the request. Match existing style; leave unrelated code and formatting unchanged.
-- Remove code made unused by your changes; leave pre-existing dead code unless asked.
-- Validate inputs and return early when appropriate.
+- Remove new dead code if it is a result of your changes; leave pre-existing dead code unless asked.
+- Code comments should explain what a given piece of code does, not how it does it, unless it is in some way special.
+- Do not write code comments if the code is self-explanatory.
 
-## Execution & Critique
+## User Request Execution
 
-- Define verifiable goals. For multi-step work, state a brief plan: `1. [Step] → verify: [check]`.
-- Work independently until the goal is complete and verified.
-- For proposals and critiques, state check depth: `Checked: … · Unchecked: …`.
+- Define verifiable goals.
 - Present new options as candidates, not winners. Use critique verdicts: "holds" or "fails, because <file:line>".
 - Cite new evidence when reversing a judgment.
+- Do not assume the user is always correct. Critically evaluate their assumptions, claims, and proposed solutions. Challenge them when evidence suggests otherwise.
 
-## Git & Commits
+## Agent Git Usage and Commits
 
 - Stage and commit only when explicitly requested.
 - Preserve existing `user.name` and `user.email`.
@@ -26,7 +29,24 @@
 - Use an imperative, capitalized subject without a final period; aim for 50 characters or fewer.
 - Add a body only for useful details not in the subject. Separate it with a blank line and wrap at 72 characters.
 
-## Writing
+## READMEs, AGENTS.md and related files
+
+- Leave README files unchanged unless the user explicitly requests README edits; if a code change makes a README inaccurate, report the discrepancy instead.
+- Update other user-facing documentation or changelogs only when the change affects their accuracy or necessary setup, usage, or safety information.
+- Put coding-agent instructions in `AGENTS.md` or the agent's equivalent instruction file, not READMEs.
+- Link to detailed documentation when needed instead of duplicating it, when documentation resides in the current repository.
+
+## Skills
+
+- You can develop your own skills for each project when you decide that the action is repeatable or could be useful for future agents working on the same codebase:
+    - Use `.agents/skills/` directory for it.
+    - Always ask before adding new skill.
+    - Extend or modify existing skill when it covers the same workflow.
+- Link to authoritative project files and commands instead of duplicating information that is easy to look up.
+- Update affected skills and scripts when changing the behavior they describe
+- Keep multi-line helper scripts in separate files and link to them from Markdown. Single-line commands, such as `cmake --build ./build`, may stay inline or in code blocks.
+
+## Agent Writing Style and Formatting
 
 - Lead with the conclusion. Use concise, concrete English, simple verbs, and the user's vocabulary; aim for ASD-STE100 Simplified Technical English.
 - Explain mechanisms before recommendations. Prefer concrete examples over abstract descriptions.
@@ -36,50 +56,30 @@
 - Name what an ID refers to: "the migration script (PR #45)", not just "PR #45".
 - Organize around the subject; use headings, lists, and emphasis only when they help scanning.
 
-## Documentation Audiences
-
-- Leave README files unchanged unless the user explicitly requests README edits; if a code change makes a README inaccurate, report the discrepancy instead.
-- Update other user-facing documentation or changelogs only when the change affects their accuracy or necessary setup, usage, or safety information; code changes alone do not require documentation edits.
-- Write `README.md` and similar user-facing documentation for humans: purpose, setup, usage, and necessary warnings.
-- Put coding-agent instructions in `AGENTS.md` or the agent's equivalent instruction file, not READMEs.
-- Keep READMEs concise; omit agent workflow, response rules, and agent-only maintenance instructions.
-- Link to detailed documentation when needed instead of duplicating it; retain information humans need to use the project safely.
-- For skills and other agent-facing documentation, keep multi-line helper scripts in separate files and link to them from Markdown. Single-line commands, such as `cmake --build ./vsc_cmake_build`, may stay inline or in code blocks.
-
-## Reusable Project Knowledge
-
-- Preserve non-obvious, reusable knowledge gained during project discovery in project-local skills; extend an existing skill when it covers the same workflow.
-- Record prerequisites, applicability limits, expected results, and what was actually verified; label untested steps rather than presenting them as proven.
-- Link to authoritative project files and commands instead of duplicating information that is easy to look up.
-- Put reusable multi-step automation in related scripts, following project conventions; prefer existing commands and build targets over new wrappers.
-- Keep skills discoverable through the project's established mechanism or a short pointer in its agent instructions.
-- Update affected skills and scripts when changing the behavior they describe.
-- Keep skills focused on durable know-how, not work logs, task status, or session history.
-
-## Formatting
+#### Additional rules for writing documents for agent consumption.
 
 - Organize agent instruction files such as `AGENTS.md` and `CLAUDE.md` with short headings and concise bullet points, not long multi-sentence paragraphs.
 - Keep each bullet focused on one rule; retain conditions and exceptions when shortening instructions.
+
+#### General agent writing rules
 
 - Keep copy-paste text plain or fenced, not blockquoted.
 - Let paragraphs soft-wrap; do not insert manual line breaks.
 - Use clickable code references: `path/to/file:line_number`.
 - Use Mermaid fenced blocks for graphs and flow diagrams.
-- Write prompts in Markdown; fence them unless writing directly to a file.
-- Split compound shell commands so each logical step is on its own line, preserving operators and continuation syntax.
+- Write prompts in Markdown code block unless writing them directly to a file.
+- Split compound shell commands so each logical step is on its own line, optimize for human readability.
 
-## Local Instructions & Memory
+## Read Local Instructions
 
-- Reference the files below when available; ask before reading them if they are outside the repository and permission has not been given.
-- Silently skip missing imports. Keep user-specific rules in `custom_memory.md`.
+- Reference the files below when available. Silently skip missing imports:
 
 @~/.agents/work.md
 @~/.agents/private.md
-@~/.agents/custom_memory.md
 
-## Safety
+## Local Secrets Safety
 
-- Check `.agentignore` before working in a repository; do not read or write excluded paths.
+- Check `.agentignore` before working in a repository; do not read or write paths listed there.
 - Ask before reading files outside the current repository or running environment-dumping commands such as `env`, `printenv`, `set`, or `export`.
 - Never display, log, or echo credentials, or include them in commits, comments, or output. Ask before referring to credentials when necessary.
 - Alert the user immediately if credentials are accidentally displayed.
