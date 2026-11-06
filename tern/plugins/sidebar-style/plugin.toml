@@ -1,0 +1,6 @@
+schema = 1
+id = "sidebar-style"
+name = "Sidebar style"
+version = "1.0.0"
+description = "Indented sidebar levels and rounded outlines for every color theme."
+window = "window.luau"
