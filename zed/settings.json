@@ -257,16 +257,16 @@
         "light": "Flexoki Light",
         "dark": "One Dark Pro Max",
     },
-    // "theme_overrides": {
-    //     "One Dark Pro Max": {
-    //         "background.appearance": "transparent",
-    //         "background": "#10101485",
-    //         "editor.background": "#10101485",
-    //     },
-    // },
+    "theme_overrides": {
+        "One Dark Pro Max": {
+            "background.appearance": "transparent",
+            "background": "#1a2024FF",
+            "editor.background": "#1a2024FF",
+        },
+    },
     "close_panel_on_toggle": true,
     "sticky_scroll": {
-        "enabled": true,
+        "enabled": false,
     },
     "semantic_tokens": "combined",
     "show_edit_predictions": true,
