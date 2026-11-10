@@ -1,36 +1,36 @@
 {
   "theme": "Dark",
-  "theme_dark": "dark-cosmos",
+  "theme_dark": "titanium",
   "link_click": "Command",
-  "font_size": 22,
-  "ui_font_size": 19,
+  "font_size": 24,
+  "ui_font_size": 21,
   "font_family": "ComicShannsMono Nerd Font",
   "font_weight": 600,
   "tabs": "Vertical",
   "pane_headers": "Always",
-  "opacity": 70,
+  "opacity": 100,
   "density": "Islands",
   "surface_tab_width": 4,
   "prefs_width": 481,
+  "files": {
+    "wrap_prose": false
+  },
+  "file_tree": {
+    "width": 311
+  },
+  "git": {
+    "ref_column_width": 201.0,
+    "diff_hunk_view": true,
+    "path_tree": true
+  },
   "keybinds": {
-    "ctrl+a>%": "split_right",
+    "alt+h": "previous_tab",
+    "alt+l": "next_tab",
+    "alt+left": "previous_tab",
+    "alt+right": "next_tab",
     "ctrl+a>\"": "split_down",
-    "ctrl+a>h": "focus_pane:left",
-    "ctrl+a>j": "focus_pane:down",
-    "ctrl+a>k": "focus_pane:up",
-    "ctrl+a>l": "focus_pane:right",
-    "ctrl+a>left": "focus_pane:left",
-    "ctrl+a>down": "focus_pane:down",
-    "ctrl+a>up": "focus_pane:up",
-    "ctrl+a>right": "focus_pane:right",
-    "ctrl+a>tab": "next_pane",
-    "ctrl+a>shift+tab": "previous_pane",
-    "ctrl+a>c": "new_tab",
+    "ctrl+a>%": "split_right",
     "ctrl+a>,": "rename_tab",
-    "ctrl+a>shift+x": "close_tab",
-    "ctrl+a>x": "close_pane",
-    "ctrl+a>z": "zoom",
-    "ctrl+a>a": "toggle_sidebar",
     "ctrl+a>1": "goto_tab:1",
     "ctrl+a>2": "goto_tab:2",
     "ctrl+a>3": "goto_tab:3",
@@ -40,28 +40,28 @@
     "ctrl+a>7": "goto_tab:7",
     "ctrl+a>8": "goto_tab:8",
     "ctrl+a>9": "goto_tab:9",
-    "alt+left": "previous_tab",
-    "alt+h": "previous_tab",
-    "alt+right": "next_tab",
-    "alt+l": "next_tab",
+    "ctrl+a>a": "toggle_sidebar",
+    "ctrl+a>c": "new_tab",
+    "ctrl+a>down": "focus_pane:down",
+    "ctrl+a>h": "focus_pane:left",
+    "ctrl+a>j": "focus_pane:down",
+    "ctrl+a>k": "focus_pane:up",
+    "ctrl+a>l": "focus_pane:right",
+    "ctrl+a>left": "focus_pane:left",
+    "ctrl+a>r>down": "resize_split:down",
     "ctrl+a>r>h": "resize_split:left",
     "ctrl+a>r>j": "resize_split:down",
     "ctrl+a>r>k": "resize_split:up",
     "ctrl+a>r>l": "resize_split:right",
     "ctrl+a>r>left": "resize_split:left",
-    "ctrl+a>r>down": "resize_split:down",
+    "ctrl+a>r>right": "resize_split:right",
     "ctrl+a>r>up": "resize_split:up",
-    "ctrl+a>r>right": "resize_split:right"
-  },
-  "files": {
-    "wrap_prose": false
-  },
-  "file_tree": {
-    "open": true,
-    "width": 379
-  },
-  "git": {
-    "diff_hunk_view": true,
-    "path_tree": true
+    "ctrl+a>right": "focus_pane:right",
+    "ctrl+a>shift+tab": "previous_pane",
+    "ctrl+a>shift+x": "close_tab",
+    "ctrl+a>tab": "next_pane",
+    "ctrl+a>up": "focus_pane:up",
+    "ctrl+a>x": "close_pane",
+    "ctrl+a>z": "zoom"
   }
 }
