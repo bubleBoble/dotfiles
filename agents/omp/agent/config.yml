@@ -3,7 +3,7 @@ composer:
   shape: claude
 theme:
   dark: dark-lunar-messages
-setupVersion: 2
+setupVersion: 3
 tools:
   approvalMode: yolo
 statusLine:
