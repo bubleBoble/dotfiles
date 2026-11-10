@@ -52,7 +52,7 @@ display:
 images:
   blockImages: true
 defaultThinkingLevel: medium
-hideThinkingBlock: false
+hideThinkingBlock: true
 personality: pragmatic
 edit:
   mode: hashline
